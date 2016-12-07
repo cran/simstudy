@@ -1,7 +1,7 @@
 #' Add single row to definitions table
 #'
 #' @useDynLib simstudy
-#' @importFrom Rcpp sourceCpp
+#' @importFrom Rcpp sourceCpp evalCpp
 #' @import data.table
 #'
 #' @param dtDefs Definition data.table to be modified
@@ -14,6 +14,15 @@
 #' @return A data.table named dtName that is an updated data defnitions table
 #' @details The possible data distributions include ""normal", "poisson",
 #' "noZeroPoisson", "binary", "uniform", "categorical", "gamma", and "nonrandom."
+#' @examples
+#' def <- defData(varname = "xNr", dist = "nonrandom", formula=7, id = "idnum")
+#' def <- defData(def, varname="xUni", dist="uniform", formula="10;20")
+#' def <- defData(def, varname="xNorm", formula="xNr + xUni * 2", dist="normal", variance=8)
+#' def <- defData(def, varname="xPois", dist="poisson", formula="xNr - 0.2 * xUni", link="log")
+#' def <- defData(def, varname="xCat", formula = "0.3;0.2;0.5", dist="categorical")
+#' def <- defData(def, varname="xGamma", dist="gamma", formula = "5+xCat", variance = 1, link = "log")
+#' def <- defData(def, varname = "xBin", dist = "binary" , formula="-3 + xCat", link="logit")
+#' def
 #' @export
 
 defData <- function(dtDefs = NULL,
@@ -33,8 +42,16 @@ defData <- function(dtDefs = NULL,
 
   if (is.null(dtDefs)) {
 
-    if (is.na(as.numeric(formula))) {
-      stop("First defined formula must be numeric", call. = FALSE)
+    # warnings are suppressed because we want to test for NAs
+
+    suppressWarnings(test <- as.numeric(unlist(strsplit(as.character(formula),
+                                           split=";",
+                                           fixed = TRUE)))
+    )
+
+
+    if (sum(is.na(test))) {
+      stop("First defined formula must be scalar", call. = FALSE)
     }
 
     dtDefs <- data.table::data.table()

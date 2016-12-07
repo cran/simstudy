@@ -3,8 +3,30 @@
 #' @param filen String file name, including full path. Must be a csv file.
 #' @param id string that includes name of id field. Defaults to "id"
 #' @return A data.table with data set definitions
-#' @export
+#' @examples
+#' # Create temporary external "csv" file
 #'
+#' test1 <- c("varname,formula,variance,dist,link",
+#'            "nr,7, 0,nonrandom,identity",
+#'            "x1,.4, 0,binary,identity",
+#'            "y1,nr + x1 * 2,8,normal,identity",
+#'            "y2,nr - 0.2 * x1,0,poisson, log"
+#'           )
+#'
+#' tfcsv <- tempfile()
+#' writeLines(test1, tfcsv)
+#'
+#' # Read external csv file stored in file "tfcsv"
+#'
+#' defs <- defRead(tfcsv, id = "myID")
+#' defs
+#'
+#' unlink(tfcsv)
+#'
+#' # Generate data based on external definition
+#'
+#' genData(5, defs)
+#' @export
 
 defRead <- function(filen, id = "id") {
 
@@ -30,13 +52,21 @@ defRead <- function(filen, id = "id") {
 
   # check validity of data set
 
-  if (is.na(as.numeric(read.dt[1, formula]))) {
-    stop("First defined formula must be numeric", call. = FALSE)
+  suppressWarnings(test <- as.numeric(unlist(strsplit(as.character(read.dt[1, formula]),
+                                                      split=";",
+                                                      fixed = TRUE)))
+  )
+
+  if (sum(is.na(test))) {
+    stop("First defined formula must be scalar", call. = FALSE)
   }
 
-  for (i in 2:nrow(read.dt)) {
-    evalDef(read.dt[i,varname], read.dt[i,formula], read.dt[i,dist], read.dt[1:(i-1), varname])
+  if (nrow(read.dt) > 1){
+    for (i in 2:nrow(read.dt)) {
+      evalDef(read.dt[i,varname], read.dt[i,formula], read.dt[i,dist], read.dt[1:(i-1), varname])
+    }
   }
+
 
   attr(read.dt,"id") <- id
   return(read.dt)
