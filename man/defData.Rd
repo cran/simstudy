@@ -23,7 +23,7 @@ defData(dtDefs = NULL, varname, formula, variance = 0, dist = "normal",
 \item{id}{A string indicating the field name for the unique record identifier}
 }
 \value{
-A data.table named dtName that is an updated data defnitions table
+A data.table named dtName that is an updated data definitions table
 }
 \description{
 Add single row to definitions table
@@ -42,4 +42,3 @@ def <- defData(def, varname="xGamma", dist="gamma", formula = "5+xCat", variance
 def <- defData(def, varname = "xBin", dist = "binary" , formula="-3 + xCat", link="logit")
 def
 }
-

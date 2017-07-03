@@ -5,17 +5,6 @@
 
 using namespace Rcpp;
 
-// vecMultinom
-int vecMultinom(NumericVector probs);
-RcppExport SEXP simstudy_vecMultinom(SEXP probsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type probs(probsSEXP);
-    rcpp_result_gen = Rcpp::wrap(vecMultinom(probs));
-    return rcpp_result_gen;
-END_RCPP
-}
 // matMultinom
 Rcpp::IntegerVector matMultinom(Rcpp::NumericMatrix probmatrix);
 RcppExport SEXP simstudy_matMultinom(SEXP probmatrixSEXP) {
@@ -26,4 +15,14 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(matMultinom(probmatrix));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"simstudy_matMultinom", (DL_FUNC) &simstudy_matMultinom, 1},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_simstudy(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }

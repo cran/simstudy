@@ -5,8 +5,12 @@ library(scales)
 library(grid)
 library(gridExtra)
 library(survival)
+library(knitr)
+library(gee)
 
 set.seed(33333)
+
+opts_chunk$set(tidy.opts=list(width.cutoff=75), tidy=TRUE)
 
 plotcolors <- c("#B84226", "#1B8445", "#1C5974")
 
@@ -580,6 +584,75 @@ dt[,round(cor(cbind(a0, a1)),1)]
 
 # estimate standard deviation
 dt[,round(sqrt(diag(var(cbind(a0, a1)))),1)]
+
+## ------------------------------------------------------------------------
+l <- c(8, 10, 12) # lambda for each new variable
+
+dx <- genCorGen(1000, nvars = 3, params1 = l, dist = "poisson", rho = .3, corstr = "cs", wide = TRUE)
+dx
+round(cor(as.matrix(dx[, .(V1, V2, V3)])), 2)
+
+## ------------------------------------------------------------------------
+genCorGen(1000, nvars = 3, params1 = c(.3, .5, .7), dist = "binary", rho = .8, corstr = "cs", wide = TRUE)
+
+## ------------------------------------------------------------------------
+dx <- genCorGen(1000, nvars = 3, params1 = l, params2 = c(1,1,1), dist = "gamma", rho = .7, corstr = "cs", wide = TRUE, cnames="a, b, c")
+dx
+round(cor(as.matrix(dx[, .(a, b, c)])), 2)
+
+## ------------------------------------------------------------------------
+dx <- genCorGen(1000, nvars = 3, params1 = l, params2 = c(1,1,1), dist = "gamma", rho = .7, corstr = "cs", wide = FALSE, cnames="NewCol")
+dx
+
+## ------------------------------------------------------------------------
+def <- defData(varname = "xbase", formula = 5, variance = .2, dist = "gamma", id = "cid")
+def <- defData(def, varname = "lambda", formula = ".5 + .1*xbase", dist="nonrandom", link = "log")
+def <- defData(def, varname = "p", formula = "-2 + .3*xbase", dist="nonrandom", link = "logit")
+def <- defData(def, varname = "gammaMu", formula = ".5 + .2*xbase", dist="nonrandom", link = "log")
+def <- defData(def, varname = "gammaDis", formula = 1, dist="nonrandom")
+
+dt <- genData(10000, def)
+dt
+
+## ------------------------------------------------------------------------
+
+dtX1 <- addCorGen(dtOld = dt, idvar = "cid", nvars = 3, rho = .1, corstr = "cs",
+                    dist = "poisson", param1 = "lambda", cnames = "a, b, c")
+dtX1
+
+## ------------------------------------------------------------------------
+dtX2 <- addCorGen(dtOld = dt, idvar = "cid", nvars = 4, rho = .4, corstr = "ar1",
+                    dist = "binary", param1 = "p")
+dtX2
+
+## ------------------------------------------------------------------------
+dtX3 <- addCorGen(dtOld = dt, idvar = "cid", nvars = 4, rho = .4, corstr = "cs",
+                  dist = "gamma", param1 = "gammaMu", param2 = "gammaDis")
+dtX3
+
+## ------------------------------------------------------------------------
+def <- defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma", id = "cid")
+def <- defData(def, "nperiods", formula = 3, dist = "noZeroPoisson")
+
+def2 <- defDataAdd(varname = "lambda", formula = ".5+.5*period + .1*xbase", dist="nonrandom", link = "log")
+
+dt <- genData(1000, def)
+
+dtLong <- addPeriods(dt, idvars = "cid", nPeriods = 3)
+dtLong <- addColumns(def2, dtLong)
+
+dtLong
+
+### Generate the data 
+
+dtX3 <- addCorGen(dtOld = dtLong, idvar = "cid", nvars = 3, rho = .6, corstr = "cs",
+                  dist = "poisson", param1 = "lambda", cnames = "NewPois")
+dtX3
+
+## ------------------------------------------------------------------------
+geefit <- gee(NewPois ~ period + xbase, data = dtX3, id = cid, family = poisson, corstr = "exchangeable")
+round(summary(geefit)$working.correlation, 2)
+
 
 ## ---- tidy = TRUE--------------------------------------------------------
 def1 <- defData(varname = "m", dist = "binary", formula = .5)

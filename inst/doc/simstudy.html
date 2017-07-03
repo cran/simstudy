@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -12,7 +12,7 @@
 
 <meta name="author" content="Keith S. Goldfeld" />
 
-<meta name="date" content="2016-12-07" />
+<meta name="date" content="2017-07-03" />
 
 <title>Simulating study data</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Simulating study data</h1>
 <h4 class="author"><em>Keith S. Goldfeld</em></h4>
-<h4 class="date"><em>2016-12-07</em></h4>
+<h4 class="date"><em>2017-07-03</em></h4>
 
 
 
@@ -259,7 +259,7 @@ study1</code></pre></div>
 </div>
 <div id="observed-treatment" class="section level3">
 <h3>Observed treatment</h3>
-<p>If exposure or treatment is observed (rather than randomly assigned), use <code>trtObserved</code> to generate groups. There may be any number of possible exposure or treatment groups, and the probability of exposure to a specific level can depend on covariates already in the data set. In this case, there are three exposure groups that vary by gender and age:</p>
+<p>If exposure or treatment is observed (rather than randomly assigned), use <code>trtObserve</code> to generate groups. There may be any number of possible exposure or treatment groups, and the probability of exposure to a specific level can depend on covariates already in the data set. In this case, there are three exposure groups that vary by gender and age:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">formula1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;-2 + 2*male - .5*over65&quot;</span>, <span class="st">&quot;-1 + 2*male + .5*over65&quot;</span>)
 dtExp &lt;-<span class="st"> </span><span class="kw">trtObserve</span>(dtstudy, <span class="dt">formulas =</span> formula1, <span class="dt">logit.link =</span> <span class="ot">TRUE</span>, <span class="dt">grpName =</span> <span class="st">&quot;exposure&quot;</span>)</code></pre></div>
 <p>Here are the exposure distributions by gender and age:</p>
@@ -367,18 +367,6 @@ dtTrial</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dtTime &lt;-<span class="st"> </span><span class="kw">addPeriods</span>(dtTrial, <span class="dt">nPeriods =</span> <span class="dv">3</span>, <span class="dt">idvars =</span> <span class="st">&quot;id&quot;</span>, <span class="dt">timevars =</span> <span class="kw">c</span>(<span class="st">&quot;Y0&quot;</span>, 
     <span class="st">&quot;Y1&quot;</span>, <span class="st">&quot;Y2&quot;</span>), <span class="dt">timevarName =</span> <span class="st">&quot;Y&quot;</span>)
 dtTime</code></pre></div>
-<pre><code>##        id period T         Y timeID
-##    1:   1      0 0  9.183977      1
-##    2:   1      1 0 13.941648      2
-##    3:   1      2 0 17.278048      3
-##    4:   2      0 1  8.643123      4
-##    5:   2      1 1 18.824743      5
-##   ---                              
-## 1496: 499      1 1 18.835811   1496
-## 1497: 499      2 1 25.331572   1497
-## 1498: 500      0 0  8.817763   1498
-## 1499: 500      1 0 14.182917   1499
-## 1500: 500      2 0 20.046143   1500</code></pre>
 <p>This is what the longitudinal data look like:</p>
 <p><img src="data:image/png;base64,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" /><!-- --></p>
 <div id="longitudinal-data-with-varying-observation-and-interval-times" class="section level3">
@@ -431,15 +419,6 @@ dtSchool &lt;-<span class="st"> </span><span class="kw">genData</span>(<span cla
 dtSchool &lt;-<span class="st"> </span><span class="kw">trtAssign</span>(dtSchool, <span class="dt">n =</span> <span class="dv">2</span>)
 
 dtSchool</code></pre></div>
-<pre><code>##    idSchool trtGrp         s0 nClasses
-## 1:        1      0  4.5073550        3
-## 2:        2      1 -1.7743869        2
-## 3:        3      1 -2.2457300        5
-## 4:        4      0  1.5088309        4
-## 5:        5      0 -1.3463298        2
-## 6:        6      1 -1.4530158        3
-## 7:        7      1 -0.3030972        6
-## 8:        8      0  0.9327829        2</code></pre>
 <p>The classroom level data are generated with a call to <code>genCluster</code>, and then school level data is added by a call to <code>addColumns</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gen.class &lt;-<span class="st"> </span><span class="kw">defDataAdd</span>(<span class="dt">varname =</span> <span class="st">&quot;c0&quot;</span>, <span class="dt">dist =</span> <span class="st">&quot;normal&quot;</span>, <span class="dt">formula =</span> <span class="dv">0</span>, <span class="dt">variance =</span> <span class="dv">2</span>)
 gen.class &lt;-<span class="st"> </span><span class="kw">defDataAdd</span>(gen.class, <span class="dt">varname =</span> <span class="st">&quot;nStudents&quot;</span>, <span class="dt">dist =</span> <span class="st">&quot;noZeroPoisson&quot;</span>, 
@@ -572,6 +551,226 @@ dt[, <span class="kw">round</span>(<span class="kw">cor</span>(<span class="kw">
 dt[, <span class="kw">round</span>(<span class="kw">sqrt</span>(<span class="kw">diag</span>(<span class="kw">var</span>(<span class="kw">cbind</span>(a0, a1)))), <span class="dv">1</span>)]</code></pre></div>
 <pre><code>##  a0  a1 
 ## 1.9 0.2</code></pre>
+<div id="correlated-data-additional-distributions" class="section level3">
+<h3>Correlated data: additional distributions</h3>
+<p>Two additional functions facilitiate the generation of correlated data from <em>binomial</em>, <em>poisson</em>, <em>gamma</em>, and <em>uniform</em> distributions: <code>genCorGen</code> and <code>addCorGen</code>.</p>
+<p><code>genCorGen</code> is an extension of <code>genCorData</code>. In the first example, we are generating data from a multivariate Poisson distribution. We start by specifying the mean of the Poisson distribution for each new variable, and then we specify the correlation structure, just as we did with the normal distribution.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">l &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">12</span>)  <span class="co"># lambda for each new variable</span>
+
+dx &lt;-<span class="st"> </span><span class="kw">genCorGen</span>(<span class="dv">1000</span>, <span class="dt">nvars =</span> <span class="dv">3</span>, <span class="dt">params1 =</span> l, <span class="dt">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="dt">rho =</span> <span class="fl">0.3</span>, <span class="dt">corstr =</span> <span class="st">&quot;cs&quot;</span>, 
+    <span class="dt">wide =</span> <span class="ot">TRUE</span>)
+dx</code></pre></div>
+<pre><code>##         id V1 V2 V3
+##    1:    1  8 13  8
+##    2:    2 12 13  9
+##    3:    3 12 17 12
+##    4:    4 11 15  9
+##    5:    5  7 13 17
+##   ---              
+##  996:  996  9 11 12
+##  997:  997  8 10 10
+##  998:  998  6  6 12
+##  999:  999  7  8 13
+## 1000: 1000  9 10 13</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">round</span>(<span class="kw">cor</span>(<span class="kw">as.matrix</span>(dx[, .(V1, V2, V3)])), <span class="dv">2</span>)</code></pre></div>
+<pre><code>##      V1   V2   V3
+## V1 1.00 0.32 0.32
+## V2 0.32 1.00 0.29
+## V3 0.32 0.29 1.00</code></pre>
+<p>We can also generate correlated binary data by specifying the probabilities:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">genCorGen</span>(<span class="dv">1000</span>, <span class="dt">nvars =</span> <span class="dv">3</span>, <span class="dt">params1 =</span> <span class="kw">c</span>(<span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.7</span>), <span class="dt">dist =</span> <span class="st">&quot;binary&quot;</span>, <span class="dt">rho =</span> <span class="fl">0.8</span>, 
+    <span class="dt">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="dt">wide =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>##         id V1 V2 V3
+##    1:    1  1  1  1
+##    2:    2  0  1  1
+##    3:    3  0  1  1
+##    4:    4  0  0  0
+##    5:    5  0  0  1
+##   ---              
+##  996:  996  0  0  0
+##  997:  997  1  1  1
+##  998:  998  1  1  1
+##  999:  999  0  0  0
+## 1000: 1000  1  1  1</code></pre>
+<p>The gamma distribution requires two parameters - the mean and dispersion. (These are converted into shape and rate parameters more commonly used.)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dx &lt;-<span class="st"> </span><span class="kw">genCorGen</span>(<span class="dv">1000</span>, <span class="dt">nvars =</span> <span class="dv">3</span>, <span class="dt">params1 =</span> l, <span class="dt">params2 =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">dist =</span> <span class="st">&quot;gamma&quot;</span>, 
+    <span class="dt">rho =</span> <span class="fl">0.7</span>, <span class="dt">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="dt">wide =</span> <span class="ot">TRUE</span>, <span class="dt">cnames =</span> <span class="st">&quot;a, b, c&quot;</span>)
+dx</code></pre></div>
+<pre><code>##         id          a          b          c
+##    1:    1  2.2147914  5.7828970 12.4494947
+##    2:    2  1.3062344  6.1613218  3.1724069
+##    3:    3  4.8616340 29.6643309  6.4130084
+##    4:    4  0.5403350  0.6539857  0.2711737
+##    5:    5 12.4790275  3.3807058 14.2851746
+##   ---                                      
+##  996:  996  3.9052560  9.5434050  8.9738441
+##  997:  997  9.0188944  9.5958862  6.9818731
+##  998:  998  1.0142999  2.5976399 13.4244831
+##  999:  999  0.3335885  5.6766551  3.0571633
+## 1000: 1000  3.4507202  2.6912672 16.6274046</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">round</span>(<span class="kw">cor</span>(<span class="kw">as.matrix</span>(dx[, .(a, b, c)])), <span class="dv">2</span>)</code></pre></div>
+<pre><code>##      a    b    c
+## a 1.00 0.64 0.67
+## b 0.64 1.00 0.66
+## c 0.67 0.66 1.00</code></pre>
+<p>These data sets can be generated in either <em>wide</em> or <em>long</em> form. So far, we have generated <em>wide</em> form data, where there is one row per unique id. Now, we will generate data using the <em>long</em> form, where the correlated data are on different rows, so that there are repeated measurements for each id. An id will have multiple records (i.e. one id will appear on multiple rows):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dx &lt;-<span class="st"> </span><span class="kw">genCorGen</span>(<span class="dv">1000</span>, <span class="dt">nvars =</span> <span class="dv">3</span>, <span class="dt">params1 =</span> l, <span class="dt">params2 =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">dist =</span> <span class="st">&quot;gamma&quot;</span>, 
+    <span class="dt">rho =</span> <span class="fl">0.7</span>, <span class="dt">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="dt">wide =</span> <span class="ot">FALSE</span>, <span class="dt">cnames =</span> <span class="st">&quot;NewCol&quot;</span>)
+dx</code></pre></div>
+<pre><code>##         id period     NewCol
+##    1:    1      0  4.6181941
+##    2:    1      1  6.3649410
+##    3:    1      2  4.9943912
+##    4:    2      0  1.6169833
+##    5:    2      1  2.6281985
+##   ---                       
+## 2996:  999      1 13.0572778
+## 2997:  999      2 13.9987895
+## 2998: 1000      0  0.6222378
+## 2999: 1000      1  4.1499146
+## 3000: 1000      2  0.3371689</code></pre>
+<p><code>addCorGen</code> allows us to create correlated data from an existing data set, as one can already do using <code>addCorData</code>. In the case of <code>addCorGen</code>, the parameter(s) used to define the distribution are created as a field (or fields) in the dataset. The correlated data are added to the existing data set. In the example below, we are going to generate three sets (poisson, binary, and gamma) of correlated data with means that are a function of the variable <code>xbase</code>, which varies by id.</p>
+<p>First we define the data and generate a data set:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">def &lt;-<span class="st"> </span><span class="kw">defData</span>(<span class="dt">varname =</span> <span class="st">&quot;xbase&quot;</span>, <span class="dt">formula =</span> <span class="dv">5</span>, <span class="dt">variance =</span> <span class="fl">0.2</span>, <span class="dt">dist =</span> <span class="st">&quot;gamma&quot;</span>, 
+    <span class="dt">id =</span> <span class="st">&quot;cid&quot;</span>)
+def &lt;-<span class="st"> </span><span class="kw">defData</span>(def, <span class="dt">varname =</span> <span class="st">&quot;lambda&quot;</span>, <span class="dt">formula =</span> <span class="st">&quot;.5 + .1*xbase&quot;</span>, <span class="dt">dist =</span> <span class="st">&quot;nonrandom&quot;</span>, 
+    <span class="dt">link =</span> <span class="st">&quot;log&quot;</span>)
+def &lt;-<span class="st"> </span><span class="kw">defData</span>(def, <span class="dt">varname =</span> <span class="st">&quot;p&quot;</span>, <span class="dt">formula =</span> <span class="st">&quot;-2 + .3*xbase&quot;</span>, <span class="dt">dist =</span> <span class="st">&quot;nonrandom&quot;</span>, 
+    <span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>)
+def &lt;-<span class="st"> </span><span class="kw">defData</span>(def, <span class="dt">varname =</span> <span class="st">&quot;gammaMu&quot;</span>, <span class="dt">formula =</span> <span class="st">&quot;.5 + .2*xbase&quot;</span>, <span class="dt">dist =</span> <span class="st">&quot;nonrandom&quot;</span>, 
+    <span class="dt">link =</span> <span class="st">&quot;log&quot;</span>)
+def &lt;-<span class="st"> </span><span class="kw">defData</span>(def, <span class="dt">varname =</span> <span class="st">&quot;gammaDis&quot;</span>, <span class="dt">formula =</span> <span class="dv">1</span>, <span class="dt">dist =</span> <span class="st">&quot;nonrandom&quot;</span>)
+
+dt &lt;-<span class="st"> </span><span class="kw">genData</span>(<span class="dv">10000</span>, def)
+dt</code></pre></div>
+<pre><code>##          cid    xbase   lambda         p  gammaMu gammaDis
+##     1:     1 5.698630 2.914980 0.4279032 5.153757        1
+##     2:     2 3.564564 2.354802 0.2827968 3.363267        1
+##     3:     3 2.664886 2.152196 0.2313802 2.809418        1
+##     4:     4 5.678577 2.909141 0.4264312 5.133129        1
+##     5:     5 5.369445 2.820585 0.4039179 4.825377        1
+##    ---                                                    
+##  9996:  9996 8.325959 3.790871 0.6219393 8.716273        1
+##  9997:  9997 2.559089 2.129546 0.2257838 2.750596        1
+##  9998:  9998 3.525356 2.345587 0.2804172 3.336997        1
+##  9999:  9999 2.417845 2.099679 0.2184629 2.673982        1
+## 10000: 10000 3.060428 2.239030 0.2531520 3.040694        1</code></pre>
+<p>The Poisson distribution has a single paramter, lambda:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dtX1 &lt;-<span class="st"> </span><span class="kw">addCorGen</span>(<span class="dt">dtOld =</span> dt, <span class="dt">idvar =</span> <span class="st">&quot;cid&quot;</span>, <span class="dt">nvars =</span> <span class="dv">3</span>, <span class="dt">rho =</span> <span class="fl">0.1</span>, <span class="dt">corstr =</span> <span class="st">&quot;cs&quot;</span>, 
+    <span class="dt">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="dt">param1 =</span> <span class="st">&quot;lambda&quot;</span>, <span class="dt">cnames =</span> <span class="st">&quot;a, b, c&quot;</span>)
+dtX1</code></pre></div>
+<pre><code>##          cid    xbase   lambda         p  gammaMu gammaDis a b c
+##     1:     1 5.698630 2.914980 0.4279032 5.153757        1 6 1 2
+##     2:     2 3.564564 2.354802 0.2827968 3.363267        1 3 3 3
+##     3:     3 2.664886 2.152196 0.2313802 2.809418        1 2 1 3
+##     4:     4 5.678577 2.909141 0.4264312 5.133129        1 3 1 4
+##     5:     5 5.369445 2.820585 0.4039179 4.825377        1 2 2 3
+##    ---                                                          
+##  9996:  9996 8.325959 3.790871 0.6219393 8.716273        1 3 4 5
+##  9997:  9997 2.559089 2.129546 0.2257838 2.750596        1 1 2 0
+##  9998:  9998 3.525356 2.345587 0.2804172 3.336997        1 2 2 1
+##  9999:  9999 2.417845 2.099679 0.2184629 2.673982        1 1 3 5
+## 10000: 10000 3.060428 2.239030 0.2531520 3.040694        1 3 0 1</code></pre>
+<p>The Bernouilli (binary) distribution has a single parameter, p:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dtX2 &lt;-<span class="st"> </span><span class="kw">addCorGen</span>(<span class="dt">dtOld =</span> dt, <span class="dt">idvar =</span> <span class="st">&quot;cid&quot;</span>, <span class="dt">nvars =</span> <span class="dv">4</span>, <span class="dt">rho =</span> <span class="fl">0.4</span>, <span class="dt">corstr =</span> <span class="st">&quot;ar1&quot;</span>, 
+    <span class="dt">dist =</span> <span class="st">&quot;binary&quot;</span>, <span class="dt">param1 =</span> <span class="st">&quot;p&quot;</span>)
+dtX2</code></pre></div>
+<pre><code>##          cid    xbase   lambda         p  gammaMu gammaDis V1 V2 V3 V4
+##     1:     1 5.698630 2.914980 0.4279032 5.153757        1  0  0  1  0
+##     2:     2 3.564564 2.354802 0.2827968 3.363267        1  1  1  0  1
+##     3:     3 2.664886 2.152196 0.2313802 2.809418        1  0  0  0  0
+##     4:     4 5.678577 2.909141 0.4264312 5.133129        1  1  0  0  0
+##     5:     5 5.369445 2.820585 0.4039179 4.825377        1  1  1  1  1
+##    ---                                                                
+##  9996:  9996 8.325959 3.790871 0.6219393 8.716273        1  0  0  1  1
+##  9997:  9997 2.559089 2.129546 0.2257838 2.750596        1  1  0  0  0
+##  9998:  9998 3.525356 2.345587 0.2804172 3.336997        1  0  0  0  0
+##  9999:  9999 2.417845 2.099679 0.2184629 2.673982        1  1  0  0  1
+## 10000: 10000 3.060428 2.239030 0.2531520 3.040694        1  1  1  1  0</code></pre>
+<p>The Gamma distribution has two parameters - in <code>simstudy</code> the mean and dispersion are specified:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dtX3 &lt;-<span class="st"> </span><span class="kw">addCorGen</span>(<span class="dt">dtOld =</span> dt, <span class="dt">idvar =</span> <span class="st">&quot;cid&quot;</span>, <span class="dt">nvars =</span> <span class="dv">4</span>, <span class="dt">rho =</span> <span class="fl">0.4</span>, <span class="dt">corstr =</span> <span class="st">&quot;cs&quot;</span>, 
+    <span class="dt">dist =</span> <span class="st">&quot;gamma&quot;</span>, <span class="dt">param1 =</span> <span class="st">&quot;gammaMu&quot;</span>, <span class="dt">param2 =</span> <span class="st">&quot;gammaDis&quot;</span>)
+dtX3</code></pre></div>
+<pre><code>##          cid    xbase   lambda         p  gammaMu gammaDis         V1
+##     1:     1 5.698630 2.914980 0.4279032 5.153757        1  2.1924081
+##     2:     2 3.564564 2.354802 0.2827968 3.363267        1  8.7328677
+##     3:     3 2.664886 2.152196 0.2313802 2.809418        1  2.7422032
+##     4:     4 5.678577 2.909141 0.4264312 5.133129        1  4.3125713
+##     5:     5 5.369445 2.820585 0.4039179 4.825377        1  4.6422097
+##    ---                                                               
+##  9996:  9996 8.325959 3.790871 0.6219393 8.716273        1 12.1051327
+##  9997:  9997 2.559089 2.129546 0.2257838 2.750596        1  6.2771513
+##  9998:  9998 3.525356 2.345587 0.2804172 3.336997        1  7.7878250
+##  9999:  9999 2.417845 2.099679 0.2184629 2.673982        1  0.4166578
+## 10000: 10000 3.060428 2.239030 0.2531520 3.040694        1  9.5893322
+##                V2         V3        V4
+##     1:  3.1822804 11.8429426  3.503066
+##     2:  0.8551908  8.4568344  3.702797
+##     3:  1.4664891  9.1577855  3.277641
+##     4:  2.5736640  1.9366756  1.689787
+##     5:  2.9348884  1.7149849  2.021616
+##    ---                                
+##  9996: 12.9311557 21.6100941 29.083559
+##  9997:  7.9767125  7.4557215  1.103534
+##  9998:  2.5641834  0.4541554  6.861430
+##  9999:  2.3301697  1.3183229  3.994858
+## 10000:  3.3786109  1.8709750  7.501375</code></pre>
+<p>If we have data in <em>long</em> form (e.g. longitudinal data), the function will recognize the structure:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">def &lt;-<span class="st"> </span><span class="kw">defData</span>(<span class="dt">varname =</span> <span class="st">&quot;xbase&quot;</span>, <span class="dt">formula =</span> <span class="dv">5</span>, <span class="dt">variance =</span> <span class="fl">0.4</span>, <span class="dt">dist =</span> <span class="st">&quot;gamma&quot;</span>, 
+    <span class="dt">id =</span> <span class="st">&quot;cid&quot;</span>)
+def &lt;-<span class="st"> </span><span class="kw">defData</span>(def, <span class="st">&quot;nperiods&quot;</span>, <span class="dt">formula =</span> <span class="dv">3</span>, <span class="dt">dist =</span> <span class="st">&quot;noZeroPoisson&quot;</span>)
+
+def2 &lt;-<span class="st"> </span><span class="kw">defDataAdd</span>(<span class="dt">varname =</span> <span class="st">&quot;lambda&quot;</span>, <span class="dt">formula =</span> <span class="st">&quot;.5+.5*period + .1*xbase&quot;</span>, 
+    <span class="dt">dist =</span> <span class="st">&quot;nonrandom&quot;</span>, <span class="dt">link =</span> <span class="st">&quot;log&quot;</span>)
+
+dt &lt;-<span class="st"> </span><span class="kw">genData</span>(<span class="dv">1000</span>, def)
+
+dtLong &lt;-<span class="st"> </span><span class="kw">addPeriods</span>(dt, <span class="dt">idvars =</span> <span class="st">&quot;cid&quot;</span>, <span class="dt">nPeriods =</span> <span class="dv">3</span>)
+dtLong &lt;-<span class="st"> </span><span class="kw">addColumns</span>(def2, dtLong)
+
+dtLong</code></pre></div>
+<pre><code>##        cid period    xbase nperiods timeID   lambda
+##    1:    1      0 4.419360        1      1 2.564942
+##    2:    1      1 4.419360        1      2 4.228875
+##    3:    1      2 4.419360        1      3 6.972236
+##    4:    2      0 5.941155        2      4 2.986540
+##    5:    2      1 5.941155        2      5 4.923972
+##   ---                                              
+## 2996:  999      1 3.365393        3   2996 3.805850
+## 2997:  999      2 3.365393        3   2997 6.274785
+## 2998: 1000      0 4.490924        5   2998 2.583364
+## 2999: 1000      1 4.490924        5   2999 4.259247
+## 3000: 1000      2 4.490924        5   3000 7.022311</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">### Generate the data
+
+dtX3 &lt;-<span class="st"> </span><span class="kw">addCorGen</span>(<span class="dt">dtOld =</span> dtLong, <span class="dt">idvar =</span> <span class="st">&quot;cid&quot;</span>, <span class="dt">nvars =</span> <span class="dv">3</span>, <span class="dt">rho =</span> <span class="fl">0.6</span>, <span class="dt">corstr =</span> <span class="st">&quot;cs&quot;</span>, 
+    <span class="dt">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="dt">param1 =</span> <span class="st">&quot;lambda&quot;</span>, <span class="dt">cnames =</span> <span class="st">&quot;NewPois&quot;</span>)
+dtX3</code></pre></div>
+<pre><code>##        cid period    xbase nperiods timeID   lambda NewPois
+##    1:    1      0 4.419360        1      1 2.564942       0
+##    2:    1      1 4.419360        1      2 4.228875       3
+##    3:    1      2 4.419360        1      3 6.972236       4
+##    4:    2      0 5.941155        2      4 2.986540       3
+##    5:    2      1 5.941155        2      5 4.923972       4
+##   ---                                                      
+## 2996:  999      1 3.365393        3   2996 3.805850       5
+## 2997:  999      2 3.365393        3   2997 6.274785       8
+## 2998: 1000      0 4.490924        5   2998 2.583364       3
+## 2999: 1000      1 4.490924        5   2999 4.259247       4
+## 3000: 1000      2 4.490924        5   3000 7.022311       9</code></pre>
+<p>We can fit a generalized estimating equation (GEE) model and examine the coefficients and the working correlation matrix. They match closely to the data generating parameters:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">geefit &lt;-<span class="st"> </span><span class="kw">gee</span>(NewPois ~<span class="st"> </span>period +<span class="st"> </span>xbase, <span class="dt">data =</span> dtX3, <span class="dt">id =</span> cid, <span class="dt">family =</span> poisson, 
+    <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>)</code></pre></div>
+<pre><code>## Beginning Cgee S-function, @(#) geeformula.q 4.13 98/01/27</code></pre>
+<pre><code>## running glm to get initial regression estimate</code></pre>
+<pre><code>## (Intercept)      period       xbase 
+##  0.49861593  0.50642513  0.09885127</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">round</span>(<span class="kw">summary</span>(geefit)$working.correlation, <span class="dv">2</span>)</code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,] 1.00 0.57 0.57
+## [2,] 0.57 1.00 0.57
+## [3,] 0.57 0.57 1.00</code></pre>
+</div>
 </div>
 <div id="missing-data" class="section level2">
 <h2>Missing data</h2>
@@ -595,30 +794,30 @@ missMat &lt;-<span class="st"> </span><span class="kw">genMiss</span>(dtAct, def
 dtObs &lt;-<span class="st"> </span><span class="kw">genObs</span>(dtAct, missMat, <span class="dt">idvars =</span> <span class="st">&quot;id&quot;</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">missMat</code></pre></div>
 <pre><code>##         id x1 x2 x3 u m
-##    1:    1  0  0  0 1 0
-##    2:    2  0  0  1 1 0
+##    1:    1  0  1  0 1 0
+##    2:    2  0  0  0 1 0
 ##    3:    3  0  0  0 1 0
 ##    4:    4  0  0  0 1 0
-##    5:    5  0  1  0 1 0
+##    5:    5  0  0  0 1 0
 ##   ---                  
-##  996:  996  1  0  0 1 0
+##  996:  996  0  0  0 1 0
 ##  997:  997  0  0  0 1 0
 ##  998:  998  0  0  0 1 0
 ##  999:  999  0  0  0 1 0
 ## 1000: 1000  0  0  0 1 0</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dtObs</code></pre></div>
-<pre><code>##         id m  u         x1         x2         x3
-##    1:    1 1 NA 38.8811064 39.8537987 39.2831061
-##    2:    2 1 NA 40.7418980 39.8806943         NA
-##    3:    3 0 NA -0.1833629  1.1697216 -0.9305892
-##    4:    4 0 NA 20.2067927 21.0258297 19.9533334
-##    5:    5 1 NA 19.3688224         NA 19.6176728
-##   ---                                           
-##  996:  996 0 NA         NA 19.3628641 19.0559199
-##  997:  997 0 NA  2.9717104  0.1390424  1.0620052
-##  998:  998 1 NA 17.6935959 19.4843757 18.9630409
-##  999:  999 1 NA 21.1926945 20.3069260 17.0687198
-## 1000: 1000 1 NA 41.4425855 39.6733677 41.1740595</code></pre>
+<pre><code>##         id m  u         x1          x2          x3
+##    1:    1 0 NA  0.4897648          NA -0.41784137
+##    2:    2 0 NA  0.7115354  0.44336010  0.09161338
+##    3:    3 0 NA -2.0015986  1.14532572  2.27791736
+##    4:    4 1 NA 17.6922028 18.87469486 18.56019618
+##    5:    5 1 NA 20.3853462 19.39040578 19.32114600
+##   ---                                             
+##  996:  996 0 NA -2.1475359 -0.16479811  0.31246825
+##  997:  997 0 NA  1.1448311  0.08416758 -1.09136051
+##  998:  998 1 NA 41.3487531 39.62171697 38.85677524
+##  999:  999 0 NA -1.1410528 -0.37949988  0.79642002
+## 1000: 1000 0 NA -0.4259718 -0.74783361 -0.63368629</code></pre>
 <p>The impacts of the various data mechanisms on estimation can be seen with a simple calculation of means using both the “true” data set without missing data as a comparison for the “observed” data set. Since <code>x1</code> is MCAR, the averages for both data sets are roughly equivalent. However, we can see below that estimates for <code>x2</code> and <code>x3</code> are biased, as the difference between observed and actual is not close to 0:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Two functions to calculate means and compare them</span>
 
@@ -639,9 +838,9 @@ meanObs &lt;-<span class="st"> </span>dtObs[, .(<span class="dt">x1 =</span> <sp
 
 <span class="kw">showDif</span>(meanAct, meanObs)</code></pre></div>
 <pre><code>##              x1   x2   x3
-## Actual     20.7 20.7 20.7
-## Observed   20.9 19.4 18.9
-## Difference -0.2  1.3  1.8</code></pre>
+## Actual     20.1 20.1 20.1
+## Observed   20.2 18.3 18.5
+## Difference -0.1  1.8  1.6</code></pre>
 <p>After adjusting for the measured covariate <code>m</code>, the bias for the estimate of the mean of <code>x2</code> is mitigated, but not for <code>x3</code>, since <code>u</code> is not observed:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">meanActm &lt;-<span class="st"> </span>dtAct[, .(<span class="dt">x1 =</span> <span class="kw">rmean</span>(x1), <span class="dt">x2 =</span> <span class="kw">rmean</span>(x2), <span class="dt">x3 =</span> <span class="kw">rmean</span>(x3)), keyby =<span class="st"> </span>m]
 meanObsm &lt;-<span class="st"> </span>dtObs[, .(<span class="dt">x1 =</span> <span class="kw">rmean</span>(x1), <span class="dt">x2 =</span> <span class="kw">rmean</span>(x2), <span class="dt">x3 =</span> <span class="kw">rmean</span>(x3)), keyby =<span class="st"> </span>m]</code></pre></div>
@@ -649,16 +848,16 @@ meanObsm &lt;-<span class="st"> </span>dtObs[, .(<span class="dt">x1 =</span> <s
 
 <span class="kw">showDif</span>(meanActm[m ==<span class="st"> </span><span class="dv">0</span>, .(x1, x2, x3)], meanObsm[m ==<span class="st"> </span><span class="dv">0</span>, .(x1, x2, x3)])</code></pre></div>
 <pre><code>##              x1   x2   x3
-## Actual     10.4 10.5 10.4
-## Observed   10.5 10.5  8.8
-## Difference -0.1  0.0  1.6</code></pre>
+## Actual     10.3 10.2 10.3
+## Observed   10.3 10.2  8.8
+## Difference  0.0  0.0  1.5</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># compare observed and actual when m = 1</span>
 
 <span class="kw">showDif</span>(meanActm[m ==<span class="st"> </span><span class="dv">1</span>, .(x1, x2, x3)], meanObsm[m ==<span class="st"> </span><span class="dv">1</span>, .(x1, x2, x3)])</code></pre></div>
 <pre><code>##              x1   x2   x3
-## Actual     30.4 30.2 30.2
-## Observed   30.5 30.3 28.4
-## Difference -0.1 -0.1  1.8</code></pre>
+## Actual     29.9 29.9 29.8
+## Observed   30.1 29.3 28.2
+## Difference -0.2  0.6  1.6</code></pre>
 </div>
 <div id="longitudinal-data-with-missingness" class="section level2">
 <h2>Longitudinal data with missingness</h2>
@@ -686,7 +885,7 @@ defMlong &lt;-<span class="st"> </span><span class="kw">defMiss</span>(defMlong,
 missMatLong &lt;-<span class="st"> </span><span class="kw">genMiss</span>(dtTime, defMlong, <span class="dt">idvars =</span> <span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;rx&quot;</span>), <span class="dt">repeated =</span> <span class="ot">TRUE</span>, 
     <span class="dt">periodvar =</span> <span class="st">&quot;period&quot;</span>)</code></pre></div>
 <p>Here is a conceptual plot that shows the pattern of missingness. Each row represents an individual, and each box represents a time period. A box that is colored reflects missing data; a box colored grey reflects observed. The missingness pattern is shown for two variables <code>x1</code> and <code>y</code>:</p>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
 <p>In the second case, missingness is monotonic; once a subject misses a measurement for <code>y</code>, there are no subsequent measurements:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># missingness for y is not monotonic</span>
 
@@ -696,14 +895,7 @@ defMlong &lt;-<span class="st"> </span><span class="kw">defMiss</span>(defMlong,
 
 missMatLong &lt;-<span class="st"> </span><span class="kw">genMiss</span>(dtTime, defMlong, <span class="dt">idvars =</span> <span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;rx&quot;</span>), <span class="dt">repeated =</span> <span class="ot">TRUE</span>, 
     <span class="dt">periodvar =</span> <span class="st">&quot;period&quot;</span>)</code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
-</div>
-<div id="other-topics" class="section level2">
-<h2>Other topics</h2>
-<ul>
-<li>Merge data</li>
-<li>Correlated data</li>
-</ul>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
 </div>
 
 
@@ -713,7 +905,7 @@ missMatLong &lt;-<span class="st"> </span><span class="kw">genMiss</span>(dtTime
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

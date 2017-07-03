@@ -1,8 +1,5 @@
-
 #include <Rcpp.h>
 using namespace Rcpp;
-
-// [[Rcpp::export]]
 
 int vecMultinom(NumericVector probs) {
 
@@ -18,11 +15,9 @@ int vecMultinom(NumericVector probs) {
   }
 
   return(total);
-
 }
 
 // [[Rcpp::export]]
-
 Rcpp::IntegerVector matMultinom(Rcpp::NumericMatrix probmatrix) {
 
   int rows = probmatrix.nrow();
@@ -34,5 +29,5 @@ Rcpp::IntegerVector matMultinom(Rcpp::NumericMatrix probmatrix) {
   }
 
   return(ans);
-
 }
+

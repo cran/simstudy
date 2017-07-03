@@ -14,7 +14,7 @@ trtAssign(dtName, nTrt = 2, balanced = TRUE, strata = NULL,
 
 \item{balanced}{indicator for treatment assignment process}
 
-\item{strata}{vector of strings representing strativying variables}
+\item{strata}{vector of strings representing stratifying variables}
 
 \item{grpName}{string representing variable name for treatment or
 exposure group}
@@ -56,4 +56,3 @@ dt5[, .N, keyby = .(Group)]
 \seealso{
 \code{\link{trtObserve}}
 }
-
