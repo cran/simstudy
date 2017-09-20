@@ -669,7 +669,7 @@ defM <- defMiss(defM, varname = "x2", formula = ".05 + m * 0.25", logit.link = F
 defM <- defMiss(defM, varname = "x3", formula = ".05 + u * 0.25", logit.link = FALSE)
 defM <- defMiss(defM, varname = "u", formula = 1, logit.link = FALSE) # not observed
 
-missMat <- genMiss(dtAct, defM, idvars = "id")
+missMat <- genMiss(dtName = dtAct, missDefs = defM, idvars = "id")
 dtObs <- genObs(dtAct, missMat, idvars = "id")
 
 ## ---- tidy = TRUE--------------------------------------------------------
@@ -730,7 +730,7 @@ dtTime <- addColumns(defLong, dtTime)
 defMlong <- defMiss(varname = "x1", formula = .20, baseline = TRUE)
 defMlong <- defMiss(defMlong,varname = "y", formula = "-1.5 - 1.5 * rx + .25*period", logit.link = TRUE, baseline = FALSE, monotonic = FALSE)
 
-missMatLong <- genMiss(dtTime, defMlong, idvars = c("id","rx"), repeated = TRUE, periodvar = "period")
+missMatLong <- genMiss(dtName = dtTime, missDefs = defMlong, idvars = c("id","rx"), repeated = TRUE, periodvar = "period")
 
 ## ----tidy=TRUE, echo=FALSE, fig.width = 7, fig.height = 6----------------
 xp10 <- ggmissing(missMatLong, varSelect="rx", varLevel = 0, idvar = "id",
@@ -763,7 +763,7 @@ grid.arrange(xp10, xp20, xp11, xp21,
 defMlong <- defMiss(varname = "x1", formula = .20, baseline = TRUE)
 defMlong <- defMiss(defMlong,varname = "y", formula = "-1.8 - 1.5 * rx + .25*period", logit.link = TRUE, baseline = FALSE, monotonic = TRUE)
 
-missMatLong <- genMiss(dtTime, defMlong, idvars = c("id","rx"), repeated = TRUE, periodvar = "period")
+missMatLong <- genMiss(dtName = dtTime, missDefs = defMlong, idvars = c("id","rx"), repeated = TRUE, periodvar = "period")
 
 ## ----tidy=TRUE, echo=FALSE, fig.width = 7, fig.height = 6----------------
 xp10 <- ggmissing(missMatLong, varSelect="rx", varLevel = 0, idvar = "id",
