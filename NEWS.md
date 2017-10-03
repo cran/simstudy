@@ -25,3 +25,10 @@
 * Added function defCondition - define distribution conditional on existing fields
 * Added function defReadCond - read in conditional definitions from external csv file
 * Added function addCondition - genaration data based on conditional definition
+
+# simstudy 0.1.5
+
+* Added uniform integer distribution (uniformInt)
+* Added negative binomial distribution (negBinomial)
+* Added exponential distribution (exponential)
+* Added function delColumns - deletes one or more columns from data.table

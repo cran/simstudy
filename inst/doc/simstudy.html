@@ -12,7 +12,7 @@
 
 <meta name="author" content="Keith S. Goldfeld" />
 
-<meta name="date" content="2017-09-20" />
+<meta name="date" content="2017-10-03" />
 
 <title>Simulating study data</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Simulating study data</h1>
 <h4 class="author"><em>Keith S. Goldfeld</em></h4>
-<h4 class="date"><em>2017-09-20</em></h4>
+<h4 class="date"><em>2017-10-03</em></h4>
 
 
 
@@ -176,13 +176,17 @@ def &lt;-<span class="st"> </span><span class="kw">defData</span>(def, <span cla
 def &lt;-<span class="st"> </span><span class="kw">defData</span>(def, <span class="dt">varname =</span> <span class="st">&quot;a1&quot;</span>, <span class="dt">dist =</span> <span class="st">&quot;binary&quot;</span>, <span class="dt">formula =</span> <span class="st">&quot;-3 + xCat&quot;</span>, 
     <span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>)</code></pre></div>
 <p>The first call to <code>defData</code> without specifying a definition name (in this example the definition name is <em>def</em>) creates a <strong>new</strong> data.table with a single row. An additional row is added to the table <code>def</code> each time the function <code>defData</code> is called. Each of these calls is the definition of a new field in the data set that will be generated. In this example, the first data field is named ‘nr’, defined as a constant with a value to be 7. In each call to <code>defData</code> the user defines a variable name, a distribution (the default is ‘normal’), a mean formula (if applicable), a variance parameter (if applicable), and a link function for the mean (defaults to ‘identity’).<br />
-The possible distributions include <strong>normal</strong>, <strong>gamma</strong>, <strong>poisson</strong>, <strong>zero-truncated poisson</strong>, <strong>binary</strong>, <strong>uniform</strong>, <strong>categorical</strong>, and <strong>deterministic/non-random</strong>. For all of these distributions, key parameters defining the distribution are entered in the <code>formula</code>, <code>variance</code>, and <code>link</code> fields.</p>
+The possible distributions include <strong>normal</strong>, <strong>gamma</strong>, <strong>poisson</strong>, <strong>zero-truncated poisson</strong>, <strong>binary</strong>, <strong>uniform</strong>, <strong>uniform integer</strong>, <strong>categorical</strong>, and <strong>deterministic/non-random</strong>. For all of these distributions, key parameters defining the distribution are entered in the <code>formula</code>, <code>variance</code>, and <code>link</code> fields.</p>
 <p>In the case of the <strong>normal</strong> and <strong>gamma</strong> distributions, the formula specifies the mean. The formula can be a scalar value (number) or a string that represents a function of previously defined variables in the data set definition (or, as we will see later, in a previously generated data set). In the example, the mean of <code>y1</code>, a normally distributed value, is declared as a linear function of <code>nr</code> and <code>x1</code>, and the mean of <code>g1</code> is a function of the category defined by <code>xCat</code>. The <code>variance</code> field is defined only for normal and gamma random variables, and can only be defined as a scalar value. In the case of gamma random variables, the value entered in variance field is really a dispersion value <span class="math inline">\(d\)</span>, where the actual variance will be <span class="math inline">\(d \times mean^2\)</span>.<br />
 </p>
 <p>In the case of the <strong>poisson</strong>, <strong>zero-truncated poisson</strong>, and <strong>binary</strong> distributions, the formula also specifies the mean. The variance is not a valid parameter in these cases, but the <code>link</code> field is. The default link is ‘identity’ but a ‘log’ link is available for the poisson distributions and a “logit” link is available for the binary outcomes. In this example, <code>y2</code> is defined as poisson random variable with a mean that is function of <code>nr</code> and <code>x1</code> on the log scale. For binary variables, which take a value of 0 or 1, the formula represents probability (with the ‘identity’ link) or log odds (with the ‘logit’ link) of the variable having a value of 1. In the example, <code>a1</code> has been defined as a binary random variable with a log odds that is a function of <code>xCat</code>.<br />
-Variables defined with a <strong>uniform</strong>, <strong>categorical</strong>, or <strong>deterministic/non-random</strong> distribution are specified using the formula only. The <code>variance</code> and <code>link</code> fields are not used in these cases.<br />
+<br />
+Variables defined with a <strong>uniform</strong>, <strong>uniform integer</strong>, <strong>categorical</strong>, or <strong>deterministic/non-random</strong> distribution are specified using the formula only. The <code>variance</code> and <code>link</code> fields are not used in these cases.<br />
+<br />
 For a uniformly distributed variable, The formula is a string with the format “a;b”, where <em>a</em> and <em>b</em> are scalars or functions of previously defined variables. The uniform distribution has two parameters - the minimum and the maximum. In this case, <em>a</em> represents the minimum and <em>b</em> represents the maximum.<br />
+<br />
 For a categorical variable with <span class="math inline">\(k\)</span> categories, the formula is a string of probabilities that sum to 1: “<span class="math inline">\(p_1 ; p_2 ; ... ; p_k\)</span>”. <span class="math inline">\(p_1\)</span> is the probability of the random variable falling category 1, <span class="math inline">\(p_2\)</span> is the probablity of category 2, etc. The probabilities can be specified as functions of other variables previously defined. In the example, <code>xCat</code> has three possibilities with probabilites 0.3, 0.2, and 0.5, respectively.<br />
+<br />
 Non-random variables are defined by the formula. Since these variables are deterministic, variance is not relevant. They can be functions of previously defined variables or a scalar, as we see in the sample for variable defined as <code>nr</code>.</p>
 </div>
 <div id="generating-the-data" class="section level2">
