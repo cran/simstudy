@@ -43,6 +43,7 @@ library(gridExtra)
 library(survival)
 library(knitr)
 library(gee)
+library(splines)
 
 set.seed(33333)
 
@@ -279,11 +280,11 @@ ggsurv_m <- function(
 
 ```
 
-Simulation using `simstudy` has two primary steps. First, the user **defines** the data elements of a data set. Second, the user **generates** the data, using the definitions in the first step. Additional functionality exists to simulate observed or randomized **treatment assignment/exposures**, to generate **survival** data, to create **longitudinal/panel** data, to create **multi-level/hierarchical** data, to create datasets with **correlated variables** based on a specified covariance structure, to **merge** datasets, and to create data sets with **missing** data.
+Simulation using `simstudy` has two primary steps. First, the user **defines** the data elements of a data set. Second, the user **generates** the data, using the definitions in the first step. Additional functionality exists to simulate observed or randomized **treatment assignment/exposures**, to generate **survival** data, to create **longitudinal/panel** data, to create **multi-level/hierarchical** data, to create datasets with **correlated variables** based on a specified covariance structure, to **merge** datasets, to create data sets with **missing** data, and to create non-linear relationships with underlying **spline** curves.
 
 ## Defining the data
 
-The key to simulating data in `simstudy` is the creation of series of data defintion tables that look like this:
+The key to simulating data in `simstudy` is the creation of series of data definition tables that look like this:
 
 ```{r,  echo=FALSE}
 def <- defData(varname = "nr", dist = "nonrandom", formula=7, id = "idnum")
@@ -316,19 +317,19 @@ The possible distributions include **normal**, **gamma**, **poisson**, **zero-tr
 In the case of the **normal** and **gamma** distributions, the formula specifies the mean. The formula can be a scalar value (number) or a string that represents a function of previously defined variables in the data set definition (or, as we will see later, in a previously generated data set). In the example, the mean of `y1`, a normally distributed value, is declared as a linear function of `nr` and `x1`, and the mean of `g1` is a function of the category defined by `xCat`. The `variance` field is defined only for normal and gamma random variables, and can only be defined as a scalar value. In the case of gamma random variables, the value entered in variance field is really a dispersion value $d$, where the actual variance will be $d \times mean^2$.\
 
 
-In the case of the **poisson**, **zero-truncated poisson**, and **binary** distributions, the formula also specifies the mean. The variance is not a valid parameter in these cases, but the `link` field is. The default link is 'identity' but a 'log' link is available for the poisson distributions and a "logit" link is available for the binary outcomes. In this example, `y2` is defined as poisson random variable with a mean that is function of `nr` and `x1` on the log scale. For binary variables, which take a value of 0 or 1, the formula represents probability (with the 'identity' link) or log odds (with the 'logit' link) of the variable having a value of 1. In the example, `a1` has been defined as a binary random variable with a log odds that is a function of `xCat`.  \
+In the case of the **poisson**, **zero-truncated poisson**, and **binary** distributions, the formula also specifies the mean. The variance is not a valid parameter in these cases, but the `link` field is. The default link is 'identity' but a 'log' link is available for the Poisson distributions and a "logit" link is available for the binary outcomes. In this example, `y2` is defined as Poisson random variable with a mean that is function of `nr` and `x1` on the log scale. For binary variables, which take a value of 0 or 1, the formula represents probability (with the 'identity' link) or log odds (with the 'logit' link) of the variable having a value of 1. In the example, `a1` has been defined as a binary random variable with a log odds that is a function of `xCat`.  \
   
 Variables defined with a **uniform**, **uniform integer**, **categorical**, or **deterministic/non-random** distribution are specified using the formula only. The `variance` and `link` fields are not used in these cases.  \
   
 For a uniformly distributed variable, The formula is a string with the format "a;b", where *a* and *b* are scalars or functions of previously defined variables. The uniform distribution has two parameters - the minimum and the maximum. In this case, *a* represents the minimum and *b* represents the maximum.  \
   
-For a categorical variable with \(k\) categories, the formula is a string of  probabilities that sum to 1: "\(p_1 ; p_2 ; ... ; p_k\)". \(p_1\) is the probability of the random variable falling category 1, \(p_2\) is the probablity of category 2, etc. The probabilities can be specified as functions of other variables previously defined. In the example, `xCat` has three possibilities with probabilites 0.3, 0.2, and 0.5, respectively.  \
+For a categorical variable with \(k\) categories, the formula is a string of  probabilities that sum to 1: "\(p_1 ; p_2 ; ... ; p_k\)". \(p_1\) is the probability of the random variable falling category 1, \(p_2\) is the probability of category 2, etc. The probabilities can be specified as functions of other variables previously defined. In the example, `xCat` has three possibilities with probabilities 0.3, 0.2, and 0.5, respectively.  \
   
 Non-random variables are defined by the formula. Since these variables are deterministic, variance is not relevant. They can be functions of previously defined variables or a scalar, as we see in the sample for variable defined as `nr`.
 
 ## Generating the data
 
-After the data set definitions have been created, a new data set with \(n\) observations can be created with a call to function **`genData`**. In this example, 1,000 observations are generated using the data set defitions in **`def`**, and then stored in the object **`dt`**:
+After the data set definitions have been created, a new data set with \(n\) observations can be created with a call to function **`genData`**. In this example, 1,000 observations are generated using the data set definitions in **`def`**, and then stored in the object **`dt`**:
 
 ```{r, tidy = TRUE}
 dt <- genData(1000, def)
@@ -470,9 +471,9 @@ p2a <- ggplot(data = dtplot2a, aes(x=factor(over65), y=N)) +
 grid.arrange(p1a,p2a,nrow=1)
 ```
 
-## Survival data
+## Survival data (updated 10-11-2017)
 
-Time-to-event data, including both survival and censoring times, are created using functions `defSurv` and `genSurv`. The survival data definitions require a variable name as well as a specification of a scale value, which determines the mean survival time at a baseline level of covariates (i.e. all covariates set to 0). The Weibull distribution is used to generate these survival times. In addition, covariates (which have been defined previously) that influence survival time can be included in the `formula` field. Positive coeffecients are associated with longer survival times (and lower hazard rates). Finally, the *shape* of the distribution can be specified. A `shape` value of 1 reflects the *exponential* distribution.
+Time-to-event data, including both survival and censoring times, are created using functions `defSurv` and `genSurv`. The survival data definitions require a variable name as well as a specification of a scale value, which determines the mean survival time at a baseline level of covariates (i.e. all covariates set to 0). The Weibull distribution is used to generate these survival times. In addition, covariates (which have been defined previously) that influence survival time can be included in the `formula` field. Positive coefficients are associated with longer survival times (and lower hazard rates). Finally, the *shape* of the distribution can be specified. A `shape` value of 1 reflects the *exponential* distribution.
 
 ```{r, tidy = TRUE}
 
@@ -585,7 +586,7 @@ ggplot(data = dtTime, aes(x = factor(period), y = Y)) +
 
 ### Longitudinal data with varying observation and interval times
 
-It is also possible to generate longitudinal data with varying numbers of measurement periods as well as varying time intervals between each measurement period. This is done by defining specific variables in the data set that define the number of observations per subject and the average interval time between each observation. `nCount` defines the number of measurements for an individual; `mInterval` specifies the average time between intervals for an subject; and `vInterval` specifies the variance of those interval times. If `vInterval` is set to 0 or is not defined, the interval for a subject is deterimined entirely by the mean interval. If `vInterval` is greater than 0, time intervals are generated using a gamma distribution with mean and dispersion specified.
+It is also possible to generate longitudinal data with varying numbers of measurement periods as well as varying time intervals between each measurement period. This is done by defining specific variables in the data set that define the number of observations per subject and the average interval time between each observation. `nCount` defines the number of measurements for an individual; `mInterval` specifies the average time between intervals for an subject; and `vInterval` specifies the variance of those interval times. If `vInterval` is set to 0 or is not defined, the interval for a subject is determined entirely by the mean interval. If `vInterval` is greater than 0, time intervals are generated using a gamma distribution with mean and dispersion specified.
 
 In this simple example, the cross-sectional data generates individuals with a different number of measurement observations and different times between each observation. Data for two of these individuals is printed:
 
@@ -635,7 +636,7 @@ The function `genCluster` generates multilevel or clustered data based on a prev
 
 In the example here, we do in fact generate school, class, and student level data. There are eight schools, four of which are randomized to receive an intervention. The number of classes per school varies, as does the number of students per class. (It is straightforward to generate fully balanced data by using constant values.) The outcome of interest is a test score, which is influenced by gender and the intervention. In addition, test scores vary by schools, and by classrooms, so the simulation provides *random effects* at each of these levels.
 
-We start by definining the school level data:
+We start by defining the school level data:
 
 ```{r, tidy = TRUE}
 gen.school <- defData(varname="s0", dist = "normal", 
@@ -702,9 +703,9 @@ ggplot(data=dtStudent,aes(x=factor(idClass),y=test,group=idClass)) +
 
 ## Correlated data
 
-Sometimes it is desireable to simulate correlated data from a correlation matrix directly. For example, a simulation might require two random effects (e.g. a random intercept and a random slope). Correlated data like this could be generated using the `defData` functionality, but it may be more natural to do this with `genCorData` or `addCorData`. Currently, simstudy can only generate multivariate normal using these functions. (In the future, additional distributions will be available.)
+Sometimes it is desirable to simulate correlated data from a correlation matrix directly. For example, a simulation might require two random effects (e.g. a random intercept and a random slope). Correlated data like this could be generated using the `defData` functionality, but it may be more natural to do this with `genCorData` or `addCorData`. Currently, simstudy can only generate multivariate normal using these functions. (In the future, additional distributions will be available.)
 
-`genCorData` requires the user to specify a mean vector `mu`, a single standard deviation or a vector of standard deviations `sigma`, and either a correlation matrix `corMatrix` or a correlation coeficient `rho` and a correlation structure `corsrt`. It is easy to see how this can be used from a few different examples.
+`genCorData` requires the user to specify a mean vector `mu`, a single standard deviation or a vector of standard deviations `sigma`, and either a correlation matrix `corMatrix` or a correlation coefficient `rho` and a correlation structure `corsrt`. It is easy to see how this can be used from a few different examples.
 
 ```{r, tidy=TRUE}
 # specifying a specific correlation matrix C
@@ -761,7 +762,7 @@ dt[,round(sqrt(diag(var(cbind(a0, a1)))),1)]
 
 ### Correlated data: additional distributions
 
-Two additional functions facilitiate the generation of correlated data from *binomial*, *poisson*, *gamma*, and *uniform* distributions: `genCorGen` and `addCorGen`.
+Two additional functions facilitate the generation of correlated data from *binomial*, *poisson*, *gamma*, and *uniform* distributions: `genCorGen` and `addCorGen`.
 
 `genCorGen` is an extension of `genCorData`. In the first example, we are generating data from a multivariate Poisson distribution. We start by specifying the mean of the Poisson distribution for each new variable, and then we specify the correlation structure, just as we did with the normal distribution.
 
@@ -809,7 +810,7 @@ dt <- genData(10000, def)
 dt
 ```
 
-The Poisson distribution has a single paramter, lambda:
+The Poisson distribution has a single parameter, lambda:
 
 ```{r}
 
@@ -818,7 +819,7 @@ dtX1 <- addCorGen(dtOld = dt, idvar = "cid", nvars = 3, rho = .1, corstr = "cs",
 dtX1
 ```
 
-The Bernouilli (binary) distribution has a single parameter, p:
+The Bernoulli (binary) distribution has a single parameter, p:
 
 ```{r}
 dtX2 <- addCorGen(dtOld = dt, idvar = "cid", nvars = 4, rho = .4, corstr = "ar1",
@@ -865,7 +866,7 @@ round(summary(geefit)$working.correlation, 2)
 ```
 ## Missing data
 
-After generating a complete data set, it is possible to generate missing data. `defMiss` defines the parameters of missingness. `genMiss` generates a missing data matrix of indicators for each field. Indicators are set to 1 if the data are missing for a subject, 0 otherwise. `genObs` creates a data set that reflects what would have been observed had data been missing; this is a replicate of the orginal data set with "NAs" replacing values where missing data has been generated.
+After generating a complete data set, it is possible to generate missing data. `defMiss` defines the parameters of missingness. `genMiss` generates a missing data matrix of indicators for each field. Indicators are set to 1 if the data are missing for a subject, 0 otherwise. `genObs` creates a data set that reflects what would have been observed had data been missing; this is a replicate of the original data set with "NAs" replacing values where missing data has been generated.
 
 By controlling the parameters of missingness, it is possible to represent different missing data mechanisms: (1) *missing completely at random* (MCAR), where the probability missing data is independent of any covariates, measured or unmeasured, that are associated with the measure, (2) *missing at random* (MAR), where the probability of subject missing data is a function only of observed covariates that are associated with the measure, and (3) *not missing at random* (NMAR), where the probability of missing data is related to unmeasured covariates that are associated with measure.
 
@@ -940,7 +941,7 @@ showDif(meanActm[m==1, .(x1, x2, x3)], meanObsm[m==1, .(x1, x2, x3)])
 
 ## Longitudinal data with missingness
 
-Missingness can occur, of course, in the context of longitudinal data. `missDef` provides two additional arguments that are relevant for these types of datas: `baseline` and `monotonic`. In the case of variables that are measured at baseline only, a missing value would be reflected throughout the course of the study. In the case where a variable is time-dependent (i.e it is measured at each time point), it is possible to declare missingness to be  *monotonic*. This means that if a value for this field is missing at time `t`, then values will also be missing at all times `T > t` as well. The call to `genMiss` must set `repeated` to TRUE.
+Missingness can occur, of course, in the context of longitudinal data. `missDef` provides two additional arguments that are relevant for these types of data: `baseline` and `monotonic`. In the case of variables that are measured at baseline only, a missing value would be reflected throughout the course of the study. In the case where a variable is time-dependent (i.e it is measured at each time point), it is possible to declare missingness to be  *monotonic*. This means that if a value for this field is missing at time `t`, then values will also be missing at all times `T > t` as well. The call to `genMiss` must set `repeated` to TRUE.
 
 The following two examples describe an outcome variable `y` that is measured over time, whose value is a function of time and an observed exposure: 
 
@@ -1035,3 +1036,110 @@ grid.arrange(xp10, xp20, xp11, xp21,
 
 
 ```
+
+## Spline data
+
+Sometimes (usually?) relationships between variables are non-linear. `simstudy` can already accommodate that. But, if we want to explicitly generate data from a piece-wise polynomial function to explore spline methods in particular, or non-linear relationships more generally. There are three functions that facilitate this: `viewBasis`, `viewSplines`, and `genSpline`. The first two functions are more exploratory in nature, and just provide plots of the B-spline basis functions and the splines, respectively. The third function actually generates data and adds to an existing data.table.
+
+The shape of a spline is determined by three factors: (1) the cut-points or knots that define the piecewise structure of the function, (2) the polynomial degree, such as linear, quadratic, cubic, etc., and (3) the linear coefficients that combine the basis functions, which is contained in a vector or matrix *theta*.
+
+First, we can look at the basis functions, we depend only the knots and degree. The knots are specified as quantiles, between 0 and 1:
+
+```{r, fig.width = 6, fig.height = 2.5 }
+knots <- c(0.25, 0.50, 0.75)
+viewBasis(knots, degree = 2)
+
+knots <- c(0.20, 0.40, 0.60, 0.80)
+viewBasis(knots, degree = 3)
+
+```
+
+The splines themselves are specified as linear combinations of each of the basis functions. The coefficients of those combinations are specified in *theta*. Each individual spline curve represents a specific linear combination of a particular set of basis functions. In exploring, we can look at a single curve or multiple curves, depending on whether or not we specify theta as a vector (single) or matrix (multiple).
+
+```{r, fig.width = 6, fig.height = 2.5 }
+knots <- c(0.25, 0.5, 0.75)
+
+# number of elements in theta: length(knots) + degree + 1
+theta1 = c(0.1, 0.8, 0.4, 0.9, 0.2, 1.0) 
+
+viewSplines(knots, degree = 2, theta1)
+
+
+theta2 = matrix(c(0.1, 0.2, 0.4, 0.9, 0.2, 0.3, 0.6, 
+                  0.1, 0.3, 0.3, 0.8, 1.0, 0.9, 0.4, 
+                  0.1, 0.9, 0.8, 0.2, 0.1, 0.6, 0.1),
+               ncol = 3)
+
+theta2
+
+viewSplines(knots, degree = 3, theta2)
+```
+
+We can generate data using a predictor in an existing data set by specifying the *knots* (in terms of quantiles), a vector of coefficients in *theta*, the degree of polynomial, as well as a range 
+
+```{r}
+ddef <- defData(varname = "age", formula = "20;60", dist = "uniform")
+
+theta1 = c(0.1, 0.8, 0.6, 0.4, 0.6, 0.9, 0.9)
+knots <- c(0.25, 0.5, 0.75)
+```
+
+Here is the shape of the curve that we want to generate data from:
+
+```{r, fig.width = 6, fig.height = 2.5 }
+viewSplines(knots = knots, theta = theta1, degree = 3)
+```
+
+Now we specify the variables in the data set and generate the data:
+
+```{r}
+set.seed(234)
+dt <- genData(1000, ddef)
+dt <- genSpline(dt = dt, newvar = "weight",
+                predictor = "age", theta = theta1,
+                knots = knots, degree = 3,
+                newrange = "90;160",
+                noise.var = 64)
+```
+
+Here's a plot of the data with a smoothed line fit to the data:
+
+```{r, fig.width = 6, fig.height = 3, message = FALSE}
+ggplot(data = dt, aes(x=age, y=weight)) +
+  geom_point(color = "grey65", size = 0.75) +
+  geom_smooth(se=FALSE, color="red", size = 1, method = "auto") +
+  geom_vline(xintercept = quantile(dt$age, knots)) +
+  theme(panel.grid.minor = element_blank())
+```
+
+Finally, we will fit three different spline models to the data - a linear, a quadratic, and a cubic - and plot the predicted values:
+
+```{r, fig.width = 6, fig.height = 3}
+
+# normalize age for best basis functions
+dt[, nage := (age - min(age))/(max(age) - min(age))] 
+
+# fit a cubic spline
+lmfit3 <- lm(weight ~ bs(x = nage, knots = knots, degree = 3, intercept = TRUE) - 1, data = dt)
+
+# fit a quadtratic spline
+lmfit2 <- lm(weight ~ bs(x = nage, knots = knots, degree = 2), data = dt)
+
+# fit a  linear spline
+lmfit1 <- lm(weight ~ bs(x = nage, knots = knots, degree = 1), data = dt)
+
+# add predicted values for plotting
+dt[, pred.3deg := predict(lmfit3)]
+dt[, pred.2deg := predict(lmfit2)]
+dt[, pred.1deg := predict(lmfit1)]
+
+ggplot(data = dt, aes(x=age, y=weight)) +
+  geom_point(color = "grey65", size = 0.75) +
+  geom_line(aes(x=age, y = pred.3deg), color = "#1B9E77", size = 1) +
+  geom_line(aes(x=age, y = pred.2deg), color = "#D95F02", size = 1) +
+  geom_line(aes(x=age, y = pred.1deg), color = "#7570B3", size = 1) +
+  geom_vline(xintercept = quantile(dt$age, knots)) +
+  theme(panel.grid.minor = element_blank())
+```
+
+

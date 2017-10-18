@@ -32,3 +32,8 @@
 * Added negative binomial distribution (negBinomial)
 * Added exponential distribution (exponential)
 * Added function delColumns - deletes one or more columns from data.table
+
+# simstudy 0.1.6
+
+* Fixed function genSurv
+* Added spline generating functions
