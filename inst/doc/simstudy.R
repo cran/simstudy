@@ -1,4 +1,5 @@
 ## ---- echo = FALSE, message = FALSE--------------------------------------
+
 library(simstudy)
 library(ggplot2)
 library(scales)

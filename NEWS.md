@@ -44,3 +44,10 @@
 * Added function genFormula - creates a linear formula in the form of a string
 * Added function updateDef - modify existing data definition table (to be used in genData())
 * Added function updateDefData - modify existing data def table (to be used in addColumns())
+
+# simstudy 0.1.8
+
+* Fixed function updateDef
+* Fixed bug in internal function genbinom
+* Added function genCorFlex - generate correlated data from variables that have different marginal distributions
+* Added function genCorFlex - generate correlated data from variables that have different marginal distributions, can be dependent on previously defined data
