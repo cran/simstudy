@@ -51,3 +51,16 @@
 * Fixed bug in internal function genbinom
 * Added function genCorFlex - generate correlated data from variables that have different marginal distributions
 * Added function genCorFlex - generate correlated data from variables that have different marginal distributions, can be dependent on previously defined data
+
+# simstudy 0.1.9
+
+* Added function catProbs - to be used to generate categorical data
+* Added binomial distribution
+* Added ability to specify formula in variance
+* Added function genMultiFac - generates multi-factorial design data
+* Added function addMultiFac - adds multi-factorial design data
+* Added function iccRE - generates required random effect variance for specified intra-class coefficients (ICCs)
+* Fixed bug in function genCorFlex
+* Fixed bug in numerous functions related to error checking and scoping
+* Fixed bug in function addCondition
+

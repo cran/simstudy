@@ -28,13 +28,6 @@
 #' probs<-c(0.40, 0.25, 0.15)
 #' dx <- genOrdCat(dx, adjVar = "z", probs, catVar = "grp")
 #'
-#' # test ordinal model
-#' m1 <- ordinal::clm(grp ~ male, data = dx, link = "logit")
-#' summary(m1)
-#'
-#' # check true cumulative log odds
-#' log(cumsum(probs)/(1-cumsum(probs)))
-#'
 #' @export
 
 genOrdCat <- function(dtName, adjVar, baseprobs, catVar = "cat", asFactor = TRUE) {
@@ -45,7 +38,7 @@ genOrdCat <- function(dtName, adjVar, baseprobs, catVar = "cat", asFactor = TRUE
 
   # Check arguments
 
-  if (!exists(deparse(substitute(dtName)))) {
+  if (!exists(deparse(substitute(dtName)),  envir = parent.frame())) {
     stop("Data table does not exist.")
   }
 
@@ -101,6 +94,6 @@ genOrdCat <- function(dtName, adjVar, baseprobs, catVar = "cat", asFactor = TRUE
     data.table::setnames(dt, "cat", catVar)
   }
 
-  return(dt)
+  return(dt[])
 
 }
