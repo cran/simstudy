@@ -64,3 +64,12 @@
 * Fixed bug in numerous functions related to error checking and scoping
 * Fixed bug in function addCondition
 
+# simstudy 0.1.10
+
+* Added function genCorMat - generate an n x n correlation matrix
+* Added function genCorOrdCat - generate correlated ordinal categorical data
+* Added beta distribution option to function defData (and associated functions)
+* Added function betaGetShapes
+* Implmented Emrich and Piedmonte algorithm for correlated binary data for function genCorGen and addCorGen
+* Modified function genOrdCat - allows adjVar = NULL
+* Fixed bug in function addCorFlex

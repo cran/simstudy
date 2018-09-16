@@ -1,4 +1,4 @@
-#### evalDef ####
+#### .evalDef ####
 
 # Internal function to check new data definition
 #
@@ -8,7 +8,7 @@
 # @return Nothing is returned if all tests are passed. If a test fails,
 # execution is halted.
 
-evalDef <- function(newvar, newform, newdist, defVars) {
+.evalDef <- function(newvar, newform, newdist, defVars) {
 
   # Check if previously defined
 
@@ -26,6 +26,7 @@ evalDef <- function(newvar, newform, newdist, defVars) {
   if (newdist %in% c("uniform","uniformInt") & nparam != 2) {
       stop("Uniform (continuous & integer) requires min and max", call. = FALSE)
   }
+  
 
   if (newdist == "categorical" & nparam < 2) {
     stop("Categorical distribution requires 2 or more probabilities", call. = FALSE)
@@ -41,7 +42,7 @@ evalDef <- function(newvar, newform, newdist, defVars) {
 
     newExpress <- try(parse(text = test[i]), silent = TRUE)
 
-    if (is.error(newExpress)) {
+    if (.iserror(newExpress)) {
       stop("Equation not in proper form", call. = FALSE)
     }
     # Check to makes sure all vars have been previously defined in data.table
@@ -62,7 +63,7 @@ evalDef <- function(newvar, newform, newdist, defVars) {
     if (length(equvars) > 0) {
       for (i in 1:length(equvars)) eval(parse(text = paste(equvars[i],"<- 1")))
       formtest <- try(eval(newExpress), silent = TRUE)
-      if (is.error(formtest)) {
+      if (.iserror(formtest)) {
         stop("Formula includes unrecognized function", call. = FALSE)
       }
     }
@@ -71,7 +72,7 @@ evalDef <- function(newvar, newform, newdist, defVars) {
   # Make sure that distribution is allowed
 
   if (!(newdist %in% c("normal","binary", "binomial","poisson","noZeroPoisson",
-                       "uniform","categorical","gamma","nonrandom",
+                       "uniform","categorical","gamma","beta","nonrandom",
                        "uniformInt", "negBinomial", "exponential"
   ))) {
 

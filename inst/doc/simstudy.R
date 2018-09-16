@@ -9,6 +9,7 @@ library(survival)
 library(knitr)
 library(gee)
 library(splines)
+library(ordinal)
 
 set.seed(33333)
 
@@ -18,6 +19,12 @@ plotcolors <- c("#B84226", "#1B8445", "#1C5974")
 
 cbbPalette <- c("#B84226","#B88F26", "#A5B435", "#1B8446",
                 "#B87326","#B8A526", "#6CA723", "#1C5974") 
+
+odds <- function(p) {
+  return(p/(1-p))
+}
+
+# 
 
 ggtheme <- function(panelback = "white") {
   
@@ -252,6 +259,7 @@ def <- defData(def,varname="y2", dist="poisson", formula="nr - 0.2 * x1",link="l
 def <- defData(def, varname = "xnb", dist = "negBinomial" , formula="nr - 0.2 * x1", variance = 0.05, link = "log")
 def <- defData(def,varname="xCat",formula = "0.3;0.2;0.5", dist="categorical")
 def <- defData(def,varname="g1", dist="gamma", formula = "5+xCat", variance = 1, link = "log")
+def <- defData(def,varname="b1", dist="beta", formula = "1+0.3*xCat", variance = 1, link = "logit")
 def <- defData(def, varname = "a1", dist = "binary" , formula="-3 + xCat", link="logit")
 def <- defData(def, varname = "a2", dist = "binomial" , formula="-3 + xCat", variance = 100, link="logit")
 
@@ -265,8 +273,9 @@ def <- defData(def,varname="y2",dist="poisson",formula="nr - 0.2 * x1",link="log
 def <- defData(def, varname = "xnb", dist = "negBinomial" , formula="nr - 0.2 * x1", variance = 0.05, link = "log")
 def <- defData(def,varname="xCat",formula = "0.3;0.2;0.5",dist="categorical")
 def <- defData(def,varname="g1", dist="gamma", formula = "5+xCat", variance = 1, link = "log")
+def <- defData(def,varname="b1", dist="beta", formula = "1+0.3*xCat", variance = 1, link = "logit")
 def <- defData(def, varname = "a1", dist = "binary" , formula="-3 + xCat", link="logit")
-def <- defData(def, varname = "a2", dist = "binomial" , formula="-3 + xCat", variance = 100, link="logit")
+def <- defData(def, varname = "a2", dist = "binomial" , formula="-3 + xCat", variance = 100, link="logit") 
 
 ## ---- tidy = TRUE--------------------------------------------------------
 dt <- genData(1000, def)
@@ -621,7 +630,6 @@ dt <- genData(10000, def)
 dt
 
 ## ------------------------------------------------------------------------
-
 dtX1 <- addCorGen(dtOld = dt, idvar = "cid", nvars = 3, rho = .1, corstr = "cs",
                     dist = "poisson", param1 = "lambda", cnames = "a, b, c")
 dtX1
@@ -873,4 +881,175 @@ ggplot(data = dt, aes(x=age, y=weight)) +
   geom_line(aes(x=age, y = pred.1deg), color = "#7570B3", size = 1) +
   geom_vline(xintercept = quantile(dt$age, knots)) +
   theme(panel.grid.minor = element_blank())
+
+## ----options, echo = FALSE-----------------------------------------------
+options(digits = 2)
+
+## ----threshold, fig.width = 5.25, fig.height = 3.5, echo = FALSE---------
+# preliminary libraries and plotting defaults
+
+library(ggplot2)
+library(data.table)
+
+my_theme <- function() {
+  theme(panel.background = element_rect(fill = "grey90"), 
+        panel.grid = element_blank(), 
+        axis.ticks = element_line(colour = "black"), 
+        panel.spacing = unit(0.25, "lines"), 
+        plot.title = element_text(size = 12, vjust = 0.5, hjust = 0), 
+        panel.border = element_rect(fill = NA, colour = "gray90"))
+}
+
+# create data points density curve 
+
+x <- seq(-6, 6, length = 1000)
+pdf <- dlogis(x, location = 0, scale = 1)
+dt <- data.table(x, pdf)
+
+# set thresholds for Group A
+
+thresholdA <- c(-2.1, -0.3, 1.4, 3.6)
+
+pdf <- dlogis(thresholdA)
+grpA <- data.table(threshold = thresholdA, pdf)
+aBreaks <- c(-6, grpA$threshold, 6)
+
+# plot density with cutpoints
+
+dt[, grpA := cut(x, breaks = aBreaks, labels = F, include.lowest = TRUE)]
+
+p1 <- ggplot(data = dt, aes(x = x, y = pdf)) +
+  geom_line() +
+  geom_area(aes(x = x, y = pdf, group = grpA, fill = factor(grpA))) +
+  geom_hline(yintercept = 0, color = "grey50") +
+  annotate("text", x = -5, y = .28, label = "unexposed", size = 5) +
+  scale_fill_manual(values = c("#d0d7d1", "#bbc5bc", "#a6b3a7", "#91a192", "#7c8f7d"),
+                    labels = c("strongly disagree", "disagree", "neutral", "agree", "strongly agree"),
+                    name = "Frequency") +
+  scale_x_continuous(breaks = thresholdA) +
+  scale_y_continuous(limits = c(0, 0.3), name = "Density") +
+  my_theme() +
+  theme(legend.position = c(.85, .7),
+        legend.background = element_rect(fill = "grey90"),
+        legend.key = element_rect(color = "grey90"))
+
+p1
+
+## ----plotB, fig.width = 5.25, fig.height = 3.5, echo = FALSE-------------
+
+pA= plogis(c(thresholdA, Inf)) - plogis(c(-Inf, thresholdA))
+probs <- data.frame(pA)
+rownames(probs) <- c("P(Resp = 1)", "P(Resp = 2)", 
+                     "P(Resp = 3)", "P(Resp = 4)", "P(Resp = 5)")
+
+probA <- data.frame(
+           cprob = plogis(thresholdA), 
+           codds = plogis(thresholdA)/(1-plogis(thresholdA)),
+           lcodds = log(plogis(thresholdA)/(1-plogis(thresholdA)))
+)
+rownames(probA) <- c("P(Grp < 2)", "P(Grp < 3)", "P(Grp < 4)", "P(Grp < 5)")
+
+thresholdB <- thresholdA + 1.1
+
+pdf <- dlogis(thresholdB)
+grpB <- data.table(threshold = thresholdB, pdf)
+bBreaks <- c(-6, grpB$threshold, 6)
+
+pB = plogis(c(thresholdB, Inf)) - plogis(c(-Inf, thresholdB))
+probs <- data.frame(pA, pB)
+rownames(probs) <- c("P(Resp = 1)", "P(Resp = 2)", 
+                     "P(Resp = 3)", "P(Resp = 4)", "P(Resp = 5)")
+
+
+# Plot density for group B
+
+dt[, grpB := cut(x, breaks = bBreaks, labels = F, include.lowest = TRUE)]
+
+p2 <- ggplot(data = dt, aes(x = x, y = pdf)) +
+  geom_line() +
+  geom_area(aes(x = x, y = pdf, group = grpB, fill = factor(grpB))) +
+  geom_hline(yintercept = 0, color = "grey5") +
+  geom_segment(data=grpA, 
+               aes(x=threshold, xend = threshold, y=0, yend=pdf), 
+               size = 0.3, lty = 2, color = "#857284") +
+  annotate("text", x = -5, y = .28, label = "exposed", size = 5) +
+  scale_fill_manual(values = c("#d0d7d1", "#bbc5bc", "#a6b3a7", 
+                               "#91a192", "#7c8f7d"),
+                    name = "Frequency") +
+  scale_x_continuous(breaks = thresholdB) +
+  scale_y_continuous(limits = c(0.0, 0.3), name = "Density") +
+  my_theme() +
+  theme(legend.position = "none")
+
+p2
+
+## ----acuts---------------------------------------------------------------
+baseprobs <- c(0.11, 0.33, 0.36, 0.17, 0.03)
+
+defA <- defDataAdd(varname = "z", formula = "-1.1*exposed", dist = "nonrandom")
+
+set.seed(130)
+
+dT <- genData(25000)
+dT <- trtAssign(dT, grpName = "exposed")
+dT <- addColumns(defA, dT)
+
+dT <- genOrdCat(dT, adjVar = "z", baseprobs, catVar = "r")
+
+## ----ord-----------------------------------------------------------------
+clmFit <- clm(r ~ exposed, data = dT)
+summary(clmFit)
+
+## ------------------------------------------------------------------------
+(logOdds.unexp <- log(odds(cumsum(dT[exposed == 0, prop.table(table(r))])))[1:4])
+
+## ------------------------------------------------------------------------
+(logOdds.expos <- log(odds(cumsum(dT[exposed == 1, prop.table(table(r))])))[1:4])
+
+## ------------------------------------------------------------------------
+logOdds.expos - logOdds.unexp
+
+## ------------------------------------------------------------------------
+baseprobs <- matrix(c(0.2, 0.1, 0.7,
+                      0.7, 0.2, 0.1,
+                      0.5, 0.2, 0.3,
+                      0.4, 0.2, 0.4,
+                      0.6, 0.2, 0.2), 
+                    nrow = 5, byrow = TRUE)
+
+# generate the data
+
+set.seed(333)                     
+dT <- genData(10000)
+
+dX <- genCorOrdCat(dT, adjVar = NULL, baseprobs = baseprobs, 
+                   prefix = "q", rho = 0.15, corstr = "cs")
+
+## ------------------------------------------------------------------------
+round(dX[, cor(cbind(q1, q2, q3, q4, q5))], 2)
+
+## ------------------------------------------------------------------------
+dM <- melt(dX, id.vars = "id")
+dProp <- dM[ , prop.table(table(value)), by = variable]
+dProp[, response := rep(seq(3), 5)]
+
+# observed probabilities
+dcast(dProp, variable ~ response, value.var = "V1", fill = 0)
+
+# specified probabilites
+baseprobs
+
+## ------------------------------------------------------------------------
+dX <- genCorOrdCat(dT, adjVar = NULL, baseprobs = baseprobs, 
+                   prefix = "q", rho = 0.40, corstr = "ar1")
+
+# correlation
+round(dX[, cor(cbind(q1, q2, q3, q4, q5))], 2)
+
+dM <- melt(dX, id.vars = "id")
+dProp <- dM[ , prop.table(table(value)), by = variable]
+dProp[, response := rep(seq(3), 5)]
+
+# probabilities
+dcast(dProp, variable ~ response, value.var = "V1", fill = 0)
 
