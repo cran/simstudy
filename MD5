@@ -1,13 +1,13 @@
-4c01d9eaa30acd89eeb2387c01856171 *DESCRIPTION
+05000eeab2d0f65b1c5743697e524ba9 *DESCRIPTION
 553fe473f2078e43441959a60e041049 *NAMESPACE
-78592ba3f5a945c0eb05df4bb0b04328 *NEWS.md
+6156d410817ddb72c0c9191a7cbeb638 *NEWS.md
 47e95171f72e5d58b8380f6b7fb6f131 *R/RcppExports.R
 e97bd38d8631418ebb1e153abfabca45 *R/addColumns.R
 4fedecd5045618248a7578fecde671c6 *R/addCondition.R
 c34db72c1d310abf28a0566b3af11d4d *R/addCorData.R
 69b4f34c6f098b2d23e33d51954bf4ae *R/addCorFlex.R
 96e138cc9ee29d0d616362b3aa83d869 *R/addCorGen.R
-e7b12ed87e1ad85ce41f205917710b46 *R/addMultiFac.R
+0ee3409d3d45dd6af5eed1a88b6fdf43 *R/addMultiFac.R
 36f77f94b05d3690534dc945cbecac20 *R/addPeriods.R
 96b09e48affdf47f099c92cd490ab60f *R/betaGetShapes.R
 9c0e9123453d5a9c2fbbfb9a7dcb83a7 *R/catProbs.R
@@ -23,7 +23,7 @@ daf0eec7b26f82baf232969fbd946308 *R/defMiss.R
 bbc20983c5110caa6e70d27b240440ed *R/gammaGetShapeRate.R
 e1fb87dbdee84b966c407610be11e1ea *R/genCluster.R
 cce75697785e743ad8b7b9ee26de8c42 *R/genCorData.R
-180e97984cec44abd816ccb8848ba340 *R/genCorFlex.R
+dc3379bf3132c63c7e2b81cde2ee63f3 *R/genCorFlex.R
 77556b51816188ff6df8a452088a34b2 *R/genCorGen.R
 8a38b4b2de548c8638382d8884e7d48c *R/genCorMat.R
 036727f08384c69262cca1c607e65c6b *R/genCorOrdCat.R
@@ -74,9 +74,9 @@ d75736738fa889c75ac4133e43f8bf9e *R/int_rmult.R
 b4bfa1809e8247c857bf5905e3ef6512 *R/viewSplines.R
 1a983e44e0815c1754f232554e98a394 *README.md
 c839026278ab56abeb9dc728ef3222b9 *build/vignette.rds
-7af81b41a3695c8901044ec338db561d *inst/doc/simstudy.R
-dd3b972c95ff4405bf07dba9cd9b99fc *inst/doc/simstudy.Rmd
-e58b562ad05c974fd63b27f551dc57b7 *inst/doc/simstudy.html
+4b86deef2356d214ebbe1c67cc81ce9b *inst/doc/simstudy.R
+c5b0f70213dc96ba72bb9e4069667708 *inst/doc/simstudy.Rmd
+7c305e1e30ac901a86f563313cab7caa *inst/doc/simstudy.html
 df87ffed6f5ccfec6dafe8f748aa89aa *man/addColumns.Rd
 f33a53384e008cdc130038f542faea51 *man/addCondition.Rd
 2227a634d4df707843442e245d57de59 *man/addCorData.Rd
@@ -123,4 +123,4 @@ dc615500ea5713ea3679c628716ae191 *man/updateDefAdd.Rd
 c914cf77eeeb5e87d4568e314f758d9a *man/viewSplines.Rd
 65ed9b9aa9971cbdd813ea69840d56a0 *src/RcppExports.cpp
 dbf3a0e01ecb90d8488243bb080a2f96 *src/srcRcpp.cpp
-dd3b972c95ff4405bf07dba9cd9b99fc *vignettes/simstudy.Rmd
+c5b0f70213dc96ba72bb9e4069667708 *vignettes/simstudy.Rmd
