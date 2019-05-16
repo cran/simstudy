@@ -12,7 +12,7 @@
 
 <meta name="author" content="Keith S. Goldfeld" />
 
-<meta name="date" content="2019-02-25" />
+<meta name="date" content="2019-05-16" />
 
 <title>Simulating study data: introduction</title>
 
@@ -22,7 +22,7 @@
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -35,13 +35,11 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
+  { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
   { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -293,6 +291,9 @@ code > span.al { color: #ff0000; font-weight: bold; }
 code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
+
+
+
 </head>
 
 <body>
@@ -301,8 +302,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 
 <h1 class="title toc-ignore">Simulating study data: introduction</h1>
-<h4 class="author"><em>Keith S. Goldfeld</em></h4>
-<h4 class="date"><em>2019-02-25</em></h4>
+<h4 class="author">Keith S. Goldfeld</h4>
+<h4 class="date">2019-05-16</h4>
 
 
 
@@ -522,12 +523,12 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 ##   2:   2     1    0      0 68.21481
 ##   3:   3     3    1      0 63.64589
 ##   4:   4     2    0      0 67.40492
-##   5:   5     3    0      0 72.96366
+##   5:   5     2    0      0 72.96366
 ##  ---                               
 ## 326: 326     1    1      1 67.99205
 ## 327: 327     3    1      0 55.73555
-## 328: 328     3    1      0 74.85385
-## 329: 329     3    1      0 75.20651
+## 328: 328     1    1      0 74.85385
+## 329: 329     1    1      0 75.20651
 ## 330: 330     3    1      0 66.24796</code></pre>
 <p><em>Balanced treatment assignment (without stratification)</em></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">study2 &lt;-<span class="st"> </span><span class="kw">trtAssign</span>(dtstudy, <span class="dt">n =</span> <span class="dv">3</span>, <span class="dt">balanced =</span> <span class="ot">TRUE</span>, <span class="dt">grpName =</span> <span class="st">&quot;rxGrp&quot;</span>)</a></code></pre></div>

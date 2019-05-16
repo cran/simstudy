@@ -1,8 +1,8 @@
 Package: simstudy
 Type: Package
 Title: Simulation of Study Data
-Version: 0.1.12
-Date: 2019-02-25
+Version: 0.1.13
+Date: 2019-05-16
 Author: Keith Goldfeld [aut, cre]
 Maintainer: Keith Goldfeld <Keith.Goldfeld@nyumc.org>
 Description: Simulates data sets in order to explore modeling techniques or
@@ -12,10 +12,10 @@ Description: Simulates data sets in order to explore modeling techniques or
     control trials, repeated measure (longitudinal) designs, and cluster
     randomized trials. Missingness can be generated using various
     mechanisms (MCAR, MAR, NMAR).
-Depends: R (>= 3.2.2), data.table
+Depends: R (>= 3.2.2)
 License: GPL-3
 LazyData: TRUE
-Imports: Rcpp, mvnfast, mvtnorm
+Imports: Rcpp, data.table, mvnfast, mvtnorm
 RoxygenNote: 6.1.1
 Encoding: UTF-8
 Suggests: testthat, knitr, rmarkdown, ggplot2, grid, gridExtra,
@@ -23,6 +23,6 @@ Suggests: testthat, knitr, rmarkdown, ggplot2, grid, gridExtra,
 VignetteBuilder: knitr
 LinkingTo: Rcpp
 NeedsCompilation: yes
-Packaged: 2019-02-26 00:17:55 UTC; goldfk01
+Packaged: 2019-05-16 21:08:33 UTC; goldfk01
 Repository: CRAN
-Date/Publication: 2019-02-26 20:50:02 UTC
+Date/Publication: 2019-05-16 22:00:03 UTC

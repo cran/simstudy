@@ -108,6 +108,7 @@ study1 <- trtAssign(dtstudy , n=3, balanced = TRUE, strata = c("male","over65"),
 
 study1
 
+
 ## ---- tidy = TRUE--------------------------------------------------------
 study2 <- trtAssign(dtstudy , n=3, balanced = TRUE, grpName = "rxGrp")
 

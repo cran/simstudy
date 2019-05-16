@@ -40,15 +40,16 @@
 #' dX <- genCorOrdCat(dT, adjVar = NULL, baseprobs = baseprobs, 
 #'                    prefix = "q", rho = .125, corstr = "cs")
 #'
-#' dM <- melt(dX, id.vars = "id")
+#' dM <- data.table::melt(dX, id.vars = "id")
 #' dProp <- dM[ , prop.table(table(value)), by = variable]
 #' dProp[, response := c(1:4, 1:3, 1:3, 1:3, 1:3)]
 #' 
-#' dcast(dProp, variable ~ response, value.var = "V1", fill = 0)
+#' data.table::dcast(dProp, variable ~ response, 
+#'                   value.var = "V1", fill = 0)
 #'                    
 #' @export
 genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs, 
-                         prefix = "grp", rho, corstr, corMatrix = NULL)     {
+                         prefix = "grp", rho, corstr, corMatrix = NULL) {
   
   # "declares" to avoid global NOTE
   
@@ -79,8 +80,12 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
     stop("Proability vector is empty")
   }
   
-  if (any(apply(baseprobs, 1, sum) != 1)) {
-    stop("Probabilities are not properly specified")
+  baseprobs <- round(baseprobs,3 )
+  if (!isTRUE(all.equal(rep(1, nrow(baseprobs)), 
+                       apply(baseprobs, 1, sum),
+                       tolerance = .Machine$double.eps^0.25))) {
+    
+    stop("Probabilities are not properly specified: each row must sum to one")
   }
   
   if (length(adjVar) > 1) {
@@ -95,7 +100,7 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
   
   N <- nrow(dtName)
   nq <- nrow(baseprobs)
-  zs <- .genQuantU(nq, N, rho = rho, corstr, corMatrix = NULL)
+  zs <- .genQuantU(nq, N, rho = rho, corstr, corMatrix = corMatrix)
   zs[, logisZ := stats::qlogis(p = zs$Unew)]
   cprop <- t(apply(baseprobs, 1, cumsum))
   quant <- t(apply(cprop, 1, stats::qlogis))
@@ -118,8 +123,8 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
                            var = paste0(prefix,i),
                            cat = assignGrp )
   }
-  dcat <- rbindlist(mycat)
-  cats <- dcast(dcat, id ~ var, value.var = "cat" )
+  dcat <- data.table::rbindlist(mycat)
+  cats <- data.table::dcast(dcat, id ~ var, value.var = "cat" )
   
   setnames(cats, "id", idname)
   setkeyv(cats, idname)

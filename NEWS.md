@@ -84,4 +84,10 @@
 
 # simstudy 0.1.12
 
-* Fixed genCorFlex and addMultiFac to accomodate bug fixes with package data.table
+* Fixed genCorFlex and addMultiFac to accommodate bug fixes with package data.table
+
+# simstudy 0.1.13
+
+* Added negative binomial distribution as an option to function iccRE
+* Fixed function genCorOrdCat so that it can accept user-specified correlation matrix
+* Add function trtStepWedge to generate treatment assignment for a stepped-wedge design cluster randomized trial.
