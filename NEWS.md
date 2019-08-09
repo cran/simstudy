@@ -90,4 +90,14 @@
 
 * Added negative binomial distribution as an option to function iccRE
 * Fixed function genCorOrdCat so that it can accept user-specified correlation matrix
-* Add function trtStepWedge to generate treatment assignment for a stepped-wedge design cluster randomized trial.
+* Added function trtStepWedge to generate treatment assignment for a stepped-wedge design cluster randomized trial.
+
+# simstudy 0.1.14
+
+* Added functions genMarkov and addMarkov to create data.table with (or add to existing data.table) individual chains of Markov processes.
+* Added function genNthEvent to create data.table with binary event outcome in a longitudinal setting. 
+* Updated function genCluster so that cluster size can be specified as an integer, and will be constant across all clusters.
+* Updated function addPeriods that period name can be specified.
+* Updated function trtStepWedge so that a transition period can be included.
+* Fixed bug in function delColumns related to multiple keys.
+

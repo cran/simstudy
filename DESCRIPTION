@@ -1,8 +1,8 @@
 Package: simstudy
 Type: Package
 Title: Simulation of Study Data
-Version: 0.1.13
-Date: 2019-05-16
+Version: 0.1.14
+Date: 2019-08-01
 Author: Keith Goldfeld [aut, cre]
 Maintainer: Keith Goldfeld <Keith.Goldfeld@nyumc.org>
 Description: Simulates data sets in order to explore modeling techniques or
@@ -23,6 +23,6 @@ Suggests: testthat, knitr, rmarkdown, ggplot2, grid, gridExtra,
 VignetteBuilder: knitr
 LinkingTo: Rcpp
 NeedsCompilation: yes
-Packaged: 2019-05-16 21:08:33 UTC; goldfk01
+Packaged: 2019-08-09 14:06:25 UTC; goldfk01
 Repository: CRAN
-Date/Publication: 2019-05-16 22:00:03 UTC
+Date/Publication: 2019-08-09 14:30:03 UTC
