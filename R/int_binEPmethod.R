@@ -1,4 +1,4 @@
-#### Impletment Emrich and Piedmonte algorithm for correlated binary data ####
+#### Implement Emrich and Piedmonte algorithm for correlated binary data ####
 
 # Internal functions called by genCorGen and addCorGen - returns matrix
 #
@@ -10,15 +10,16 @@
 
 .checkBoundsBin <- function(p1, p2, d) {
 
-      l <- (p1*p2) / (1-p1)*(1-p2)
+      l <- (p1*p2) / ((1-p1)*(1-p2))
       L <- max(-sqrt(l), -sqrt(1/l))
       
       u <- (p1*(1-p2)) / (p2*(1-p1))
       U <- min(sqrt(u), sqrt(1/u))  
       
-      if (d < L | d > U)   {
+      if ((d < L & isTRUE(all.equal(d, L)) == FALSE) | 
+          (d > U & isTRUE(all.equal(d, U)) == FALSE))   {
         LU <- paste0("(", round(L,2) , " ... ", round(U, 2), ")")
-        stopText <- paste("Sepcified correlation", d, "out of range" , LU)
+        stopText <- paste("Specified correlation", d, "out of range" , LU)
         stop(stopText)
       }
 }
@@ -30,7 +31,7 @@
   
   target <- d*sqrt(p1*p2*(1-p1)*(1-p2)) + p1*p2
   
-  # given p1, p2 & d, biesection search for corresponding rho
+  # given p1, p2 & d, bisection search for corresponding rho
   
   Max <- 1
   Min <- -1
@@ -82,6 +83,12 @@
       
       phicorr[j, i] <- phicorr[i, j] <- .findRhoBin(p1, p2, tcorr[i, j])
     }
+    
+  }
+  
+  # check that phicorr is positive definite (PD), if not adjust to nearest PD matrix
+  if (!all(eigen(phicorr)$values > 0)) {
+    phicorr <- Matrix::nearPD(phicorr)$mat
     
   }
   
