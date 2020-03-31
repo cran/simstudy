@@ -106,3 +106,9 @@
 * Added function trimData (that uses new rcpp function clipVec) to clip or truncate a longitudinal data set after a certain event has occurred.
 * Fixed bug in addMarkov, added trimvalue argument to use trimData function
 * Added trimvalue argument in genMarkov
+
+# simstudy 0.1.16
+
+* Added "mixture" distribution that takes a value from an existing column with a specified probability.
+* Modified function trtAssign to improve speed performance of stratified sampling with very large numbers of strata.
+* Add argument "ratio" to function trtAssign to allow users to specify more than 1:1 randomization.

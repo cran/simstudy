@@ -4,8 +4,15 @@
 \alias{defData}
 \title{Add single row to definitions table}
 \usage{
-defData(dtDefs = NULL, varname, formula, variance = 0,
-  dist = "normal", link = "identity", id = "id")
+defData(
+  dtDefs = NULL,
+  varname,
+  formula,
+  variance = 0,
+  dist = "normal",
+  link = "identity",
+  id = "id"
+)
 }
 \arguments{
 \item{dtDefs}{Definition data.table to be modified}
@@ -31,7 +38,8 @@ Add single row to definitions table
 \details{
 The possible data distributions include "normal", "poisson", 
 "noZeroPoisson", "negBinomial" "binary", "binomial", "beta", "uniform", 
-"uniformInt", "categorical", "gamma", "exponential", and "nonrandom."
+"uniformInt", "categorical", "gamma", "exponential", 
+"mixture", and "nonrandom."
 }
 \examples{
 def <- defData(varname = "xNr", dist = "nonrandom", formula=7, id = "idnum")
