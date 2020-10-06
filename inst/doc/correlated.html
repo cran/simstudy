@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Correlated Data</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Correlated Data</h1>
+
+
+
+<div id="correlated-data" class="section level2">
+<h2>Correlated data</h2>
+<p>Sometimes it is desirable to simulate correlated data from a correlation matrix directly. For example, a simulation might require two random effects (e.g. a random intercept and a random slope). Correlated data like this could be generated using the <code>defData</code> functionality, but it may be more natural to do this with <code>genCorData</code> or <code>addCorData</code>. Currently, simstudy can only generate multivariate normal using these functions. (In the future, additional distributions will be available.)</p>
+<p><code>genCorData</code> requires the user to specify a mean vector <code>mu</code>, a single standard deviation or a vector of standard deviations <code>sigma</code>, and either a correlation matrix <code>corMatrix</code> or a correlation coefficient <code>rho</code> and a correlation structure <code>corsrt</code>. It is easy to see how this can be used from a few different examples.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># specifying a specific correlation matrix C</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>C &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">0.7</span>, <span class="dv">1</span>, <span class="fl">0.8</span>, <span class="fl">0.2</span>, <span class="fl">0.8</span>, <span class="dv">1</span>), <span class="dt">nrow =</span> <span class="dv">3</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>C</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]  1.0  0.7  0.2
+## [2,]  0.7  1.0  0.8
+## [3,]  0.2  0.8  1.0</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># generate 3 correlated variables with different location and scale for each</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co"># field</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>dt &lt;-<span class="st"> </span><span class="kw">genCorData</span>(<span class="dv">1000</span>, <span class="dt">mu =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">12</span>, <span class="dv">3</span>), <span class="dt">sigma =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="dt">corMatrix =</span> C)</span>
+<span id="cb3-4"><a href="#cb3-4"></a>dt</span></code></pre></div>
+<pre><code>##         id       V1        V2         V3
+##    1:    1 4.058035 11.775641  1.4136784
+##    2:    2 2.123084  9.863020  3.4490109
+##    3:    3 3.141109  9.018995 -0.8078367
+##    4:    4 3.512148 10.602635  0.6695056
+##    5:    5 4.537790 12.370902  2.1505126
+##   ---                                   
+##  996:  996 3.615397 12.742743  5.2624659
+##  997:  997 3.794947 13.341832  6.3298183
+##  998:  998 4.932117 13.114247  3.1206027
+##  999:  999 4.164953 12.311527  3.7568423
+## 1000: 1000 3.242038 10.258521  1.3226698</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># estimate correlation matrix</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>dt[, <span class="kw">round</span>(<span class="kw">cor</span>(<span class="kw">cbind</span>(V1, V2, V3)), <span class="dv">1</span>)]</span></code></pre></div>
+<pre><code>##     V1  V2  V3
+## V1 1.0 0.7 0.2
+## V2 0.7 1.0 0.8
+## V3 0.2 0.8 1.0</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># estimate standard deviation</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>dt[, <span class="kw">round</span>(<span class="kw">sqrt</span>(<span class="kw">diag</span>(<span class="kw">var</span>(<span class="kw">cbind</span>(V1, V2, V3)))), <span class="dv">1</span>)]</span></code></pre></div>
+<pre><code>##  V1  V2  V3 
+## 1.0 2.0 3.1</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># generate 3 correlated variables with different location but same standard</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co"># deviation and compound symmetry (cs) correlation matrix with correlation</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co"># coefficient = 0.4.  Other correlation matrix structures are &#39;independent&#39;</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co"># (&#39;ind&#39;) and &#39;auto-regressive&#39; (&#39;ar1&#39;).</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a></span>
+<span id="cb9-6"><a href="#cb9-6"></a>dt &lt;-<span class="st"> </span><span class="kw">genCorData</span>(<span class="dv">1000</span>, <span class="dt">mu =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">12</span>, <span class="dv">3</span>), <span class="dt">sigma =</span> <span class="dv">3</span>, <span class="dt">rho =</span> <span class="fl">0.4</span>, <span class="dt">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="dt">cnames =</span> <span class="kw">c</span>(<span class="st">&quot;x0&quot;</span>, </span>
+<span id="cb9-7"><a href="#cb9-7"></a>    <span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>))</span>
+<span id="cb9-8"><a href="#cb9-8"></a>dt</span></code></pre></div>
+<pre><code>##         id         x0        x1          x2
+##    1:    1  0.6637534 15.411935  8.21102940
+##    2:    2 -2.1386381  6.647061 -4.87059866
+##    3:    3  0.7738308 14.010696  2.36971424
+##    4:    4 -1.3669604  7.805225  5.84619105
+##    5:    5  1.7462404 12.802335  6.18068532
+##   ---                                      
+##  996:  996 -0.4226211 13.550424  3.04177758
+##  997:  997  1.0399654  8.842263 -0.02695016
+##  998:  998  1.9620598  8.392662 -5.13841535
+##  999:  999  6.8600500 14.109390  1.04625707
+## 1000: 1000 -0.2261344  8.646182  4.87754944</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># estimate correlation matrix</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>dt[, <span class="kw">round</span>(<span class="kw">cor</span>(<span class="kw">cbind</span>(x0, x1, x2)), <span class="dv">1</span>)]</span></code></pre></div>
+<pre><code>##     x0  x1  x2
+## x0 1.0 0.4 0.4
+## x1 0.4 1.0 0.4
+## x2 0.4 0.4 1.0</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># estimate standard deviation</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>dt[, <span class="kw">round</span>(<span class="kw">sqrt</span>(<span class="kw">diag</span>(<span class="kw">var</span>(<span class="kw">cbind</span>(x0, x1, x2)))), <span class="dv">1</span>)]</span></code></pre></div>
+<pre><code>##  x0  x1  x2 
+## 3.0 3.0 3.1</code></pre>
+<p>The new data generated by <code>genCorData</code> can be merged with an existing data set. Alternatively, <code>addCorData</code> will do this directly:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># define and generate the original data set</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>def &lt;-<span class="st"> </span><span class="kw">defData</span>(<span class="dt">varname =</span> <span class="st">&quot;x&quot;</span>, <span class="dt">dist =</span> <span class="st">&quot;normal&quot;</span>, <span class="dt">formula =</span> <span class="dv">0</span>, <span class="dt">variance =</span> <span class="dv">1</span>, <span class="dt">id =</span> <span class="st">&quot;cid&quot;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3"></a>dt &lt;-<span class="st"> </span><span class="kw">genData</span>(<span class="dv">1000</span>, def)</span>
+<span id="cb15-4"><a href="#cb15-4"></a></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co"># add new correlate fields a0 and a1 to &#39;dt&#39;</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a>dt &lt;-<span class="st"> </span><span class="kw">addCorData</span>(dt, <span class="dt">idname =</span> <span class="st">&quot;cid&quot;</span>, <span class="dt">mu =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">sigma =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="fl">0.2</span>), <span class="dt">rho =</span> <span class="fl">-0.2</span>, </span>
+<span id="cb15-7"><a href="#cb15-7"></a>    <span class="dt">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="dt">cnames =</span> <span class="kw">c</span>(<span class="st">&quot;a0&quot;</span>, <span class="st">&quot;a1&quot;</span>))</span>
+<span id="cb15-8"><a href="#cb15-8"></a></span>
+<span id="cb15-9"><a href="#cb15-9"></a>dt</span></code></pre></div>
+<pre><code>##        cid           x          a0          a1
+##    1:    1 -0.42253976  1.70913663 -0.21916549
+##    2:    2  0.21082079  2.24083912 -0.18539546
+##    3:    3 -0.43131449 -0.02808837  0.26726127
+##    4:    4  0.73399704 -2.36834345 -0.29376261
+##    5:    5  0.94016230 -1.47098599 -0.02953758
+##   ---                                         
+##  996:  996 -0.46009949 -2.00774558  0.28938213
+##  997:  997 -0.91059568  2.96603486  0.02535612
+##  998:  998 -0.16363279 -1.90368728  0.09981716
+##  999:  999 -0.15381623  0.16926667  0.11932288
+## 1000: 1000  0.06060543  1.96515980 -0.08131505</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># estimate correlation matrix</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>dt[, <span class="kw">round</span>(<span class="kw">cor</span>(<span class="kw">cbind</span>(a0, a1)), <span class="dv">1</span>)]</span></code></pre></div>
+<pre><code>##      a0   a1
+## a0  1.0 -0.2
+## a1 -0.2  1.0</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># estimate standard deviation</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a>dt[, <span class="kw">round</span>(<span class="kw">sqrt</span>(<span class="kw">diag</span>(<span class="kw">var</span>(<span class="kw">cbind</span>(a0, a1)))), <span class="dv">1</span>)]</span></code></pre></div>
+<pre><code>##  a0  a1 
+## 2.0 0.2</code></pre>
+<div id="correlated-data-additional-distributions" class="section level3">
+<h3>Correlated data: additional distributions</h3>
+<p>Two additional functions facilitate the generation of correlated data from <em>binomial</em>, <em>poisson</em>, <em>gamma</em>, and <em>uniform</em> distributions: <code>genCorGen</code> and <code>addCorGen</code>.</p>
+<p><code>genCorGen</code> is an extension of <code>genCorData</code>. In the first example, we are generating data from a multivariate Poisson distribution. We start by specifying the mean of the Poisson distribution for each new variable, and then we specify the correlation structure, just as we did with the normal distribution.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>l &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">12</span>) <span class="co"># lambda for each new variable</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a></span>
+<span id="cb21-3"><a href="#cb21-3"></a>dx &lt;-<span class="st"> </span><span class="kw">genCorGen</span>(<span class="dv">1000</span>, <span class="dt">nvars =</span> <span class="dv">3</span>, <span class="dt">params1 =</span> l, <span class="dt">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="dt">rho =</span> <span class="fl">.3</span>, <span class="dt">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="dt">wide =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb21-4"><a href="#cb21-4"></a>dx</span></code></pre></div>
+<pre><code>##         id V1 V2 V3
+##    1:    1  4  7 10
+##    2:    2  8 10 11
+##    3:    3  4  9  9
+##    4:    4  8 11  8
+##    5:    5  8 10 14
+##   ---              
+##  996:  996  2  6  8
+##  997:  997  9 13 12
+##  998:  998  8 10 17
+##  999:  999 11  8 18
+## 1000: 1000  5  5 14</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="kw">round</span>(<span class="kw">cor</span>(<span class="kw">as.matrix</span>(dx[, .(V1, V2, V3)])), <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##      V1   V2   V3
+## V1 1.00 0.28 0.19
+## V2 0.28 1.00 0.24
+## V3 0.19 0.24 1.00</code></pre>
+<p>We can also generate correlated binary data by specifying the probabilities:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="kw">genCorGen</span>(<span class="dv">1000</span>, <span class="dt">nvars =</span> <span class="dv">3</span>, <span class="dt">params1 =</span> <span class="kw">c</span>(.<span class="dv">3</span>, <span class="fl">.5</span>, <span class="fl">.7</span>), <span class="dt">dist =</span> <span class="st">&quot;binary&quot;</span>, <span class="dt">rho =</span> <span class="fl">.8</span>, <span class="dt">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="dt">wide =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>##         id V1 V2 V3
+##    1:    1  1  1  1
+##    2:    2  0  0  1
+##    3:    3  0  0  1
+##    4:    4  0  1  0
+##    5:    5  0  0  1
+##   ---              
+##  996:  996  0  0  0
+##  997:  997  1  1  1
+##  998:  998  0  0  1
+##  999:  999  0  0  1
+## 1000: 1000  1  1  1</code></pre>
+<p>The gamma distribution requires two parameters - the mean and dispersion. (These are converted into shape and rate parameters more commonly used.)</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>dx &lt;-<span class="st"> </span><span class="kw">genCorGen</span>(<span class="dv">1000</span>, <span class="dt">nvars =</span> <span class="dv">3</span>, <span class="dt">params1 =</span> l, <span class="dt">params2 =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="dt">dist =</span> <span class="st">&quot;gamma&quot;</span>, <span class="dt">rho =</span> <span class="fl">.7</span>, <span class="dt">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="dt">wide =</span> <span class="ot">TRUE</span>, <span class="dt">cnames=</span><span class="st">&quot;a, b, c&quot;</span>)</span>
+<span id="cb27-2"><a href="#cb27-2"></a>dx</span></code></pre></div>
+<pre><code>##         id          a         b         c
+##    1:    1  3.2210286  6.603092  9.433625
+##    2:    2  4.8227247 11.670059  2.779509
+##    3:    3  0.3718405  1.080022  3.350224
+##    4:    4 11.2559658 18.605721  9.422487
+##    5:    5  9.3505345  6.911211 14.987907
+##   ---                                    
+##  996:  996 11.6806256 16.844255 29.036638
+##  997:  997  5.6878312  8.917821  1.545817
+##  998:  998  1.0845072  1.505709  5.368722
+##  999:  999  5.4031168  9.251644  9.703376
+## 1000: 1000  5.6008289  4.733656 10.395727</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="kw">round</span>(<span class="kw">cor</span>(<span class="kw">as.matrix</span>(dx[, .(a, b, c)])), <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##      a    b    c
+## a 1.00 0.65 0.66
+## b 0.65 1.00 0.67
+## c 0.66 0.67 1.00</code></pre>
+<p>These data sets can be generated in either <em>wide</em> or <em>long</em> form. So far, we have generated <em>wide</em> form data, where there is one row per unique id. Now, we will generate data using the <em>long</em> form, where the correlated data are on different rows, so that there are repeated measurements for each id. An id will have multiple records (i.e. one id will appear on multiple rows):</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>dx &lt;-<span class="st"> </span><span class="kw">genCorGen</span>(<span class="dv">1000</span>, <span class="dt">nvars =</span> <span class="dv">3</span>, <span class="dt">params1 =</span> l, <span class="dt">params2 =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="dt">dist =</span> <span class="st">&quot;gamma&quot;</span>, <span class="dt">rho =</span> <span class="fl">.7</span>, <span class="dt">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="dt">wide =</span> <span class="ot">FALSE</span>, <span class="dt">cnames=</span><span class="st">&quot;NewCol&quot;</span>)</span>
+<span id="cb31-2"><a href="#cb31-2"></a>dx</span></code></pre></div>
+<pre><code>##         id period    NewCol
+##    1:    1      0 2.7330362
+##    2:    1      1 0.4607286
+##    3:    1      2 0.7506392
+##    4:    2      0 1.2700871
+##    5:    2      1 2.7766983
+##   ---                      
+## 2996:  999      1 1.0962913
+## 2997:  999      2 4.7320269
+## 2998: 1000      0 0.2802979
+## 2999: 1000      1 4.2086395
+## 3000: 1000      2 2.2394438</code></pre>
+<p><code>addCorGen</code> allows us to create correlated data from an existing data set, as one can already do using <code>addCorData</code>. In the case of <code>addCorGen</code>, the parameter(s) used to define the distribution are created as a field (or fields) in the dataset. The correlated data are added to the existing data set. In the example below, we are going to generate three sets (poisson, binary, and gamma) of correlated data with means that are a function of the variable <code>xbase</code>, which varies by id.</p>
+<p>First we define the data and generate a data set:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>def &lt;-<span class="st"> </span><span class="kw">defData</span>(<span class="dt">varname =</span> <span class="st">&quot;xbase&quot;</span>, <span class="dt">formula =</span> <span class="dv">5</span>, <span class="dt">variance =</span> <span class="fl">.2</span>, <span class="dt">dist =</span> <span class="st">&quot;gamma&quot;</span>, <span class="dt">id =</span> <span class="st">&quot;cid&quot;</span>)</span>
+<span id="cb33-2"><a href="#cb33-2"></a>def &lt;-<span class="st"> </span><span class="kw">defData</span>(def, <span class="dt">varname =</span> <span class="st">&quot;lambda&quot;</span>, <span class="dt">formula =</span> <span class="st">&quot;.5 + .1*xbase&quot;</span>, <span class="dt">dist=</span><span class="st">&quot;nonrandom&quot;</span>, <span class="dt">link =</span> <span class="st">&quot;log&quot;</span>)</span>
+<span id="cb33-3"><a href="#cb33-3"></a>def &lt;-<span class="st"> </span><span class="kw">defData</span>(def, <span class="dt">varname =</span> <span class="st">&quot;p&quot;</span>, <span class="dt">formula =</span> <span class="st">&quot;-2 + .3*xbase&quot;</span>, <span class="dt">dist=</span><span class="st">&quot;nonrandom&quot;</span>, <span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>)</span>
+<span id="cb33-4"><a href="#cb33-4"></a>def &lt;-<span class="st"> </span><span class="kw">defData</span>(def, <span class="dt">varname =</span> <span class="st">&quot;gammaMu&quot;</span>, <span class="dt">formula =</span> <span class="st">&quot;.5 + .2*xbase&quot;</span>, <span class="dt">dist=</span><span class="st">&quot;nonrandom&quot;</span>, <span class="dt">link =</span> <span class="st">&quot;log&quot;</span>)</span>
+<span id="cb33-5"><a href="#cb33-5"></a>def &lt;-<span class="st"> </span><span class="kw">defData</span>(def, <span class="dt">varname =</span> <span class="st">&quot;gammaDis&quot;</span>, <span class="dt">formula =</span> <span class="dv">1</span>, <span class="dt">dist=</span><span class="st">&quot;nonrandom&quot;</span>)</span>
+<span id="cb33-6"><a href="#cb33-6"></a></span>
+<span id="cb33-7"><a href="#cb33-7"></a>dt &lt;-<span class="st"> </span><span class="kw">genData</span>(<span class="dv">10000</span>, def)</span>
+<span id="cb33-8"><a href="#cb33-8"></a>dt</span></code></pre></div>
+<pre><code>##          cid    xbase   lambda         p  gammaMu gammaDis
+##     1:     1 4.942294 2.702641 0.3734811 4.430263        1
+##     2:     2 5.399692 2.829130 0.4061046 4.854657        1
+##     3:     3 3.313523 2.296422 0.2677745 3.198572        1
+##     4:     4 8.754599 3.956896 0.6516681 9.496467        1
+##     5:     5 4.673274 2.630904 0.3547973 4.198196        1
+##    ---                                                    
+##  9996:  9996 5.182748 2.768415 0.3905084 4.648524        1
+##  9997:  9997 6.473087 3.149705 0.4854856 6.017172        1
+##  9998:  9998 5.698362 2.914902 0.4278836 5.153481        1
+##  9999:  9999 5.789669 2.941639 0.4346020 5.248455        1
+## 10000: 10000 5.932624 2.983993 0.4451682 5.400680        1</code></pre>
+<p>The Poisson distribution has a single parameter, lambda:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>dtX1 &lt;-<span class="st"> </span><span class="kw">addCorGen</span>(<span class="dt">dtOld =</span> dt, <span class="dt">idvar =</span> <span class="st">&quot;cid&quot;</span>, <span class="dt">nvars =</span> <span class="dv">3</span>, <span class="dt">rho =</span> <span class="fl">.1</span>, <span class="dt">corstr =</span> <span class="st">&quot;cs&quot;</span>,</span>
+<span id="cb35-2"><a href="#cb35-2"></a>                    <span class="dt">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="dt">param1 =</span> <span class="st">&quot;lambda&quot;</span>, <span class="dt">cnames =</span> <span class="st">&quot;a, b, c&quot;</span>)</span>
+<span id="cb35-3"><a href="#cb35-3"></a>dtX1</span></code></pre></div>
+<pre><code>##          cid    xbase   lambda         p  gammaMu gammaDis a b c
+##     1:     1 4.942294 2.702641 0.3734811 4.430263        1 4 2 2
+##     2:     2 5.399692 2.829130 0.4061046 4.854657        1 1 0 2
+##     3:     3 3.313523 2.296422 0.2677745 3.198572        1 2 1 3
+##     4:     4 8.754599 3.956896 0.6516681 9.496467        1 3 5 1
+##     5:     5 4.673274 2.630904 0.3547973 4.198196        1 1 1 4
+##    ---                                                          
+##  9996:  9996 5.182748 2.768415 0.3905084 4.648524        1 2 0 2
+##  9997:  9997 6.473087 3.149705 0.4854856 6.017172        1 2 5 2
+##  9998:  9998 5.698362 2.914902 0.4278836 5.153481        1 1 3 4
+##  9999:  9999 5.789669 2.941639 0.4346020 5.248455        1 4 1 5
+## 10000: 10000 5.932624 2.983993 0.4451682 5.400680        1 8 5 4</code></pre>
+<p>The Bernoulli (binary) distribution has a single parameter, p:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>dtX2 &lt;-<span class="st"> </span><span class="kw">addCorGen</span>(<span class="dt">dtOld =</span> dt, <span class="dt">idvar =</span> <span class="st">&quot;cid&quot;</span>, <span class="dt">nvars =</span> <span class="dv">4</span>, <span class="dt">rho =</span> <span class="fl">.4</span>, <span class="dt">corstr =</span> <span class="st">&quot;ar1&quot;</span>,</span>
+<span id="cb37-2"><a href="#cb37-2"></a>                    <span class="dt">dist =</span> <span class="st">&quot;binary&quot;</span>, <span class="dt">param1 =</span> <span class="st">&quot;p&quot;</span>)</span>
+<span id="cb37-3"><a href="#cb37-3"></a>dtX2</span></code></pre></div>
+<pre><code>##          cid    xbase   lambda         p  gammaMu gammaDis V1 V2 V3 V4
+##     1:     1 4.942294 2.702641 0.3734811 4.430263        1  0  0  0  0
+##     2:     2 5.399692 2.829130 0.4061046 4.854657        1  0  0  0  0
+##     3:     3 3.313523 2.296422 0.2677745 3.198572        1  0  0  0  0
+##     4:     4 8.754599 3.956896 0.6516681 9.496467        1  1  0  1  1
+##     5:     5 4.673274 2.630904 0.3547973 4.198196        1  0  0  0  1
+##    ---                                                                
+##  9996:  9996 5.182748 2.768415 0.3905084 4.648524        1  1  0  0  0
+##  9997:  9997 6.473087 3.149705 0.4854856 6.017172        1  1  0  1  0
+##  9998:  9998 5.698362 2.914902 0.4278836 5.153481        1  0  0  0  1
+##  9999:  9999 5.789669 2.941639 0.4346020 5.248455        1  1  1  1  1
+## 10000: 10000 5.932624 2.983993 0.4451682 5.400680        1  0  1  0  0</code></pre>
+<p>The Gamma distribution has two parameters - in <code>simstudy</code> the mean and dispersion are specified:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>dtX3 &lt;-<span class="st"> </span><span class="kw">addCorGen</span>(<span class="dt">dtOld =</span> dt, <span class="dt">idvar =</span> <span class="st">&quot;cid&quot;</span>, <span class="dt">nvars =</span> <span class="dv">4</span>, <span class="dt">rho =</span> <span class="fl">.4</span>, <span class="dt">corstr =</span> <span class="st">&quot;cs&quot;</span>,</span>
+<span id="cb39-2"><a href="#cb39-2"></a>                  <span class="dt">dist =</span> <span class="st">&quot;gamma&quot;</span>, <span class="dt">param1 =</span> <span class="st">&quot;gammaMu&quot;</span>, <span class="dt">param2 =</span> <span class="st">&quot;gammaDis&quot;</span>)</span>
+<span id="cb39-3"><a href="#cb39-3"></a>dtX3</span></code></pre></div>
+<pre><code>##          cid    xbase   lambda         p  gammaMu gammaDis         V1
+##     1:     1 4.942294 2.702641 0.3734811 4.430263        1  4.5827763
+##     2:     2 5.399692 2.829130 0.4061046 4.854657        1  6.3696259
+##     3:     3 3.313523 2.296422 0.2677745 3.198572        1  2.8339987
+##     4:     4 8.754599 3.956896 0.6516681 9.496467        1  1.6840195
+##     5:     5 4.673274 2.630904 0.3547973 4.198196        1  3.8304399
+##    ---                                                               
+##  9996:  9996 5.182748 2.768415 0.3905084 4.648524        1  1.9510948
+##  9997:  9997 6.473087 3.149705 0.4854856 6.017172        1  0.5384673
+##  9998:  9998 5.698362 2.914902 0.4278836 5.153481        1  1.4544040
+##  9999:  9999 5.789669 2.941639 0.4346020 5.248455        1  1.7798068
+## 10000: 10000 5.932624 2.983993 0.4451682 5.400680        1 10.8308558
+##                V2         V3          V4
+##     1:  6.9349628  1.2167647  0.81201729
+##     2:  4.9414240  8.0505113  2.56651408
+##     3:  0.1976552  1.7561377  0.65642144
+##     4: 19.1556327  6.0133948  8.46809194
+##     5:  2.8191067  0.6836075 11.66770192
+##    ---                                  
+##  9996:  0.2791214  0.6791530  0.02628097
+##  9997:  4.1095608  2.1455912  1.47861097
+##  9998:  5.8319255  0.4525492  1.79852344
+##  9999:  0.2417584  4.8559813  8.55681650
+## 10000:  4.7053416 15.9349774  7.58807488</code></pre>
+<p>If we have data in <em>long</em> form (e.g. longitudinal data), the function will recognize the structure:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>def &lt;-<span class="st"> </span><span class="kw">defData</span>(<span class="dt">varname =</span> <span class="st">&quot;xbase&quot;</span>, <span class="dt">formula =</span> <span class="dv">5</span>, <span class="dt">variance =</span> <span class="fl">.4</span>, <span class="dt">dist =</span> <span class="st">&quot;gamma&quot;</span>, <span class="dt">id =</span> <span class="st">&quot;cid&quot;</span>)</span>
+<span id="cb41-2"><a href="#cb41-2"></a>def &lt;-<span class="st"> </span><span class="kw">defData</span>(def, <span class="st">&quot;nperiods&quot;</span>, <span class="dt">formula =</span> <span class="dv">3</span>, <span class="dt">dist =</span> <span class="st">&quot;noZeroPoisson&quot;</span>)</span>
+<span id="cb41-3"><a href="#cb41-3"></a></span>
+<span id="cb41-4"><a href="#cb41-4"></a>def2 &lt;-<span class="st"> </span><span class="kw">defDataAdd</span>(<span class="dt">varname =</span> <span class="st">&quot;lambda&quot;</span>, <span class="dt">formula =</span> <span class="st">&quot;.5+.5*period + .1*xbase&quot;</span>, <span class="dt">dist=</span><span class="st">&quot;nonrandom&quot;</span>, <span class="dt">link =</span> <span class="st">&quot;log&quot;</span>)</span>
+<span id="cb41-5"><a href="#cb41-5"></a></span>
+<span id="cb41-6"><a href="#cb41-6"></a>dt &lt;-<span class="st"> </span><span class="kw">genData</span>(<span class="dv">1000</span>, def)</span>
+<span id="cb41-7"><a href="#cb41-7"></a></span>
+<span id="cb41-8"><a href="#cb41-8"></a>dtLong &lt;-<span class="st"> </span><span class="kw">addPeriods</span>(dt, <span class="dt">idvars =</span> <span class="st">&quot;cid&quot;</span>, <span class="dt">nPeriods =</span> <span class="dv">3</span>)</span>
+<span id="cb41-9"><a href="#cb41-9"></a>dtLong &lt;-<span class="st"> </span><span class="kw">addColumns</span>(def2, dtLong)</span>
+<span id="cb41-10"><a href="#cb41-10"></a></span>
+<span id="cb41-11"><a href="#cb41-11"></a>dtLong</span></code></pre></div>
+<pre><code>##        cid period    xbase nperiods timeID    lambda
+##    1:    1      0 8.854073        1      1  3.996453
+##    2:    1      1 8.854073        1      2  6.589037
+##    3:    1      2 8.854073        1      3 10.863486
+##    4:    2      0 3.416826        2      4  2.320268
+##    5:    2      1 3.416826        2      5  3.825475
+##   ---                                               
+## 2996:  999      1 1.194655        2   2996  3.063216
+## 2997:  999      2 1.194655        2   2997  5.050390
+## 2998: 1000      0 2.815540        3   2998  2.184865
+## 2999: 1000      1 2.815540        3   2999  3.602233
+## 3000: 1000      2 2.815540        3   3000  5.939078</code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="co">### Generate the data </span></span>
+<span id="cb43-2"><a href="#cb43-2"></a></span>
+<span id="cb43-3"><a href="#cb43-3"></a>dtX3 &lt;-<span class="st"> </span><span class="kw">addCorGen</span>(<span class="dt">dtOld =</span> dtLong, <span class="dt">idvar =</span> <span class="st">&quot;cid&quot;</span>, <span class="dt">nvars =</span> <span class="dv">3</span>, <span class="dt">rho =</span> <span class="fl">.6</span>, <span class="dt">corstr =</span> <span class="st">&quot;cs&quot;</span>,</span>
+<span id="cb43-4"><a href="#cb43-4"></a>                  <span class="dt">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="dt">param1 =</span> <span class="st">&quot;lambda&quot;</span>, <span class="dt">cnames =</span> <span class="st">&quot;NewPois&quot;</span>)</span>
+<span id="cb43-5"><a href="#cb43-5"></a>dtX3</span></code></pre></div>
+<pre><code>##        cid period    xbase nperiods timeID    lambda NewPois
+##    1:    1      0 8.854073        1      1  3.996453       5
+##    2:    1      1 8.854073        1      2  6.589037       8
+##    3:    1      2 8.854073        1      3 10.863486       7
+##    4:    2      0 3.416826        2      4  2.320268       4
+##    5:    2      1 3.416826        2      5  3.825475       5
+##   ---                                                       
+## 2996:  999      1 1.194655        2   2996  3.063216       3
+## 2997:  999      2 1.194655        2   2997  5.050390       5
+## 2998: 1000      0 2.815540        3   2998  2.184865       3
+## 2999: 1000      1 2.815540        3   2999  3.602233       4
+## 3000: 1000      2 2.815540        3   3000  5.939078       5</code></pre>
+<p>We can fit a generalized estimating equation (GEE) model and examine the coefficients and the working correlation matrix. They match closely to the data generating parameters:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>geefit &lt;-<span class="st"> </span><span class="kw">gee</span>(NewPois <span class="op">~</span><span class="st"> </span>period <span class="op">+</span><span class="st"> </span>xbase, <span class="dt">data =</span> dtX3, <span class="dt">id =</span> cid, <span class="dt">family =</span> poisson, <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>)</span></code></pre></div>
+<pre><code>## Beginning Cgee S-function, @(#) geeformula.q 4.13 98/01/27</code></pre>
+<pre><code>## running glm to get initial regression estimate</code></pre>
+<pre><code>## (Intercept)      period       xbase 
+##  0.51949114  0.49858066  0.09860462</code></pre>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a><span class="kw">round</span>(<span class="kw">summary</span>(geefit)<span class="op">$</span>working.correlation, <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,] 1.00 0.58 0.58
+## [2,] 0.58 1.00 0.58
+## [3,] 0.58 0.58 1.00</code></pre>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
