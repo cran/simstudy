@@ -1,8 +1,8 @@
 Type: Package
 Package: simstudy
 Title: Simulation of Study Data
-Version: 0.2.0
-Date: 2020-10-06
+Version: 0.2.1
+Date: 2020-10-07
 Authors@R: 
     c(person(given = "Keith",
              family = "Goldfeld",
@@ -26,8 +26,8 @@ URL: https://github.com/kgoldfeld/simstudy,
         https://kgoldfeld.github.io/simstudy/,
         https://kgoldfeld.github.io/simstudy/dev/
 BugReports: https://github.com/kgoldfeld/simstudy/issues
-Depends: R (>= 3.2.2)
-Imports: data.table, glue, methods, mvnfast, mvtnorm, Rcpp
+Depends: R (>= 3.3.0)
+Imports: data.table, glue, methods, mvnfast, mvtnorm, Rcpp, backports
 Suggests: covr, dplyr, formatR, gee, ggplot2, grid, gridExtra,
         hedgehog, knitr, magrittr, Matrix, mgcv, ordinal, pracma,
         rmarkdown, scales, splines, survival, testthat
@@ -37,9 +37,9 @@ Encoding: UTF-8
 LazyData: TRUE
 RoxygenNote: 7.1.1
 NeedsCompilation: yes
-Packaged: 2020-10-06 14:36:25 UTC; goldfk01
+Packaged: 2020-10-07 15:24:27 UTC; goldfk01
 Author: Keith Goldfeld [aut, cre] (<https://orcid.org/0000-0002-0292-8780>),
   Jacob Wujciak-Jens [aut] (<https://orcid.org/0000-0002-7281-3989>)
 Maintainer: Keith Goldfeld <Keith.Goldfeld@nyumc.org>
 Repository: CRAN
-Date/Publication: 2020-10-06 15:00:02 UTC
+Date/Publication: 2020-10-07 22:50:03 UTC
