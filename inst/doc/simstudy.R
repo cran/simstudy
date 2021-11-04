@@ -6,8 +6,6 @@ library(ggplot2)
 library(knitr)
 library(data.table)
 
-set.seed(33333)
-
 options(digits = 3)
 
 opts_chunk$set(tidy.opts=list(width.cutoff=55), tidy=TRUE)
@@ -49,6 +47,8 @@ def <- defData(def,varname="visits", dist="poisson",
   formula="1.5 - 0.2 * age + 0.5 * female", link="log")
 
 ## -----------------------------------------------------------------------------
+set.seed(87261)
+
 dd <- genData(1000, def)
 dd
 
@@ -112,7 +112,7 @@ d <- list()
 d[[1]] <- data.table("beta", "mean", "both", "-", "dispersion", "X", "-", "X") 
 d[[2]] <- data.table("binary", "probability", "both", "-", "-", "X", "-", "X") 
 d[[3]] <- data.table("binomial", "probability", "both", "-", "# of trials", "X", "-", "X")
-d[[4]] <- data.table("categorical", "probability", "string", " p_1;p_2;...;p_n", "-", "X", "-", "-")
+d[[4]] <- data.table("categorical", "probability", "string", " p_1;p_2;...;p_n", "a;b;c", "X", "-", "-")
 d[[5]] <- data.table("exponential", "mean", "both", "-", "-", "X", "X", "-")
 d[[6]] <- data.table("gamma", "mean", "both", "-", "dispersion", "X", "X", "-")
 d[[7]] <- data.table("mixture", "formula", "string", "x_1 | p_1 + ... + x_n | p_n", "-", "X", "-", "-")
@@ -121,8 +121,9 @@ d[[9]] <- data.table("nonrandom", "formula", "both", "-", "-", "X", "-", "-")
 d[[10]] <- data.table("normal", "mean", "both", "-", "variance", "X", "-", "-")
 d[[11]] <- data.table("noZeroPoisson", "mean", "both", "-", "-", "X", "X", "-")
 d[[12]] <- data.table("poisson", "mean", "both", "-", "-", "X", "X", "-")
-d[[13]] <- data.table("uniform", "range", "string", "from ; to", "-", "X", "-", "-")
-d[[14]] <- data.table("uniformInt", "range", "string", "from ; to", "-", "X", "-", "-")
+d[[13]] <- data.table("trtAssign", "ratio", "string", "r_1;r_2;...;r_n", "stratification", "X", "X", "-")
+d[[14]] <- data.table("uniform", "range", "string", "from ; to", "-", "X", "-", "-")
+d[[15]] <- data.table("uniformInt", "range", "string", "from ; to", "-", "X", "-", "-")
 
 
 d <- rbindlist(d)

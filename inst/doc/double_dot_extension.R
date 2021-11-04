@@ -1,4 +1,6 @@
 ## ---- echo = FALSE, message = FALSE-------------------------------------------
+options(digits = 3)
+
 library(simstudy)
 library(ggplot2)
 library(scales)
@@ -62,6 +64,7 @@ B1 <- 2;
 sigma2 <- 9
 
 set.seed(716251)
+
 dd <- genData(100, def)
 
 fit <- summary(lm(y ~ x, data = dd))
@@ -104,4 +107,52 @@ defblk
 ## -----------------------------------------------------------------------------
 sizes <- c(2, 4)
 genData(1000, defblk)
+
+## -----------------------------------------------------------------------------
+tau <- rgamma(3, 5, 2)
+tau <- tau / sum(tau)
+tau
+
+d <- defData(varname = "a", formula = 3, variance = 4)
+d <- defData(d, varname = "b", formula = 8, variance = 2)
+d <- defData(d, varname = "c", formula = 11, variance = 6)
+d <- defData(d, varname = "theta", formula = "..tau[1]*a + ..tau[2]*b + ..tau[3]*c", 
+  dist = "nonrandom")
+
+set.seed(1)
+genData(4, d)
+
+## -----------------------------------------------------------------------------
+d <- updateDef(d, changevar = "theta", newformula = "t(..tau) %*% c(a, b, c)")
+
+set.seed(1)
+genData(4, d)
+
+## -----------------------------------------------------------------------------
+effect <- matrix(c(0, 4, 5, 7), nrow = 2)
+effect
+
+## -----------------------------------------------------------------------------
+d1 <- defData(varname = "a", formula = ".5;.5", variance = "1;2", dist = "categorical")
+d1 <- defData(d1, varname = "b", formula = ".5;.5", variance = "1;2", dist = "categorical")
+d1 <- defData(d1, varname = "outcome", formula = "..effect[a, b]", dist="nonrandom")
+
+## -----------------------------------------------------------------------------
+dx <- genData(8, d1)
+dx
+
+## -----------------------------------------------------------------------------
+d1 <- updateDef(d1, "outcome", newvariance = 9, newdist = "normal")
+dx <- genData(1000, d1)
+
+## ---- echo=FALSE--------------------------------------------------------------
+dsum <- dx[, .(outcome=mean(outcome)), keyby = .(a, b)]
+
+ggplot(data = dx, aes(x = factor(a), y = outcome)) +
+  geom_jitter(aes(color = factor(b)), width = .2, alpha = .4, size = .2) +
+  geom_point(data = dsum, size = 2, aes(color = factor(b))) + 
+  geom_line(data = dsum, size = 1, aes(color = factor(b), group = factor(b))) +
+  scale_color_manual(values = cbbPalette, name = "  b") +
+  theme(panel.grid = element_blank()) +
+  xlab ("a")
 

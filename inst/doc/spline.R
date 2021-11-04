@@ -66,6 +66,7 @@ viewSplines(knots = knots, theta = theta1, degree = 3)
 
 ## -----------------------------------------------------------------------------
 set.seed(234)
+
 dt <- genData(1000, ddef)
 dt <- genSpline(dt = dt, newvar = "weight",
                 predictor = "age", theta = theta1,

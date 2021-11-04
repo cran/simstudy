@@ -17,7 +17,7 @@
       formula = args$formula,
       precision = args$variance,
       link = args$link,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     binary = {
@@ -27,7 +27,7 @@
         formula = args$formula,
         size = args$variance,
         link = args$link,
-        dtSim = dfSim,
+        dtSim = copy(dfSim),
         envir = envir
       )
     },
@@ -36,21 +36,22 @@
       formula = args$formula,
       size = args$variance,
       link = args$link,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     categorical = .gencat(
       n = n,
       formula = args$formula,
+      variance = args$variance,
       link = args$link,
-      dfSim = dfSim,
+      dfSim = copy(dfSim),
       envir = envir
     ),
     exponential = .genexp(
       n = n,
       formula = args$formula,
       link = args$link,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     gamma = .gengamma(
@@ -58,13 +59,13 @@
       formula = args$formula,
       dispersion = args$variance,
       link = args$link,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     mixture = .genmixture(
       n = n,
       formula = args$formula,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     negBinomial = .gennegbinom(
@@ -72,14 +73,14 @@
       formula = args$formula,
       dispersion = args$variance,
       link = args$link,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     nonrandom = .gendeterm(
       n = n,
       formula = args$formula,
       link = args$link,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     normal = .gennorm(
@@ -87,33 +88,40 @@
       formula = args$formula,
       variance = args$variance,
       link = args$link,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     noZeroPoisson = .genpoisTrunc(
       n = n,
       formula = args$formula,
       link = args$link,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     poisson = .genpois(
       n = n,
       formula = args$formula,
       link = args$link,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
+    ),
+    trtAssign = .genAssign(
+      dtName = copy(dfSim),
+      grpName = args$varname,
+      strata = args$variance,
+      ratio = args$formula,
+      balanced = args$link
     ),
     uniform = .genunif(
       n = n,
       formula = args$formula,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     uniformInt = .genUnifInt(
       n = n,
       formula = args$formula,
-      dtSim = dfSim,
+      dtSim = copy(dfSim),
       envir = envir
     ),
     default = stop(
@@ -124,12 +132,16 @@
 
   # Create data frame
   if (is.null(dfSim)) {
-    dfNew <- data.frame(newColumn)
+    dfNew <- data.table(newColumn)
   } else {
     dfNew <- cbind(dfSim, newColumn)
   }
 
-  names(dfNew)[ncol(dfNew)] <- as.character(args$varname)
+  data.table::setnames(
+    dfNew,
+    ncol(dfNew),
+    as.character(args$varname)
+  )
 
   return(dfNew)
 }
@@ -187,8 +199,9 @@
 # @param formula String that specifies the mean (lambda)
 # @return A data.frame column with the updated simulated data
 
-.getBetaMean <- function(dtSim, formula, link, n = nrow(dtSim)) {
-  mean <- .evalWith(formula, .parseDotVars(formula), dtSim, n)
+.getBetaMean <- function(dtSim, formula, link, n = nrow(dtSim),
+                         envir = parent.frame()) {
+  mean <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
   if (link == "logit") {
     mean <- 1 / (1 + exp(-mean))
   }
@@ -198,7 +211,7 @@
 
 # TODO document internal functions
 .genbeta <- function(n, formula, precision, link = "identity", dtSim, envir) {
-  mean <- .getBetaMean(dtSim, formula, link, n)
+  mean <- .getBetaMean(dtSim, formula, link, n, envir)
 
   d <- .evalWith(precision, .parseDotVars(precision, envir), dtSim, n)
 
@@ -249,12 +262,15 @@
 #
 # @param n The number of observations required in the data set
 # @param formula String that specifies the probabilities, each separated by ";"
+# @param variance String that specifies the categorical values, each separated
+#   by ";". If all the values are numeric, the class of the generated vector
+#   will be numeric.
 # @param dfSim Incomplete simulated data set
 # @param idkey Key of incomplete data set
 # @param envir Environment the data definitions are evaluated in.
 #  Defaults to [base::parent.frame].
 # @return A data.frame column with the updated simulated data
-.gencat <- function(n, formula, link, dfSim, envir) {
+.gencat <- function(n, formula, variance, link, dfSim, envir) {
   formulas <- .splitFormula(formula)
 
   if (length(formulas) < 2) {
@@ -276,7 +292,23 @@
 
   parsedProbs <- cbind(parsedProbs, 1 - rowSums(parsedProbs))
 
-  .Call(`_simstudy_matMultinom`, parsedProbs, PACKAGE = "simstudy")
+  c <- .Call(`_simstudy_matMultinom`, parsedProbs, PACKAGE = "simstudy")
+
+  if (variance != 0 && !is.null(variance)) {
+    variance <- .splitFormula(variance)
+    assertLength(variance = variance, length = length(formulas))
+
+    numVariance <- suppressWarnings(as.numeric(variance))
+    nonNA <- all(!is.na(numVariance))
+
+    if (nonNA) {
+      variance <- numVariance
+    }
+
+    c <- variance[c]
+  }
+
+  c
 }
 
 # Internal function called by .generate - returns non-random data
@@ -360,7 +392,7 @@
   f1 <- paste(unlist(formDT[, 1]), conditions, sep = "*")
   interval_formula <- paste(f1, collapse = "+")
 
-  dvars <- .parseDotVars(formula)
+  dvars <- .parseDotVars(formula, envir)
 
   u <- stats::runif(n)
   dvars$interval <- findInterval(u, ps, rightmost.closed = TRUE) + 1
@@ -374,7 +406,8 @@
 # @param formula String that specifies the mean
 # @return A data.frame column with the updated simulated data
 
-.getNBmean <- function(dtSim, formula, link, n = nrow(dtSim), envir = parent.frame()) {
+.getNBmean <- function(dtSim, formula, link, n = nrow(dtSim),
+                       envir = parent.frame()) {
   mean <- .evalWith(formula, .parseDotVars(formula, envir), dtSim, n)
   if (link == "log") {
     mean <- exp(mean)
@@ -535,4 +568,30 @@
   unifCont <- stats::runif(n, range$min, range$max + 1)
 
   return(as.integer(floor(unifCont)))
+}
+
+.genAssign <- function(dtName, balanced,
+                       strata, grpName, ratio) {
+  stopifnot(is.data.table(dtName))
+  assertLength("formula/ratio" = ratio, length = 1)
+  if (strata == 0) {
+    strata <- NULL
+  } else {
+    strata <- .splitFormula(strata)
+  }
+
+  balanced <- fifelse(balanced == "identity", TRUE, FALSE)
+
+  if (is.character(ratio)) {
+    ratio <- as.numeric(.splitFormula(ratio))
+    nTrt <- length(ratio)
+  } else if (is.numeric(ratio)) {
+    nTrt <- ratio
+    ratio <- NULL
+  }
+
+  trtAssign(
+    dtName,
+    nTrt, balanced, strata, grpName, ratio
+  )[, get(grpName)]
 }

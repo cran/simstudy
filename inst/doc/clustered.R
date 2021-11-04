@@ -37,6 +37,8 @@ gen.school <- defData(gen.school, varname = "nClasses",
                       dist = "noZeroPoisson", formula = 3
 )
 
+set.seed(282721)
+
 dtSchool <- genData(8, gen.school)
 dtSchool <- trtAssign(dtSchool, n = 2)
 

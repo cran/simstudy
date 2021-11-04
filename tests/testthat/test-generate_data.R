@@ -1,15 +1,40 @@
 # genData ----
 test_that("data is generated as expected", {
   n <- 20
-  def <- defData(varname = "test", formula = .3, dist = "nonrandom")
+
+  null_def <- defData(varname = "test", formula = .3, dist = "nonrandom", id = NULL)
+  def <- defData(varname = "test", formula = .3, dist = "nonrandom", id = "some_id")
   def <- defData(def, varname = "test2", formula = .7, dist = "nonrandom")
   def2 <- defData(def, varname = "cat", formula = "test2;.4", dist = "categorical")
   def3 <- defData(def, varname = "cat", formula = "test2;.2", dist = "categorical")
   def <- defData(def, varname = "cat", formula = "test;test2", dist = "categorical")
 
   expect_silent(genData(n, def))
+  expect_silent(genData(n, null_def))
+
+  expect_warning(genData(n, def, "not-id"), class = "simstudy::valueWarning")
+  expect_equal(
+    {
+      data <- suppressWarnings(genData(n, def, "not-id"))
+      names(data)[1]
+    },
+    "not-id"
+  )
+  expect_silent(genData(n, def, "some_id"))
+
   expect_warning(genData(n, def2), "will be normalized")
   expect_warning(genData(n, def3), "Adding category")
+  # TODO expand test with hedgehog
+})
+
+test_that("vectorized variables work in formulas", {
+  d <- defData(varname = "a", formula = 0.6, dist = "binary")
+  d <- defData(d, varname = "b", formula = 0.4, dist = "binary")
+  d <- defData(d, varname = "c", formula = 0.3, dist = "binary")
+  d <- defData(d, varname = "theta", formula = "t(..tau) %*% c(a, b, c)", dist = "nonrandom")
+  tau <- rnorm(3, 0, 1)
+
+  expect_silent(genData(10, d))
 })
 
 # genOrdCat ----
@@ -18,7 +43,6 @@ test_that("genOrdCat throws errors.", {
   expect_error(genOrdCat(adjVar = NULL, rho = 1), class = "simstudy::missingArgument")
   expect_error(genOrdCat(NULL, NULL, NULL), class = "simstudy::noValue")
   expect_warning(genOrdCat(genData(1), baseprobs = c(0.5, 0.5), corstr = "notValid"), class = "simstudy::invalidOption")
-  
 })
 
 library(magrittr)
@@ -30,7 +54,7 @@ test_that("ordinal categorical data is generated correctly.", {
   probs_short <- c(.2, .4, .2)
   probs <- c(.2, .2, .6)
   data <- genData(n)
-
+  # TODO more test variable parameter combinations
   expect_equal(
     {
       data %>%
@@ -53,15 +77,20 @@ test_that("ordinal categorical data is generated correctly.", {
     tolerance = 0.01
   )
 
-  expect_equal({
-    set.seed(123)
-    genOrdCat(genData(1), baseprobs = c(0.5, 0.5), corstr = "ind")
-  }, {
-    set.seed(123)
-    suppressWarnings(genOrdCat(genData(1), baseprobs = c(0.5, 0.5), corstr = "notValid"),
-    classes = "simstudy::optionInvalid")
-  })
+  expect_equal(
+    {
+      set.seed(123)
+      genOrdCat(genData(1), baseprobs = c(0.5, 0.5), corstr = "ind")
+    },
+    {
+      set.seed(123)
+      suppressWarnings(genOrdCat(genData(1), baseprobs = c(0.5, 0.5), corstr = "notValid"),
+        classes = "simstudy::optionInvalid"
+      )
+    }
+  )
   set.seed(oldSeed)
+  expect_silent(genOrdCat(dtName = data, adjVar = "id", baseprobs = rbind(probs, probs), asFactor = FALSE))
 })
 
 test_that("deprecation warning shows up.", {

@@ -1,9 +1,51 @@
 # .gencat ----
 test_that(".gencat throws errors", {
-  expect_error(.gencat(n, "1;", "identity", NULL, environment()), "two probabilities")
-  expect_error(.gencat(n, "1; ", "identity", NULL, environment()), "two probabilities")
+  expect_error(.gencat(
+    n = n,
+    formula = "1;",
+    variance = NULL,
+    link = "identity",
+    envir = emptyenv()
+  ), "two probabilities")
+  expect_error(.gencat(
+    n = n,
+    formula = "1; ",
+    variance = NULL,
+    link = "identity",
+    envir = emptyenv()
+  ), "two probabilities")
+  expect_error(.gencat(
+    n = 10,
+    formula = ".5;.5",
+    variance = "a;",
+    link = "identity",
+    envir = emptyenv()
+  ), class = "simstudy::lengthMismatch")
 })
 
+test_that("categorical data is generated as expected.", {
+  expect_type(.gencat(
+    n = 10,
+    formula = genCatFormula(n = 3),
+    variance = "a;b;c",
+    link = "identity",
+    envir = emptyenv()
+  ), "character")
+  expect_type(.gencat(
+    n = 10,
+    formula = genCatFormula(n = 3),
+    variance = "a;2;c",
+    link = "identity",
+    envir = emptyenv()
+  ), "character")
+  expect_true(is.numeric(.gencat(
+    n = 10,
+    formula = genCatFormula(n = 3),
+    variance = "1;2;3",
+    link = "identity",
+    envir = emptyenv()
+  )))
+})
 # .genunif ----
 test_that("unif data is generated as expected.", {
   n <- 20
@@ -67,4 +109,16 @@ test_that("'uniformInt' formula checked correctly", {
   )
 
   expect_error(.genUnifInt(3, "1.1;2.4", NULL, environment()), "must be integer")
+})
+
+# .genmixture ----
+test_that("mixtures are generated correctly", {
+  def <- defData(varname =  "a", formula = 5)
+  def <- defData(def,
+    varname = "blksize",
+    formula = "..sizes[1] | .5 + ..sizes[2] * a/10 | .5", dist = "mixture"
+  )
+  sizes <- c(2, 4)
+  env <- environment()
+  expect_silent(genData(1000, def, envir = env))
 })

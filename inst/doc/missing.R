@@ -70,6 +70,8 @@ defM <- defMiss(defM, varname = "x2", formula = ".05 + m * 0.25", logit.link = F
 defM <- defMiss(defM, varname = "x3", formula = ".05 + u * 0.25", logit.link = FALSE)
 defM <- defMiss(defM, varname = "u", formula = 1, logit.link = FALSE) # not observed
 
+set.seed(283726)
+
 missMat <- genMiss(dtAct, defM, idvars = "id")
 dtObs <- genObs(dtAct, missMat, idvars = "id")
 
@@ -112,7 +114,7 @@ showDif(meanActm[m==1, .(x1, x2, x3)], meanObsm[m==1, .(x1, x2, x3)])
 
 ## ---- tidy = TRUE-------------------------------------------------------------
 
-# use baseline definitions from previous example
+# use baseline definitions from the previous example
 
 dtAct <- genData(120, def1)
 dtAct <- trtObserve(dtAct, formulas = .5, logit.link = FALSE, grpName = "rx")
@@ -188,6 +190,4 @@ grid.arrange(xp10, xp20, xp11, xp21,
              bottom = textGrob("Periods", gp = gpar(cex=.8)) #,
 #             left = textGrob("ID", gp = gpar(cex = .8), rot = 90)
 )
-
-
 

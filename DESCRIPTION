@@ -1,13 +1,13 @@
 Type: Package
 Package: simstudy
 Title: Simulation of Study Data
-Version: 0.2.1
-Date: 2020-10-07
+Version: 0.3.0
+Date: 2021-11-04
 Authors@R: 
     c(person(given = "Keith",
              family = "Goldfeld",
              role = c("aut", "cre"),
-             email = "Keith.Goldfeld@nyumc.org",
+             email = "keith.goldfeld@nyulangone.org",
              comment = c(ORCID = "0000-0002-0292-8780")),
       person(given = "Jacob",
              family = "Wujciak-Jens",
@@ -34,12 +34,11 @@ Suggests: covr, dplyr, formatR, gee, ggplot2, grid, gridExtra,
 LinkingTo: Rcpp
 VignetteBuilder: knitr
 Encoding: UTF-8
-LazyData: TRUE
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 NeedsCompilation: yes
-Packaged: 2020-10-07 15:24:27 UTC; goldfk01
+Packaged: 2021-11-04 22:02:03 UTC; ksg
 Author: Keith Goldfeld [aut, cre] (<https://orcid.org/0000-0002-0292-8780>),
   Jacob Wujciak-Jens [aut] (<https://orcid.org/0000-0002-7281-3989>)
-Maintainer: Keith Goldfeld <Keith.Goldfeld@nyumc.org>
+Maintainer: Keith Goldfeld <keith.goldfeld@nyulangone.org>
 Repository: CRAN
-Date/Publication: 2020-10-07 22:50:03 UTC
+Date/Publication: 2021-11-05 00:20:02 UTC

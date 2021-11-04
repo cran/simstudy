@@ -89,6 +89,22 @@ p3a <- aplotfunc(study3, "")
 
 grid.arrange(p1, p1a, p2, p2a, p3, p3a, ncol=2)
 
+## -----------------------------------------------------------------------------
+def <- defData(varname = "male", dist = "binary", 
+               formula = .5 , id="cid")
+def <- defData(def, varname = "over65", dist = "binary",  
+               formula = "-1.7 + .8*male", link="logit")
+def <- defData(def, varname = "rx", dist = "trtAssign",
+               formula = "1;1", variance = "male;over65")
+def <- defData(def, varname = "y", dist = "normal", 
+               formula = "20 + 5*male + 10*over65 + 10*rx", variance = 40)
+
+dtstudy <- genData(330, def)
+dtstudy
+
+## -----------------------------------------------------------------------------
+dtstudy[, .(n = .N, avg = round(mean(y), 1)), keyby = .(male, over65, rx)]
+
 ## ---- tidy = TRUE-------------------------------------------------------------
 formula1 <- c("-2 + 2*male - .5*over65", "-1 + 2*male + .5*over65")
 dtExp <- trtObserve(dtstudy, formulas = formula1, logit.link = TRUE, grpName = "exposure")

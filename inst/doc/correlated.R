@@ -33,6 +33,8 @@ ggtheme <- function(panelback = "white") {
 C <- matrix(c(1,.7,.2, .7, 1, .8, .2, .8, 1),nrow = 3)
 C
 
+set.seed(282726)
+
 # generate 3 correlated variables with different location and scale for each field
 dt <- genCorData(1000, mu=c(4,12,3), sigma = c(1,2,3), corMatrix=C)
 dt

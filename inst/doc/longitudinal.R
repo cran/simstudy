@@ -34,6 +34,8 @@ tdef <- defData(tdef, varname = "Y0", dist = "normal", formula = 10, variance = 
 tdef <- defData(tdef, varname = "Y1", dist = "normal", formula = "Y0 + 5 + 5 * T", variance = 1)
 tdef <- defData(tdef, varname = "Y2", dist = "normal", formula = "Y0 + 10 + 5 * T", variance = 1)
 
+set.seed (483726)
+
 dtTrial <- genData( 500, tdef)
 dtTrial
 

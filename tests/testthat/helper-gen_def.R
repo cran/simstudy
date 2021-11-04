@@ -1,4 +1,4 @@
-library(hedgehog)
+library(hedgehog, pos = 3)
 # Generators:
 #   This file implements helper functions and generators used in property based
 #   testing using the hedgehog package. Generators do not just return one value
@@ -8,7 +8,7 @@ library(hedgehog)
 #   usecase or intent is not clear from the generator naming.
 
 # General Generators ----
-distributions <- .getDists()
+distributions <- .getDists()[1:14]
 gen_dist <- gen.no.shrink(gen.element(distributions))
 
 # beta dist variance
@@ -383,7 +383,7 @@ gen_link_logit <- gen.no.shrink(gen.element(c("identity", "logit")))
 #   This data.table is used in generating complete data definitions. New
 #   Distributios need to be added here to to be included in testing.
 reg <- data.table()
-reg$name <- sort(.getDists())
+reg$name <- sort(.getDists()[1:14])
 reg$formula <- character()
 reg$variance <- "gen_var"
 reg$link <- "gen_id"

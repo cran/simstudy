@@ -39,7 +39,7 @@ ggtheme <- function(panelback = "white") {
 
 ```
 
-Using the `defData` and `genData` functions, it is is relatively easy to specify multinomial distributions that characterize categorical data. Order becomes relevant when the categories take on meanings related strength of opinion or agreement (as in a Likert-type response) or frequency. A motivating example could be when a response variable takes on five possible values: (1) strongly disagree, (2) disagree, (3) neutral, (4) agree, (5) strongly agree. There is a natural order to the response possibilities.
+Using the `defData` and `genData` functions, it is relatively easy to specify multinomial distributions that characterize categorical data. Order becomes relevant when the categories take on meanings related to strength of opinion or agreement (as in a Likert-type response) or frequency. A motivating example could be when a response variable takes on five possible values: (1) strongly disagree, (2) disagree, (3) neutral, (4) agree, (5) strongly agree. There is a natural order to the response possibilities.
 
 It is common to summarize the data by looking at *cumulative* probabilities, odds, or log-odds.  Comparisons of different exposures or individual characteristics typically look at how these cumulative measures vary across the different exposures or characteristics. So, if we were interested in cumulative odds, we would compare
 $$\small{\frac{P(response = 1|exposed)}{P(response > 1|exposed)} \ \ vs. \ \frac{P(response = 1|unexposed)}{P(response > 1|unexposed)}},$$
@@ -107,13 +107,13 @@ p1 <- ggplot(data = dt, aes(x = x, y = pdf)) +
 p1
 ```
 
-### Comparing response distributions of different populations
+## Comparing response distributions of different populations
 
 In the cumulative logit model, the underlying assumption is that the odds ratio of one population relative to another is constant across all the possible responses. This means that all of the cumulative odds ratios are equal: 
 
 $$\small{\frac{codds(P(Resp = 1 | exposed))}{codds(P(Resp = 1 | unexposed))} = \frac{codds(P(Resp \leq 2 | exposed))}{codds(P(Resp \leq 2 | unexposed))} = \ ... \ = \frac{codds(P(Resp \leq 4 | exposed))}{codds(P(Resp \leq 4 | unexposed))}}$$
 
-In terms of the underlying process, this means that each of the thresholds shifts the same amount, as shown below, where we add 1.1 units to each threshold that was set for the exposed group. What this effectively does is create a greater probability of a lower outcome for the unexposed group.
+In terms of the underlying process, this means that each of the thresholds shifts the same amount (as shown below) where we add 1.1 units to each threshold that was set for the exposed group. What this effectively does is create a greater probability of a lower outcome for the unexposed group.
 
 ```{r plotB, fig.width = 5.25, fig.height = 3.5, echo = FALSE}
 
@@ -163,7 +163,7 @@ p2 <- ggplot(data = dt, aes(x = x, y = pdf)) +
 p2
 ```
 
-### The cumulative proportional odds model
+## The cumulative proportional odds model
 
 In the `R` package `ordinal`, the model is fit using function `clm`. The model that is being estimated has the form
 
@@ -171,7 +171,7 @@ $$log \left( \frac{P(Resp \leq  i)}{P(Resp > i)} | Group \right) = \alpha_i - \b
 
 The model specifies that the cumulative log-odds for a particular category is a function of two parameters, $\alpha_i$ and $\beta$. (Note that in this parameterization and the model fit, $-\beta$ is used.)  $\alpha_i$ represents the cumulative log odds of being in category $i$ or lower for those in the reference exposure group, which in our example is Group A. *$\alpha_i$ also represents the threshold of the latent continuous (logistic) data generating process.* $\beta$ is the cumulative log-odds ratio for the category $i$ comparing the unexposed to reference group, which is the exposed. *$\beta$ also represents the shift of the threshold on the latent continuous process for the exposed relative to the unexposed*. The proportionality assumption implies that the shift of the threshold for each of the categories is identical.
 
-### Simulation
+## Simulation
 
 To generate ordered categorical data using `simstudy`, there is a function `genOrdCat`.
 
@@ -217,9 +217,9 @@ The log of the cumulative odds ratios for each of the four groups is
 logOdds.expos - logOdds.unexp
 ```
 
-### Correlated multivariate ordinal data
+## Correlated multivariate ordinal data
 
-Function `genOrdCat` generates multiple categorical response variables that may be correlated. For example, a survey of multiple Likert-type questions could have many response variables. The function generates correlated latent variables (using a normal copula) to simulate correlated categorical outcomes. The user specifies a matrix of probabilities, with each row representing a single item or categorical variable. The across each row must be 1. Adjustment variables can be specified for each item, or a single adjustment variable can be specified for all items. The correlation is on the standard normal scale, and is specified with a value of `rho` and a correlation structure (*independence*, *compound symmetry*, or *AR-1*). Alternatively, a correlation matrix can be specified.
+Function `genOrdCat` generates multiple categorical response variables that may be correlated. For example, a survey of multiple Likert-type questions could have many response variables. The function generates correlated latent variables (using a normal copula) to simulate correlated categorical outcomes. The user specifies a matrix of probabilities, with each row representing a single item or categorical variable. The across each row must be 1. Adjustment variables can be specified for each item, or a single adjustment variable can be specified for all items. The correlation is on the standard normal scale and is specified with a value of `rho` and a correlation structure (*independence*, *compound symmetry*, or *AR-1*). Alternatively, a correlation matrix can be specified.
 
 In this example, there are 5 questions, each of which has three possible responses: "none", "some", "a lot". The probabilities of response are specified in a $5 \times 3$ matrix, and the rows sum to 1:
 
@@ -276,3 +276,4 @@ dProp[, response := rep(seq(3), 5)]
 
 # probabilities
 dcast(dProp, variable ~ response, value.var = "V1", fill = 0)
+```
