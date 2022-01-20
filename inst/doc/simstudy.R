@@ -131,10 +131,21 @@ setnames(d, c("name", "formula", "string/value", "format", "variance", "identity
 knitr::kable(d, align = "lllllccc")
 
 ## -----------------------------------------------------------------------------
+def <- defRepeat(nVars = 4, prefix = "g", formula = "1/3;1/3;1/3", 
+   variance = 0, dist = "categorical")
+def <- defData(def, varname = "a", formula = "1;1", dist = "trtAssign")
+def <- defRepeat(def, 3, "b", formula = "5 + a", variance = 3, dist = "normal")
+def <- defData(def, "y", formula = "0.10", dist = "binary")
+
+def
+
+## -----------------------------------------------------------------------------
 d1 <- defData(varname = "x1", formula = 0, variance = 1, dist = "normal")
 d1 <- defData(d1, varname = "x2", formula = 0.5, dist = "binary")
 
-d2 <- defDataAdd(varname = "y", formula = "-2 + 0.5*x1 + 0.5*x2 + 1*rx", 
+d2 <- defRepeatAdd(nVars = 2, prefix = "q", formula = "5 + 3*rx",
+                   variance = 4, dist = "normal")
+d2 <- defDataAdd(d2, varname = "y", formula = "-2 + 0.5*x1 + 0.5*x2 + 1*rx", 
                  dist = "binary", link = "logit")
 
 dd <- genData(5, d1)
@@ -147,12 +158,12 @@ dd
 ## -----------------------------------------------------------------------------
 d <- defData(varname = "x", formula = 0, variance = 9, dist = "normal")
 
-dc <- defCondition(condition = "x <= -2", formula = "4 + 3*x", variance = 2, 
-                   dist = "normal")
-dc <- defCondition(dc, condition = "x > -2 & x <= 2", formula = "0 + 1*x", variance = 4, 
-                   dist = "normal")
-dc <- defCondition(dc, condition = "x > 2", formula = "-5 + 4*x", variance = 3, 
-                   dist = "normal")
+dc <- defCondition(condition = "x <= -2", formula = "4 + 3*x", 
+                   variance = 2, dist = "normal")
+dc <- defCondition(dc, condition = "x > -2 & x <= 2", formula = "0 + 1*x", 
+                   variance = 4, dist = "normal")
+dc <- defCondition(dc, condition = "x > 2", formula = "-5 + 4*x", 
+                   variance = 3, dist = "normal")
 
 dd <- genData(1000, d)
 dd <- addCondition(dc, dd, newvar = "y")

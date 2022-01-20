@@ -228,10 +228,8 @@ head(dtSurv)
 
 dtSurv[,round(1-mean(status),2), keyby = .(grp,x1)]
 
-## ---- tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5------------
+## ---- tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE----
 fit <- survfit(Surv(obsTime, status) ~ x1+grp, data=dtSurv)
-# ggsurvplot(fit, palette = cbbPalette, font.tickslab = c(8), font.x = 10, font.y = 10,
-#            legend = c(0.8, 0.8))
 
 ggsurv_m(fit, cens.col = "grey50", surv.col = cbbPalette, 
          labels = c("grp=0 & x1=0","grp=1 & x1=0","grp=0 & x1=1","grp=1 & x1=1")) +
@@ -244,4 +242,28 @@ ggsurv_m(fit, cens.col = "grey50", surv.col = cbbPalette,
         legend.key.width = unit(1, "cm")) +
   guides(colour = guide_legend(override.aes = list(size=1)))
 
+
+## ---- tidy = TRUE-------------------------------------------------------------
+
+# Baseline data definitions
+
+def <- defData(varname = "x1", formula = .5, dist = "binary")
+def <- defData(def,varname = "x2", formula = .5, dist = "binary")
+
+# Survival data definitions
+
+sdef <- defSurv(varname = "survTime", formula = "1.5*x1 - .8*x2", scale = 50, shape = 1/2)
+sdef <- defSurv(sdef, varname = "censorTime", scale = 80, shape = 1)
+
+dtSurv <- genData(300, def)
+dtSurv <- genSurv(dtSurv, sdef)
+
+cdef <- defDataAdd(varname = "obsTime", formula = "pmin(survTime, censorTime)", dist="nonrandom")
+cdef <- defDataAdd(cdef, varname = "status", formula = "I(survTime <= censorTime)",dist="nonrandom")
+
+dtSurv <- addColumns(cdef, dtSurv)
+coxfit <- survival::coxph(Surv(obsTime, status) ~ x1 + x2, data = dtSurv)
+
+## ---- echo=FALSE--------------------------------------------------------------
+gtsummary::tbl_regression(coxfit)
 
