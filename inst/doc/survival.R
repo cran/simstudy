@@ -1,6 +1,6 @@
 ## ---- echo = FALSE, message = FALSE-------------------------------------------
 library(simstudy)
-library(ggplot2)
+# library(ggplot2)
 library(scales)
 library(grid)
 library(gridExtra)
@@ -8,6 +8,7 @@ library(survival)
 library(gee)
 library(data.table)
 
+## ---- echo = FALSE------------------------------------------------------------
 plotcolors <- c("#B84226", "#1B8445", "#1C5974")
 
 cbbPalette <- c("#B84226","#B88F26", "#A5B435", "#1B8446",
@@ -16,171 +17,16 @@ cbbPalette <- c("#B84226","#B88F26", "#A5B435", "#1B8446",
 ggtheme <- function(panelback = "white") {
   
   ggplot2::theme(
-    panel.background = element_rect(fill = panelback),
-    panel.grid = element_blank(),
-    axis.ticks =  element_line(colour = "black"),
-    panel.spacing =unit(0.25, "lines"),  # requires package grid
-    panel.border = element_rect(fill = NA, colour="gray90"), 
-    plot.title = element_text(size = 8,vjust=.5,hjust=0),
-    axis.text = element_text(size=8),
-    axis.title = element_text(size = 8)
+    panel.background = ggplot2::element_rect(fill = panelback),
+    panel.grid = ggplot2::element_blank(),
+    axis.ticks =  ggplot2::element_line(colour = "black"),
+    panel.spacing = ggplot2::unit(0.25, "lines"),  # requires package grid
+    panel.border = ggplot2::element_rect(fill = NA, colour="gray90"), 
+    plot.title = ggplot2::element_text(size = 8,vjust=.5,hjust=0),
+    axis.text = ggplot2::element_text(size=8),
+    axis.title = ggplot2::element_text(size = 8)
   )  
   
-}
-
-ggsurv_m <- function(
-  s,
-  CI         = 'def',
-  plot.cens  = TRUE,
-  surv.col   = 'gg.def',
-  cens.col   = 'gg.def',
-  lty.est    = 1,
-  lty.ci     = 2,
-  cens.shape = 3,
-  back.white = FALSE,
-  xlab       = 'Time',
-  ylab       = 'Survival',
-  main       = '',
-  strata     = length(s$strata),
-  labels     = NULL
-) {
-  
-  s <- fit
-  
-  n <- s$strata
-  
-  strataEqualNames <- unlist(strsplit(names(s$strata), '='))
-  groups <- factor(
-    strataEqualNames[seq(2, 2 * strata, by = 2)],
-    levels = strataEqualNames[seq(2, 2 * strata, by = 2)]
-  )
-  
-  gr.name <-  strataEqualNames[1]
-  gr.df   <- vector('list', strata)
-  n.ind   <- cumsum(c(0,n))
-  
-  for (i in 1:strata) {
-    indI <- (n.ind[i]+1):n.ind[i+1]
-    gr.df[[i]] <- data.frame(
-      time  = c(0, s$time[ indI ]),
-      surv  = c(1, s$surv[ indI ]),
-      up    = c(1, s$upper[ indI ]),
-      low   = c(1, s$lower[ indI ]),
-      cens  = c(0, s$n.censor[ indI ]),
-      group = rep(groups[i], n[i] + 1)
-    )
-  }
-  
-  dat      <- do.call(rbind, gr.df)
-  dat.cens <- subset(dat, cens != 0)
-  
-  pl <- ggplot(dat, aes(x = time, y = surv, group = group)) +
-    geom_step(aes(col = group, lty = group)) +
-    xlab(xlab) +
-    ylab(ylab) +
-    ggtitle(main)
-  
-  pl <- if(surv.col[1] != 'gg.def'){
-    scaleValues <- if (length(surv.col) == 1) {
-      rep(surv.col, strata)
-    } else{
-      surv.col
-    }
-    pl + scale_colour_manual(name = gr.name, values = scaleValues, labels=labels)
-    
-  } else {
-    pl + scale_colour_discrete(name = gr.name, labels=labels)
-  }
-  
-  lineScaleValues <- if (length(lty.est) == 1) {
-    rep(lty.est, strata)
-  } else {
-    lty.est
-  }
-  pl <- pl + scale_linetype_manual(name = gr.name, values = lineScaleValues)
-
-  if(identical(CI,TRUE)) {
-    if(length(surv.col) > 1 || length(lty.est) > 1){
-      stop('Either surv.col or lty.est should be of length 1 in order to plot 95% CI with multiple strata')
-    }
-
-    stepLty <- if ((length(surv.col) > 1 | surv.col == 'gg.def')[1]) {
-      lty.ci
-    } else {
-      surv.col
-    }
-    pl <- pl +
-      geom_step(aes(y = up, lty = group), lty = stepLty) +
-      geom_step(aes(y = low,lty = group), lty = stepLty)
-  }
-
-  if (identical(plot.cens, TRUE) ){
-    if (nrow(dat.cens) == 0) {
-      stop('There are no censored observations')
-    }
-    if (length(cens.col) == 1) {
-      col <- ifelse(cens.col == 'gg.def', 'red', cens.col)
-      pl <- pl + geom_point(
-        data    = dat.cens,
-        mapping = aes(y = surv),
-        shape   = cens.shape,
-        col     = col
-      )
-
-    } else if (length(cens.col) > 0) {
-    # if(!(identical(cens.col,surv.col) || is.null(cens.col))) {
-      #   warning ("Color scales for survival curves and censored points don't match.\nOnly one color scale can be used. Defaulting to surv.col")
-      # }
-
-
-      if (! identical(cens.col, "gg.def")) {
-        if (length(cens.col) != strata) {
-          warning("Color scales for censored points don't match the number of groups. Defaulting to ggplot2 default color scale")
-          cens.col <- "gg.def"
-        }
-      }
-
-      if (identical(cens.col, "gg.def")) {
-        pl <- pl + geom_point(
-          data = dat.cens,
-          mapping = aes(y=surv, col = group),
-          shape = cens.shape,
-          show.legend = FALSE
-        )
-      } else {
-
-        uniqueGroupVals = unique(dat.cens$group)
-        if (length(cens.shape) == 1) {
-          cens.shape = rep(cens.shape, strata)
-        }
-
-        if (length(cens.shape) != strata) {
-          warning("The length of the censored shapes does not match the number of groups (or 1). Defaulting shape = 3 (+)")
-          cens.shape = rep(3, strata)
-        }
-        for (i in seq_along(uniqueGroupVals)) {
-          groupVal = uniqueGroupVals[i]
-          dtGroup <- subset(dat.cens, group == groupVal)
-
-          pl <- pl + geom_point(
-            data = dtGroup,
-            mapping = aes(y=surv),
-            color = I(cens.col[i]),
-            shape = cens.shape[i],
-            show.legend = FALSE
-          )
-
-        }
-      }
-
-    }
-  }
-
-  if(identical(back.white, TRUE)) {
-    pl <- pl + theme_bw()
-  }
-  
-  pl
 }
 
 ## ---- tidy = TRUE-------------------------------------------------------------
@@ -188,7 +34,6 @@ ggsurv_m <- function(
 # Baseline data definitions
 
 def <- defData(varname = "x1", formula = .5, dist = "binary")
-def <- defData(def,varname = "x2", formula = .5, dist = "binary")
 def <- defData(def,varname = "grp", formula = .5, dist = "binary")
 
 # Survival data definitions
@@ -216,11 +61,10 @@ dtSurv[,round(mean(survTime),1), keyby = .(grp,x1)]
 
 
 ## ---- tidy = TRUE-------------------------------------------------------------
-
-cdef <- defDataAdd(varname = "obsTime", formula = "pmin(survTime, censorTime)", dist="nonrandom")
-cdef <- defDataAdd(cdef, varname = "status", formula = "I(survTime <= censorTime)",dist="nonrandom")
-
-dtSurv <- addColumns(cdef, dtSurv)
+dtSurv <- genData(300, def)
+dtSurv <- genSurv(dtSurv, sdef, timeName = "obsTime", 
+            censorName = "censorTime", eventName = "status", 
+            keepEvents = TRUE)
 
 head(dtSurv)
 
@@ -231,17 +75,13 @@ dtSurv[,round(1-mean(status),2), keyby = .(grp,x1)]
 ## ---- tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE----
 fit <- survfit(Surv(obsTime, status) ~ x1+grp, data=dtSurv)
 
-ggsurv_m(fit, cens.col = "grey50", surv.col = cbbPalette, 
-         labels = c("grp=0 & x1=0","grp=1 & x1=0","grp=0 & x1=1","grp=1 & x1=1")) +
-  ggplot2::guides(linetype = FALSE) +
-  ggtheme("grey95") +
-  theme(legend.position=c(.8,.8), 
-        legend.title = element_blank(),
-        legend.key = element_rect(fill="grey95" , color = "grey95"),
-        legend.background = element_rect(fill="grey95"),
-        legend.key.width = unit(1, "cm")) +
-  guides(colour = guide_legend(override.aes = list(size=1)))
-
+survminer::ggsurvplot(fit, data = dtSurv,
+  palette = cbbPalette,
+  size = .5,
+  ggtheme = ggtheme("grey94")
+    # ggplot2::theme(axis.title = ggplot2::element_text(size = 9),
+    #                        panel.grid = ggplot2::element_blank())
+)
 
 ## ---- tidy = TRUE-------------------------------------------------------------
 
@@ -256,14 +96,129 @@ sdef <- defSurv(varname = "survTime", formula = "1.5*x1 - .8*x2", scale = 50, sh
 sdef <- defSurv(sdef, varname = "censorTime", scale = 80, shape = 1)
 
 dtSurv <- genData(300, def)
-dtSurv <- genSurv(dtSurv, sdef)
+dtSurv <- genSurv(dtSurv, sdef, timeName = "obsTime", 
+            censorName = "censorTime", eventName = "status")
 
-cdef <- defDataAdd(varname = "obsTime", formula = "pmin(survTime, censorTime)", dist="nonrandom")
-cdef <- defDataAdd(cdef, varname = "status", formula = "I(survTime <= censorTime)",dist="nonrandom")
-
-dtSurv <- addColumns(cdef, dtSurv)
 coxfit <- survival::coxph(Surv(obsTime, status) ~ x1 + x2, data = dtSurv)
 
 ## ---- echo=FALSE--------------------------------------------------------------
 gtsummary::tbl_regression(coxfit)
+
+## -----------------------------------------------------------------------------
+d1 <- defData(varname = "x1", formula = .5, dist = "binary")
+d1 <- defData(d1, "x2", .5, dist = "binary")
+
+dS <- defSurv(varname = "event_1", formula = "-10 - 0.6*x1 + 0.4*x2", shape = 0.3)
+dS <- defSurv(dS, "event_2", "-6.5 + 0.3*x1 - 0.5*x2", shape = 0.5)
+dS <- defSurv(dS, "censor", "-7", shape = 0.55)
+
+dtSurv <- genData(1001, d1)
+dtSurv <- genSurv(dtSurv, dS)
+
+dtSurv
+
+## -----------------------------------------------------------------------------
+dtSurv <- addCompRisk(dtSurv, events = c("event_1", "event_2", "censor"), 
+            timeName = "time", censorName = "censor")
+dtSurv
+
+## ---- tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE----
+fit <- survfit(Surv(time, event, type="mstate") ~ 1, data=dtSurv)
+survminer::ggcompetingrisks(fit, ggtheme = ggtheme("grey94"))  + 
+  ggplot2::scale_fill_manual(values = cbbPalette)
+
+## -----------------------------------------------------------------------------
+dtSurv <- genData(101, d1)
+dtSurv <- genSurv(dtSurv, dS, timeName = "time", censorName = "censor")
+dtSurv
+
+## ---- tidy = TRUE-------------------------------------------------------------
+def <- defData(varname = "x", formula = .4, dist="binary")
+
+defS <- defSurv(varname = "death", formula = "-14.6 - 0.7*x", shape = .35)
+defS <- defSurv(defS, varname = "censor", scale = exp(13), shape = .5)
+
+dd <- genData(500, def)
+dd <- genSurv(dd, defS, digits = 2, timeName = "time", censorName = "censor")
+
+fit <- survfit( Surv(time, event) ~ x, data = dd )
+
+## ---- tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE----
+survminer::ggsurvplot(fit, data = dd, 
+                      ggtheme = ggtheme("grey94"),
+                      palette = cbbPalette
+)
+
+## -----------------------------------------------------------------------------
+coxfit <- coxph(formula = Surv(time, event) ~ x, data = dd)
+
+## ---- echo=FALSE--------------------------------------------------------------
+gtsummary::tbl_regression(coxfit)
+
+## -----------------------------------------------------------------------------
+cox.zph(coxfit)
+
+## ---- tidy = TRUE-------------------------------------------------------------
+def <- defData(varname = "x", formula = .4, dist="binary")
+
+defS <- defSurv(varname = "death", formula = "-14.6 - 1.3*x", shape = .35, transition = 0)
+defS <- defSurv(defS, varname = "death", formula = "-14.6 - 0.4*x", shape = .35, transition = 150)
+defS <- defSurv(defS, varname = "censor", scale = exp(13), shape = .5)
+
+dd <- genData(500, def)
+dd <- genSurv(dd, defS, digits = 2, timeName = "time", censorName = "censor")
+
+fit <- survfit( Surv(time, event) ~ x, data = dd )
+
+## ---- tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE----
+survminer::ggsurvplot(fit, data = dd, 
+                      ggtheme = ggtheme("grey94"),
+                      palette = cbbPalette
+)
+
+## -----------------------------------------------------------------------------
+coxfit <- survival::coxph(formula = Surv(time, event) ~ x, data = dd)
+
+## ---- echo=FALSE--------------------------------------------------------------
+gtsummary::tbl_regression(coxfit)
+
+## -----------------------------------------------------------------------------
+cox.zph(coxfit)
+
+## -----------------------------------------------------------------------------
+dd2 <- survSplit(Surv(time, event) ~ ., data= dd, cut=c(150),
+                 episode= "tgroup", id="newid")
+
+coxfit2 <- survival::coxph(Surv(tstart, time, event) ~ x:strata(tgroup), data=dd2)
+
+## ---- echo=FALSE--------------------------------------------------------------
+gtsummary::tbl_regression(coxfit2)
+
+## -----------------------------------------------------------------------------
+cox.zph(coxfit2)
+
+## -----------------------------------------------------------------------------
+points <- list(c(100, 0.80), c(200, 0.10))
+r <- survGetParams(points)
+r
+
+## ---- tidy = TRUE, fig.width = 6.5, fig.height = 3.5, warning=FALSE-----------
+survParamPlot(f = r[1], shape = r[2], points)
+
+## -----------------------------------------------------------------------------
+
+defS <- defSurv(varname = "death", formula = -17, scale = 1, shape = 0.3)
+defS <- defSurv(defS, varname = "censor", formula = 0, scale = exp(18.5), shape = 0.3)
+
+dd <- genData(500)
+dd <- genSurv(dd, defS, timeName = "time", censorName = "censor")
+
+## ---- tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE----
+fit <- survfit( Surv(time, event) ~ 1, data = dd )
+
+survminer::ggsurvplot(fit, data = dd, 
+                      ggtheme = ggtheme("grey94"),
+                      palette = cbbPalette,
+                      legend = "none"
+)
 

@@ -137,28 +137,31 @@ genData <- function(n, dtDefs = NULL, id = "id", envir = parent.frame()) {
 genDummy <- function(dtName, varname, sep = ".", replace = FALSE) {
 
   # Initial data checks
-
-  if (missing(dtName)) stop("argument 'dtName' is missing", call. = FALSE)
-  if (missing(varname)) stop("argument 'varname' is missing", call. = FALSE)
+  
+  assertNotMissing(dtName = missing(dtName), varname = missing(varname))
 
   # Check if data table exists
 
   if (!exists(deparse(substitute(dtName)), envir = parent.frame())) {
-    stop(paste("data table", deparse(substitute(dtName)), "not found"), call. = FALSE)
+    c <- condition(c("simstudy::dtNotExist", "error"),
+                   "Data Table does not exist!")
+    stop(c)
   }
+  
+  #assertDataTableExists(deparse(substitute(dtName)))
 
   # Check if varname exists
-
-  if (!(varname %in% names(dtName))) {
-    stop(paste("variable", varname, "not found in data table", deparse(substitute(dtName))), call. = FALSE)
-  }
+  
+  assertInDataTable(varname, dtName)
 
   # Check if field is integer or factor
 
   x <- dtName[, get(varname)]
-
+  
   if (!(is.integer(x) | is.factor(x))) {
-    stop(paste("variable", varname, "must be a factor or integer"), call. = FALSE)
+    c <- condition(c("simstudy::notIntegerOrFactor", "error"),
+                   "Variable must be a factor or integer")
+    stop(c)
   }
 
 
@@ -171,9 +174,7 @@ genDummy <- function(dtName, varname, sep = ".", replace = FALSE) {
   # Check to see if new field names exist
 
   for (i in 1:nlevels) {
-    if (dummy.names[i] %in% names(dtName)) {
-      stop(paste("variable", dummy.names[i], "already exists in data table", deparse(substitute(dtName))), call. = FALSE)
-    }
+    assertNotInDataTable(dummy.names[i], dtName)
   }
 
   # Create dummies for each level of factor
@@ -277,8 +278,9 @@ genFactor <- function(dtName,
 #' @title Generate a linear formula
 #' @description Formulas for additive linear models can be generated
 #' with specified coefficient values and variable names.
-#' @param coefs A numerical vector that contains the values of the
-#' coefficients. If length(coefs) == length(vars), then no intercept
+#' @param coefs A vector that contains the values of the
+#' coefficients. Coefficients can also be defined as character for use with 
+#' double dot notation. If length(coefs) == length(vars), then no intercept
 #' is assumed. Otherwise, an intercept is assumed.
 #' @param vars A vector of strings that specify the names of the
 #' explanatory variables in the equation.
@@ -287,6 +289,9 @@ genFactor <- function(dtName,
 #'
 #' genFormula(c(.5, 2, 4), c("A", "B", "C"))
 #' genFormula(c(.5, 2, 4), c("A", "B"))
+#' 
+#' genFormula(c(.5, "..x", 4), c("A", "B", "C"))
+#' genFormula(c(.5, 2, "..z"), c("A", "B"))
 #'
 #' changeX <- c(7, 10)
 #' genFormula(c(.5, 2, changeX[1]), c("A", "B"))
@@ -308,16 +313,26 @@ genFormula <- function(coefs, vars) {
   lvars <- length(vars)
 
   if (!(lcoef == lvars | lcoef == lvars + 1)) {
-    stop("Coefficients or variables not properly specified")
+    c <- condition(c("simstudy::coeffVar", "error"),
+                   "Coefficients or variables not properly specified!")
+    stop(c)
+  }
+  
+  
+  if (is.character(coefs)) {
+    for (cf in coefs) {
+      if (suppressWarnings(is.na(as.integer(cf)))) {
+        if (substr(cf, start = 1, stop = 2) != "..") {
+          c <- condition(c("simstudy::doubleDot", "error"),
+                         "non-numerical coefficients must be specified with double dot notation")
+          
+          stop(c)
+        }
+      }
+    }
   }
 
-  if (!is.numeric(coefs)) {
-    stop("Coefficients must be specified as numeric values or numeric variables")
-  }
-
-  if (!is.character(vars)) {
-    stop("Variable names must be specified as characters or character variables")
-  }
+  assertType(var1 = vars, type = "character")
 
   if (lcoef != lvars) { # Intercept
 
@@ -361,6 +376,9 @@ genFormula <- function(coefs, vars) {
 #' prefix for the state fields in the wide format. Defaults to "S".
 #' @param trimvalue Integer value indicating end state. If trimvalue is not NULL,
 #' all records after the first instance of state = trimvalue will be deleted.
+#' @param startProb A string that contains the probability distribution of the 
+#' starting state, separated by a ";". Length of start probabilities must match
+#' the number of rows of the transition matrix.
 #' @return A data table with n rows if in wide format, or n by chainLen rows
 #' if in long format.
 #' @examples
@@ -384,38 +402,79 @@ genFormula <- function(coefs, vars) {
 #' @concept generate_data
 genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
                       pername = "period", varname = "state",
-                      widePrefix = "S", trimvalue = NULL) {
+                      widePrefix = "S", trimvalue = NULL, startProb = NULL) {
 
   # 'declare' vars created in data.table
   variable <- NULL
 
-  # check transMat is square matrix and row sums = 1
-
-  if (!is.matrix(transMat) |
-    (length(dim(transMat)) != 2) |
-    (dim(transMat)[1] != dim(transMat)[2])
-  ) {
-    stop("Transition matrix needs to be a square matrix")
+  # check transMat is matrix
+  if (!is.matrix(transMat)) {
+    c <- condition(c("simstudy::typeMatrix", "error"),
+                   "transMat is not a matrix!")
+    stop(c)
   }
-
-  # check row sums = 1
-
+    
+  # check transMat is square matrix
+  if ((length(dim(transMat)) != 2) |
+      (dim(transMat)[1] != dim(transMat)[2])) {
+    c <- condition(c("simstudy::squareMatrix", "error"),
+                   "transMat is not a square matrix!")
+    stop(c)
+  }
+  
+  # check transMat row sums = 1
   if (!all(round(apply(transMat, 1, sum), 5) == 1)) {
-    stop("Rows in transition matrix must sum to 1")
+    c <- condition(c("simstudy::rowSums1", "error"),
+                   "transMat rows do not sum to 1!")
+    stop(c)
   }
-
-  # check chainLen is > 1
-
-  if (chainLen <= 1) stop("Chain length must be greater than 1")
+  
+  # check chainLen greater than 1
+  if (chainLen <= 1) {
+    c <- condition(c("simstudy::chainLen", "error"),
+                   "chainLen must be greater than 1!")
+    stop(c)
+  }
+  
+  # if startProb defined, check it sums to 1
+  if (!is.null(startProb)) {
+    s <- as.numeric(unlist(strsplit(startProb, split = ";")))
+    ssum <- sum(s)
+    if (ssum != 1) {
+      c <- condition(c("simstudy::notEqual", "error"),
+                     "startProb must sum to 1!")
+      stop(c)
+    }
+    
+  }
+  
+  # if startProb defined, check it has length == number of matrix rows
+  if (!is.null(startProb)) {
+    s <- unlist(strsplit(startProb, split = ";"))
+    r <- dim(transMat)[1]
+      assertLength(var1 = s, length = r)
+    
+  }
 
   ####
 
-  dd <- genData(n = n, id = id)
-  dd <- addMarkov(dd, transMat, chainLen, wide, id,
-    pername, varname, widePrefix,
-    start0lab = NULL,
-    trimvalue = trimvalue
-  )
+  if (!is.null(startProb)) {
+    dprob <- defData(varname = "prob", formula = startProb, dist = "categorical")
+    dd <- genData(n = n, dprob, id = id)
+    dd <- addMarkov(dd, transMat, chainLen, wide, id,
+      pername, varname, widePrefix,
+      start0lab = "prob",
+      trimvalue = trimvalue
+    )
+    
+    dd$prob <- NULL
+  } else {
+    dd <- genData(n = n, id = id)
+    dd <- addMarkov(dd, transMat, chainLen, wide, id,
+                    pername, varname, widePrefix,
+                    trimvalue = trimvalue
+    )
+  }
 
   dd[]
 }
@@ -446,18 +505,35 @@ genMarkov <- function(n, transMat, chainLen, wide = FALSE, id = "id",
 #' @export
 #' @concept generate_data
 genMultiFac <- function(nFactors, each, levels = 2, coding = "dummy", colNames = NULL, idName = "id") {
-  if (nFactors < 2) stop("Must specify at least 2 factors")
-  if (length(levels) > 1 & (length(levels) != nFactors)) stop("Number of levels does not match factors")
+  # check nFactors are integers
+  assertInteger(var1 = nFactors)
+  
+  # check length nFactors greater than 2
+  if(nFactors < 2) {
+    c <- condition(c("simstudy::greaterThan", "error"),
+                   "nFactors must be greater than 2!")
+    stop(c)
+  }
+  
+  # check number of levels matches factors
+  if (length(levels) > 1) {
+    assertLength(var1 = levels, length = nFactors)
+  }
+  
+  # check coding == 'effect' or 'dummy'
+  if(!(coding == "effect" | coding == "dummy")) {
+    c <- condition(c("simstudy::codingVal", "error"),
+                   "coding must equal 'effect' or 'dummy'!")
+    stop(c)
+  }
 
   x <- list()
 
   if (all(levels == 2)) {
     if (coding == "effect") {
       opts <- c(-1, 1)
-    } else if (coding == "dummy") {
-      opts <- c(0, 1)
     } else {
-      stop("Need to specify 'effect' or 'dummy' coding")
+      opts <- c(0, 1)
     }
 
     for (i in 1:nFactors) {
@@ -871,10 +947,26 @@ genSpline <- function(dt, newvar, predictor, theta,
 
 #' @title Generate survival data
 #' @description Survival data is added to an existing data set.
-#' @param dtName Name of complete data set
+#' @param dtName Name of data set
 #' @param survDefs Definitions of survival
 #' @param digits Number of digits for rounding
-#' @return Original matrix with survival time
+#' @param timeName A string to indicate the name of a combined competing risk
+#' time-to-event outcome that reflects the minimum observed value of all 
+#' time-to-event outcomes. Defaults to NULL, indicating that each time-to-event
+#' outcome will be included in dataset.
+#' @param censorName The name of a time to event variable that is the censoring
+#' variable. Will be ignored if timeName is NULL.
+#' @param eventName The name of the new numeric/integer column representing the
+#' competing event outcomes. If censorName is specified, the integer value for
+#' that event will be 0. Defaults to "event", but will be ignored 
+#' if timeName is NULL.
+#' @param typeName The name of the new character column that will indicate the
+#' event type. The type will be the unique variable names in survDefs. Defaults
+#' to "type", but will be ignored if timeName is NULL.
+#' @param keepEvents Indicator to retain original "events" columns. Defaults
+#' to FALSE.
+#' @param idName Name of id field in existing data set.
+#' @return Original data table with survival time
 #' @examples
 #' # Baseline data definitions
 #'
@@ -908,27 +1000,171 @@ genSpline <- function(dt, newvar, predictor, theta,
 # source: Bender, Augustin, & Blettner, Generating survival times to simulate Cox
 # proportional hazard models, SIM, 2005;24;1713-1723.
 #
-genSurv <- function(dtName, survDefs, digits = 3) {
+genSurv <- function(dtName, survDefs, digits = 3, 
+  timeName = NULL, censorName = NULL, eventName = "event", 
+  typeName = "type", keepEvents = FALSE, idName = "id") {
+  
+  assertNotMissing(
+    dtName = missing(dtName),
+    survDefs = missing(survDefs),
+    call = sys.call(-1)
+  )
+  
+  assertClass(
+    dtName = dtName, 
+    survDefs = survDefs, 
+    class = "data.table",
+    call = sys.call(-1)
+  )
+  
+  events <- unique(survDefs$varname)
+  
+  assertNotInDataTable(events, dtName)
+  
+  assertClass(digits = digits, class="numeric")
+  assertLength(digits = digits, length = 1, call = sys.call(-1))
+  assertInDataTable(idName, dtName)
 
   # 'declare
   varname <- NULL
   formula <- NULL
-
+  N <- NULL
+  V1 <- NULL 
+  event  <- NULL
+  survx  <- NULL
+  time  <- NULL
+  type <- NULL
+  id <- NULL
+  
   dtSurv <- copy(dtName)
+  setnames(dtSurv, idName, "id")
+  
+  for (i in (seq_along(events))) {
+    
+    nlogu <--log(stats::runif(nrow(dtSurv), min = 0, max = 1))
+    
+    subDef <- survDefs[varname == events[i]]
+    
+    shape <- dtSurv[, eval(parse(text = subDef[1, shape]))]
+    scale <- dtSurv[, eval(parse(text = subDef[1, scale]))]
+    formulas <- subDef[, formula]
+    
+    form1 <- dtSurv[, eval(parse(text = formulas[1])), keyby = id][, V1]
+    
+    if (nrow(subDef) > 1) {
+      
+      transition <- subDef[2, transition]
+      t_adj <- transition ^ (1/shape)
+     
+      form2 <- dtSurv[, eval(parse(text = formulas[2])), keyby = id][, V1]
+      
+      threshold <- exp(form1) * t_adj
+      period <- 1*(nlogu < threshold) + 2*(nlogu >= threshold)
+      
+      tempdt <- data.table(nlogu, form1, form2, period)
+      
+      tempdt[period == 1, survx := (nlogu/((1/scale)*exp(form1)))^shape]
+      tempdt[period == 2, survx := ((nlogu - (1/scale)*exp(form1)*t_adj + (1/scale)*exp(form2)*t_adj)/((1/scale)*exp(form2)))^shape]
+      
+      newColumn <- tempdt[, list(survx = round(survx, digits))]
+      
+    } else {
+    
+      tempdt <- data.table(nlogu, form1)
+      newColumn <-  
+        tempdt[, list(survx = round((nlogu/((1/scale)*exp(form1)))^shape, digits))]
 
-  for (i in (1:nrow(survDefs))) {
-    shape <- dtSurv[, eval(parse(text = survDefs[i, shape]))]
-    scale <- dtSurv[, eval(parse(text = survDefs[i, scale]))]
-    survPred <- dtSurv[, eval(parse(text = survDefs[i, formula]))]
-
-    u <- stats::runif(n = nrow(dtSurv))
-
-    newColumn <- dtSurv[, list(survx = round((-(log(u) / ((1 / scale) * exp(survPred))))^(shape), digits)), ]
-
+    }
+    
     dtSurv <- data.table::data.table(dtSurv, newColumn)
-
-    data.table::setnames(dtSurv, "survx", as.character(survDefs[i, varname]))
+    data.table::setnames(dtSurv, "survx", as.character(subDef[1, varname]))
+    
   }
-
+  
+  if (!is.null(timeName)) {
+    
+    dtSurv <- addCompRisk(dtSurv, events, timeName, censorName, 
+      eventName, typeName, keepEvents)
+    
+  }
+    
+  setnames(dtSurv, "id", idName)
   return(dtSurv[])
+  
 }
+
+#' @title Generate synthetic data 
+#' @description Synthetic data is generated from an existing data set
+#' @param dtFrom Data table that contains the source data
+#' @param n Number of samples to draw from the source data. The default
+#' is number of records that are in the source data file.
+#' @param vars A vector of string names specifying the fields that will be
+#' sampled. The default is that all variables will be selected.
+#' @param id A string specifying the field that serves as the record id. The
+#' default field is "id".
+#' @return A data table with the generated data
+#' @examples
+#' ### Create fake "real" data set
+#'
+#' d <- defData(varname = "a", formula = 3, variance = 1, dist = "normal")
+#' d <- defData(d, varname = "b", formula = 5, dist = "poisson")
+#' d <- defData(d, varname = "c", formula = 0.3, dist = "binary")
+#' d <- defData(d, varname = "d", formula = "a + b + 3*c", variance = 2, dist = "normal")
+#' 
+#' A <- genData(100, d, id = "index")
+#' 
+#' ### Create synthetic data set from "observed" data set A:
+#' 
+#' def <- defDataAdd(varname = "x", formula = "2*b + 2*d", variance = 2)
+#' 
+#' S <- genSynthetic(dtFrom = A, n = 120, vars = c("b", "d"), id = "index")
+#' S <- addColumns(def, S)
+#'
+#' @export
+#' @concept generate_data
+
+genSynthetic <- function(dtFrom, n = nrow(dtFrom),  
+  vars = NULL, id = "id") {
+  
+  assertNotMissing(
+    dtFrom = missing(dtFrom),
+    call = sys.call(-1)
+  )
+  
+  assertClass(
+    dtFrom = dtFrom, 
+    class = "data.table",
+    call = sys.call(-1)
+  )
+  
+  if (is.null(vars)) { vars <- names(dtFrom)[names(dtFrom) != id] }
+
+  assertClass(
+    vars= vars,
+    id = id,
+    class = "character",
+    call = sys.call(-1)
+  )  
+  
+  assertInteger(n = n)
+  
+  assertInDataTable(vars = vars, dt = dtFrom)
+  assertInDataTable(vars = id, dt = dtFrom)
+  
+  assertNotInVector(id, vars)
+  
+  dx <- copy(dtFrom)
+  
+  getVars <- c(id, vars)
+  dx <- dx[, getVars, with = FALSE]  
+  
+  setnames(dx, id, "id")
+  ids <- dx[, sample(id, n, replace = TRUE)]
+  dx <- dx[ids]
+  dx[, id := 1:n]
+  setnames(dx, "id", id)
+  
+  dx[]
+  
+}
+

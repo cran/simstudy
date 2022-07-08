@@ -8,11 +8,11 @@
 #' @return Condition inhereting from "condition" and subclass
 #' @noRd
 condition <- function(subclass, message, call = sys.call(-1), ...) {
-    structure(
-        class = c(subclass, "condition"),
-        list(message = message, call = call),
-        ...
-    )
+  structure(
+    class = c(subclass, "condition"),
+    list(message = message, call = call),
+    ...
+  )
 }
 
 #' Argument Missing Error
@@ -20,15 +20,15 @@ condition <- function(subclass, message, call = sys.call(-1), ...) {
 #' @param args Missing argument(s) as character vector.
 #' @noRd
 argMissingError <- function(args, call = sys.call(-1), msg = "", ...) {
-    plr <- ifelse(length(args) > 1, "s are", " is")
-    message <- glueCollapse(
-        "The following argument{ plr }",
-        " missing with no default: { args *} ",
-        msg
-    )
-    c <- condition(c("simstudy::missingArgument", "error"), message, call, ...)
+  plr <- ifelse(length(args) > 1, "s are", " is")
+  message <- glueCollapse(
+    "The following argument{ plr }",
+    " missing with no default: { args *} ",
+    msg
+  )
+  c <- condition(c("simstudy::missingArgument", "error"), message, call, ...)
 
-    stop(c)
+  stop(c)
 }
 
 #' Length Mismatch Error
@@ -42,11 +42,63 @@ lengthError <- function(names,
                         prop = "equal",
                         call = sys.call(-1),
                         msg = "{ names *} should be of { prop } length!", ...) {
-    c <- condition(
-        c("simstudy::lengthMismatch", "error"),
-        glueCollapse(msg), call, ...
-    )
-    stop(c)
+  c <- condition(
+    c("simstudy::lengthMismatch", "error"),
+    glueCollapse(msg), call, ...
+  )
+  stop(c)
+}
+
+#' Order Error
+#'
+#' @param name Name of the incorrectly ordered vector
+#' @param prop Which property should hold e.g. "ascending".
+#' @param call sys.call to pass on to the error.
+#' @param msg Error message as glueCollapse'able string.
+#' @noRd
+orderError <- function(name,
+                       prop = "ascending",
+                       call = sys.call(-1),
+                       msg = "{ name } should be in { prop } order!", ...) {
+  c <- condition(
+    c("simstudy::wrongOrder", "error"),
+    glueCollapse(msg), call, ...
+  )
+  stop(c)
+}
+
+#' Positive Error
+#'
+#' @param name Name of the vector with non-positive values
+#' @param prop Which property should hold e.g. "positive".
+#' @param call sys.call to pass on to the error.
+#' @param msg Error message as glueCollapse'able string.
+#' @noRd
+signError <- function(name,
+                      prop = "positive",
+                      call = sys.call(-1),
+                      msg = "{ name } should be { prop}!", ...) {
+  c <- condition(
+    c("simstudy::wrongSign", "error"),
+    glueCollapse(msg), call, ...
+  )
+  stop(c)
+}
+
+#' Probability Error
+#'
+#' @param name Name of the vector with improper probabilities
+#' @param call sys.call to pass on to the error.
+#' @param msg Error message as glueCollapse'able string.
+#' @noRd
+probError <- function(name,
+                      call = sys.call(-1),
+                      msg = "probabilities { name } should all be between 0 and 1!", ...) {
+  c <- condition(
+    c("simstudy::probError", "error"),
+    glueCollapse(msg), call, ...
+  )
+  stop(c)
 }
 
 #' Wrong Class Error
@@ -58,13 +110,13 @@ lengthError <- function(names,
 #' glueCollapse'able string.
 #' @noRd
 classError <- function(names, class, call = sys.call(-1), msg = "", ...) {
-    message <- glueCollapse("{ names *} should be a { class }!", msg)
+  message <- glueCollapse("{ names *} should be a { class }!", msg)
 
-    c <- condition(
-        c("simstudy::wrongClass", "error"),
-        message, call, ...
-    )
-    stop(c)
+  c <- condition(
+    c("simstudy::wrongClass", "error"),
+    message, call, ...
+  )
+  stop(c)
 }
 
 #' Wrong Type Error
@@ -76,16 +128,16 @@ classError <- function(names, class, call = sys.call(-1), msg = "", ...) {
 #' glueCollapse'able string.
 #' @noRd
 typeError <- function(names, type, call = sys.call(-1), msg = "", ...) {
-    message <- glueCollapse(
-        "{ names *} should be/contain only { type }(s)!",
-        msg
-    )
+  message <- glueCollapse(
+    "{ names *} should be/contain only { type }(s)!",
+    msg
+  )
 
-    c <- condition(
-        c("simstudy::wrongType", "error"),
-        message, call, ...
-    )
-    stop(c)
+  c <- condition(
+    c("simstudy::wrongType", "error"),
+    message, call, ...
+  )
+  stop(c)
 }
 
 #' No Value Error
@@ -124,17 +176,17 @@ noValueError <- function(names, call = sys.call(-1),
 #' @param call sys.call to pass on to the error.
 #' @noRd
 valueError <- function(names, msg, var = NULL, call = sys.call(-1), ...) {
-    if (is.list(msg)) {
-        message <- do.call(glueCollapse, msg)
-    } else {
-        message <- glueCollapse(msg)
-    }
+  if (is.list(msg)) {
+    message <- do.call(glueCollapse, msg)
+  } else {
+    message <- glueCollapse(msg)
+  }
 
-    c <- condition(
-        c("simstudy::valueError", "error"),
-        message, call, ...
-    )
-    stop(c)
+  c <- condition(
+    c("simstudy::valueError", "error"),
+    message, call, ...
+  )
+  stop(c)
 }
 
 #' Generic Value Warning
@@ -146,17 +198,17 @@ valueError <- function(names, msg, var = NULL, call = sys.call(-1), ...) {
 #' @param call sys.call to pass on to the error.
 #' @noRd
 valueWarning <- function(names, msg, var = NULL, call = sys.call(-1), ...) {
-    if (is.list(msg)) {
-        message <- do.call(glueCollapse, msg)
-    } else {
-        message <- glueCollapse(msg)
-    }
+  if (is.list(msg)) {
+    message <- do.call(glueCollapse, msg)
+  } else {
+    message <- glueCollapse(msg)
+  }
 
-    c <- condition(
-        c("simstudy::valueWarning", "warning"),
-        message, call, ...
-    )
-    warning(c)
+  c <- condition(
+    c("simstudy::valueWarning", "warning"),
+    message, call, ...
+  )
+  warning(c)
 }
 
 #' Not Unique Error
@@ -167,17 +219,17 @@ valueWarning <- function(names, msg, var = NULL, call = sys.call(-1), ...) {
 #' glueCollapse'able string.
 #' @noRd
 notUniqueError <- function(names, call = sys.call(-1), msg = "", ...) {
-    plr <- ifelse(length(names) > 1, "", "s")
-    message <- glueCollapse(
-        "{ names *} need{plr} to have only unique values",
-        msg
-    )
+  plr <- ifelse(length(names) > 1, "", "s")
+  message <- glueCollapse(
+    "{ names *} need{plr} to have only unique values",
+    msg
+  )
 
-    c <- condition(
-        c("simstudy::uniqueValue", "error"),
-        message, call, ...
-    )
-    stop(c)
+  c <- condition(
+    c("simstudy::uniqueValue", "error"),
+    message, call, ...
+  )
+  stop(c)
 }
 
 #' Var Not Defined Error
@@ -188,16 +240,16 @@ notUniqueError <- function(names, call = sys.call(-1), msg = "", ...) {
 #' glueCollapse'able string.
 #' @noRd
 notDefinedError <- function(names, call = sys.call(-1), msg = "", ...) {
-    plr <- ifelse(length(names) > 1, "s", "")
-    message <- glueCollapse(
-        "Variable{plr} { names *} not previously defined!", msg
-    )
+  plr <- ifelse(length(names) > 1, "s", "")
+  message <- glueCollapse(
+    "Variable{plr} { names *} not previously defined!", msg
+  )
 
-    c <- condition(
-        c("simstudy::notDefined", "error"),
-        message, call, ...
-    )
-    stop(c)
+  c <- condition(
+    c("simstudy::notDefined", "error"),
+    message, call, ...
+  )
+  stop(c)
 }
 
 #' Var Already Defined Error
@@ -208,16 +260,40 @@ notDefinedError <- function(names, call = sys.call(-1), msg = "", ...) {
 #' glueCollapse'able string.
 #' @noRd
 alreadyDefinedError <- function(names, call = sys.call(-1), msg = "", ...) {
-    plr <- ifelse(length(names) > 1, "s", "")
-    message <- glueCollapse(
-        "Variable{plr} { names *} previously defined!", msg
-    )
+  plr <- ifelse(length(names) > 1, "s", "")
+  message <- glueCollapse(
+    "Variable{plr} { names *} previously defined!", msg
+  )
 
-    c <- condition(
-        c("simstudy::alreadyDefined", "error"),
-        message, call, ...
-    )
-    stop(c)
+  c <- condition(
+    c("simstudy::alreadyDefined", "error"),
+    message, call, ...
+  )
+  stop(c)
+
+}
+
+#' Element in vector
+#'
+#' @param nameVar Value(s) in vector.
+#' @param nameVec Name of the vector.
+#' @param call sys.call to pass on to the error.
+#' @param msg Additional information for the error message as
+#' glueCollapse'able string.
+#' @noRd
+alreadyInVectorError <- function(elementOfVar, nameVar, nameVec,
+                                 call = sys.call(-1), msg = "", ...) {
+  vars <- paste(elementOfVar, collapse = ", ")
+  message <- glueCollapse(
+    "{ vars } (in { nameVar }) should not also be in vector { nameVec }!", msg
+  )
+
+  c <- condition(
+    c("simstudy::alreadyInVector", "error"),
+    message, call, ...
+  )
+  stop(c)
+
 }
 
 #' Not Positive Definite Error
@@ -254,13 +330,13 @@ optionInvalidWarning <- function(name,
                                  default,
                                  call = sys.call(-1),
                                  ...) {
-    message <- glueCollapse(
-        "Argument {name}: '{value}' invalid.",
-        " Valid options: {options *}.",
-        "\nDefaulting to '{default}'."
-    )
-    c <- condition(c("simstudy::optionInvalid", "warning"), message, call, ...)
-    warning(c)
+  message <- glueCollapse(
+    "Argument {name}: '{value}' invalid.",
+    " Valid options: {options *}.",
+    "\nDefaulting to '{default}'."
+  )
+  c <- condition(c("simstudy::optionInvalid", "warning"), message, call, ...)
+  warning(c)
 }
 
 #' Option Invalid Error
@@ -277,16 +353,14 @@ optionInvalidError <- function(name,
                                call = sys.call(-1),
                                msg = "",
                                ...) {
-    message <- glueCollapse(
-        "Argument {name}: '{value}' invalid.",
-        " Valid options: {options *}.",
-        msg
-    )
-    c <- condition(c("simstudy::optionInvalid", "error"), message, call, ...)
-    stop(c)
+  message <- glueCollapse(
+    "Argument {name}: '{value}' invalid.",
+    " Valid options: {options *}.",
+    msg
+  )
+  c <- condition(c("simstudy::optionInvalid", "error"), message, call, ...)
+  stop(c)
 }
-
-### Added by KSG 1/1/22
 
 #' Mismatch of arguments Warning
 #'
@@ -296,8 +370,8 @@ optionInvalidError <- function(name,
 #' @return Error message
 #' @noRd
 mismatchError <- function(name_specified, name_null,
-                                 call = sys.call(-1),
-                                 ...) {
+                          call = sys.call(-1),
+                          ...) {
   message <- glueCollapse(
     "Argument {name_specified} has been specified",
     " without argument {name_null}.",
@@ -306,6 +380,28 @@ mismatchError <- function(name_specified, name_null,
   )
   c <- condition(
     c("simstudy::mismatch", "error"),
+    message, call, ...
+  )
+  stop(c)
+}
+
+### Added by ME 5/9/22
+
+#' Variables not equal to value error.
+#'
+#' @param names Names of the variables.
+#' @param val Value to be equal to.
+#' @param call sys.call to pass on to the error.
+#' @param msg Additional information for the error message as
+#' glueCollapse'able string.
+#' @noRd
+notEqualError <- function(names, val, call = sys.call(-1), msg = "", ...) {
+  message <- glueCollapse(
+    "{ names *} not equal to {val}!", msg
+  )
+
+  c <- condition(
+    c("simstudy::notEqual", "error"),
     message, call, ...
   )
   stop(c)

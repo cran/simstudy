@@ -625,6 +625,13 @@ updateDefAdd <- function(dtDefs, changevar, newformula = NULL,
 #' @concept utility
 #' @concept splines
 viewBasis <- function(knots, degree) {
+  
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop(
+      "Package \"ggplot2\" must be installed to use this function.",
+      call. = FALSE
+    )
+  }
 
   # 'declare vars'
   value <- NULL
@@ -688,6 +695,13 @@ viewBasis <- function(knots, degree) {
 #' @concept splines
 #' @concept utility
 viewSplines <- function(knots, degree, theta) {
+  
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop(
+      "Package \"ggplot2\" must be installed to use this function.",
+      call. = FALSE
+    )
+  }
 
   # 'declare'
 
@@ -712,7 +726,6 @@ viewSplines <- function(knots, degree, theta) {
 
   dx[, Spline := factor(index)]
 
-
   p <- ggplot2::ggplot(data = dx) +
     ggplot2::geom_line(ggplot2::aes(x = x, y = y.spline, color = Spline), size = 1) +
     ggplot2::scale_y_continuous(limits = c(0, 1)) +
@@ -726,3 +739,213 @@ viewSplines <- function(knots, degree, theta) {
 
   return(p)
 }
+
+#' Get survival curve parameters
+#'
+#' @param points A list of two-element vectors specifying the desired time and 
+#' probability pairs that define the desired survival curve
+#' @return A vector of parameters that define the survival curve optimized for
+#' the target points. The first element of the vector represents the "f"
+#' parameter and the second element represents the "shape" parameter.
+#' @examples
+#' points <- list(c(60, 0.90), c(100, .75), c(200, .25), c(250, .10))
+#' survGetParams(points)
+#' @export
+#' @concept utility
+survGetParams <- function(points) {
+  
+  assertNotMissing(points = missing(points))
+  assertClass(points = points, class = "list")
+  
+  time <- vapply(points, function(x) x[1], FUN.VALUE = numeric(1))
+  p <- vapply(points, function(x) x[2],  FUN.VALUE = numeric(1))
+  
+  assertPositive(time)
+  assertAscending(time)
+  
+  assertProbability(p)  
+  assertDescending(p)
+  
+  loss_surv <- function(params, points) {
+    
+    loss <- function(a, params) {
+      ( params[2]*(log(-log(a[2])) - params[1]) - log(a[1]) ) ^ 2
+    }
+    
+    sum(vapply(points, function(a) loss(a, params), FUN.VALUE = numeric(1)))
+    
+  }
+  
+  optim_results <- stats::optim(
+    par = c(1, 1), 
+    fn = loss_surv, 
+    points = points,
+    method = "L-BFGS-B", 
+    lower = c(-Inf, 0),
+    upper = c(Inf, Inf)
+  )
+  
+  if (optim_results$convergence !=0) stop("Optimization did not converge")
+  
+  return(optim_results$par)
+}
+
+#' Plot survival curves
+#' 
+#' @param formula This is the "formula" parameter of the Weibull-based survival curve
+#' that can be used to define the scale of the distribution.
+#' @param shape The parameter that defines the shape of the distribution.
+#' @param points An optional list of two-element vectors specifying the desired 
+#' time and probability pairs that define the desired survival curve. If no list
+#' is specified then the plot will not include any points.
+#' @param n The number of points along the curve that will be used to 
+#' define the line. Defaults to 100.
+#' @param scale An optional scale parameter that defaults to 1. If the value is 
+#' 1, the scale of the distribution is determined entirely by the argument "f".
+#' @return A ggplot of the survival curve defined by the specified parameters.
+#' If the argument points is specified, the plot will include them
+#' @examples
+#' points <- list(c(60, 0.90), c(100, .75), c(200, .25), c(250, .10))
+#' r <- survGetParams(points)
+#' survParamPlot(r[1], r[2])
+#' survParamPlot(r[1], r[2], points = points)
+#' @export
+#' @concept utility
+survParamPlot <- function(formula, shape, points = NULL, n = 100, scale = 1) {
+  
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop(
+      "Package \"ggplot2\" must be installed to use this function.",
+      call. = FALSE
+    )
+  }
+  
+  assertNotMissing(formula = missing(formula), shape = missing(shape))
+  assertPositive(shape)
+  
+  # "declares" to avoid global NOTE
+  
+  V1 <- NULL
+  V2 <- NULL
+  
+  ###
+  
+  u <- seq(1, 0.001, length = n)
+  
+  dd <- data.table::data.table(
+    formula = formula,
+    scale = scale,
+    shape = shape,
+    T = (-(log(u)*scale/exp(formula)))^(shape),
+    p = round(1 - cumsum(rep(1/length(u), length(u))), 3)
+  )
+  
+  p <- ggplot2::ggplot(data = dd, ggplot2::aes(x = T, y = p)) +
+    ggplot2::geom_line(size = 0.8) +
+    ggplot2::scale_y_continuous(limits = c(0,1), name = "probability of survival") +
+    ggplot2::scale_x_continuous(name = "time") +
+    ggplot2::theme(panel.grid = ggplot2::element_blank(),
+          axis.text = ggplot2::element_text(size = 7.5),
+          axis.title = ggplot2::element_text(size = 8, face = "bold")
+    )
+  
+  if (!is.null(points)) {
+    dpoints <- as.data.frame(do.call(rbind, points))  
+    return(
+      p +     
+        ggplot2::geom_point(data = dpoints, ggplot2::aes(x = V1, y = V2), 
+                    pch = 21, fill = "#DCC949", size = 2.5) 
+    )
+  } else return(p)
+  
+}
+
+#' Generating single competing risk survival varible
+#' 
+#' @param dtName Name of complete data set to be updated
+#' @param events Vector of column names that include
+#' time-to-event outcome measures
+#' @param timeName A string to indicate the name of the combined competing risk
+#' time-to-event outcome that reflects the minimum observed value of all 
+#' time-to-event outcomes.
+#' @param censorName The name of a time-to-event variable that is the censoring
+#' variable. Must be one of the "events" names. Defaults to NULL.
+#' @param eventName The name of the new numeric/integer column representing the
+#' competing event outcomes. If censorName is specified, the integer value for
+#' that event will be 0. Defaults to "event", but will be ignored 
+#' if timeName is NULL.
+#' @param typeName The name of the new character column that will indicate the
+#' event type. The type will be the unique variable names in survDefs. Defaults
+#' to "type", but will be ignored if timeName is NULL.
+#' @param keepEvents Indicator to retain original "events" columns. Defaults
+#' to FALSE.
+#' @param idName Name of id field in existing data set.
+#' @return An updated data table
+#' @examples
+#' d1 <- defData(varname = "x1", formula = .5, dist = "binary")
+#' d1 <- defData(d1, "x2", .5, dist = "binary")
+#' 
+#' dS <- defSurv(varname = "reinc", formula = "-10 - 0.6*x1 + 0.4*x2", shape = 0.3)
+#' dS <- defSurv(dS, "death", "-6.5 + 0.3*x1 - 0.5*x2", shape = 0.5)
+#' dS <- defSurv(dS, "censor", "-7", shape = 0.55)
+#' 
+#' dd <- genData(10, d1)
+#' dd <- genSurv(dd, dS)
+#' 
+#' addCompRisk(dd, c("reinc","death", "censor"), timeName = "time",
+#'    censorName = "censor", keepEvents = FALSE)
+#' 
+#' @export
+#' @concept utility
+addCompRisk <- function(dtName, events, timeName, 
+  censorName = NULL, eventName = "event", typeName = "type",
+  keepEvents = FALSE, idName = "id") {
+  
+  assertNotMissing(
+    dtName = missing(dtName),
+    events = missing(events),
+    timeName = missing(timeName),
+    call = sys.call(-1)
+  )
+  assertAtLeastLength(events = events, length = 2)
+  assertInDataTable(events, dtName)
+  assertInDataTable(idName, dtName)
+  if (!is.null(censorName)) {assertInDataTable(censorName, dtName)}
+  assertNotInDataTable(vars = c(eventName, typeName), dtName)
+  if (keepEvents == TRUE) assertNotInDataTable(vars = timeName, dtName)
+  
+  # 'declare'
+  ..temp_time <- NULL
+  ..temp_event <- NULL
+  ..temp_type <- NULL
+  id <- NULL
+
+  dtSurv <- copy(dtName)
+  setnames(dtSurv, idName, "id")
+  
+  dtSurv[, ..temp_time := min(sapply(1:length(events), 
+              function(a) get(events[a]))), keyby = id]
+  dtSurv[, ..temp_event := which.min(sapply(1:length(events), 
+              function(a) get(events[a]))), keyby = id]
+  dtSurv[, ..temp_type := events[..temp_event], keyby = id]
+  
+  if (! keepEvents) {
+    for (i in seq_along(events)) { dtSurv[, events[i] := NULL] }  
+  }
+  
+  if (!is.null(censorName)) {
+    dtSurv[..temp_type == censorName, ..temp_event := 0 ]
+    dtSurv[, ..temp_event := as.numeric(factor(..temp_event)) - 1]
+  }
+  
+  data.table::setnames(
+    dtSurv, 
+    c("..temp_time", "..temp_event", "..temp_type"),
+    c(timeName, eventName, typeName)
+  )
+  
+  setnames(dtSurv, "id", idName)
+  dtSurv[]
+}
+  
+  

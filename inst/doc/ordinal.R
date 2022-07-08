@@ -252,7 +252,8 @@ p3
 baseprobs <- c(0.31, 0.29, .20, 0.20)
 npAdj <- c(-0.4, 0.0, -1.7, 0)
 
-dX <- genOrdCat(dT_1_cat, baseprobs = baseprobs, catVar = "r", npVar = "exposed", npAdj = npAdj)
+dX <- genOrdCat(dT_1_cat, baseprobs = baseprobs, adjVar = "z",
+                catVar = "r", npVar = "exposed", npAdj = npAdj)
 
 ## -----------------------------------------------------------------------------
 (logOdds.unexp <- log(odds(cumsum(dX[exposed == 0, prop.table(table(r))])))[1:3])
@@ -263,7 +264,7 @@ dX <- genOrdCat(dT_1_cat, baseprobs = baseprobs, catVar = "r", npVar = "exposed"
 ## -----------------------------------------------------------------------------
 logOdds.expos - logOdds.unexp
 
-## ---- echo=FALSE, fig.width=6, fig.height=3.5---------------------------------
+## ---- echo=FALSE, fig.width=6, fig.height=3.5, warning=FALSE------------------
 fitPlot(dX)
 
 ## -----------------------------------------------------------------------------

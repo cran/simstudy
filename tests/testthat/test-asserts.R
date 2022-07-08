@@ -14,12 +14,28 @@ test_that("assertLengthEqual works.", {
   expect_error(assertLengthEqual(x = 5), class = "simpleError")
 })
 
+test_that("assertEqual works.", {
+  expect_error(assertEqual(x = 5, val = 6), class = "simstudy::notEqual")
+  expect_error(assertEqual(x = 5, y = 6, val = 5), class = "simstudy::notEqual")
+  expect_error(assertEqual(x = "one", val = "two"), class = "simstudy::notEqual")
+  expect_silent(assertEqual(x = "three", y = "three", val = "three"))
+})
+
 test_that("assertLength works", {
   expect_error(assertLength(x = 5, y = c(1, 3), z = list(a = 3, b = 4), length = 2),
     class = "simstudy::lengthMismatch"
   )
   expect_silent(assertLength(x = 1, z = "b", length = 1))
 })
+
+test_that("assertAtLeastLength works", {
+  expect_error(assertAtLeastLength(x = c("3", "4"), length = 3),
+    class = "simstudy::lengthMismatch"
+  )
+  expect_silent(assertAtLeastLength(x = c("3", "4", "5"), length = 2))
+})
+
+
 
 test_that("assertClass works.", {
   expect_error(assertClass(x = c(1, 2, 3), y = "b", class = "data.frame"), class = "simstudy::wrongClass")
@@ -65,6 +81,22 @@ test_that("assertInteger works.", {
     a = c(1, 2, 3), b = list(a = 1, b = 2),
     c = data.frame(a = 1:10, b = 1:10),
     d = 1
+  ))
+})
+
+test_that("assertFactor works.", {
+  expect_error(assertFactor(
+    a = "two", b = 123.456,
+    c = as.factor(c(1, 2, 3)),
+    d = as.factor(1.1), e = as.factor("one")
+  ),
+  regexp = "a and b", class = "simstudy::wrongType"
+  )
+
+  expect_silent(assertFactor(
+    a = as.factor("two"), b = as.factor(123.456),
+    c = as.factor(c(1, 2, 3)),
+    d = as.factor(1.1), e = as.factor("one")
   ))
 })
 

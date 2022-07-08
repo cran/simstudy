@@ -14,7 +14,19 @@
 
 <title>Simulating Study Data</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -24,6 +36,7 @@
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   ul.task-list{list-style: none;}
     </style>
+
 
 
 <style type="text/css">
@@ -125,7 +138,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -141,15 +334,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<p>The <code>simstudy</code> package is a collection of functions that allows users to generate simulated data sets to explore modeling techniques or better understand data generating processes. The user defines the distributions of individual variables, specifies relationships between covariates and outcomes, and generates data based on these specifications. The final data sets can represent randomized control trials, repeated measure designs, cluster-randomized trials, or naturally observed data processes. Other complexities that can be added include survival data, correlated data, factorial study designs, step wedge designs, and missing data processes.</p>
-<p>Simulation using <code>simstudy</code> has two fundamental steps. The user (1) <strong>defines</strong> the data elements of a data set and (2) <strong>generates</strong> the data based on these definitions. Additional functionality exists to simulate observed or randomized <strong>treatment assignment/exposures</strong>, to create <strong>longitudinal/panel</strong> data, to create <strong>multi-level/hierarchical</strong> data, to create data sets with <strong>correlated variables</strong> based on a specified covariance structure, to <strong>merge</strong> data sets, to create data sets with <strong>missing</strong> data, and to create non-linear relationships with underlying <strong>spline</strong> curves.</p>
-<p>The overarching philosophy of <code>simstudy</code> is to create data generating processes that mimic the typical models used to fit those types of data. So, the parameterization of some of the data generating processes may not follow the standard parameterizations for the specific distributions. For example, in <code>simstudy</code> <em>gamma</em>-distributed data are generated based on the specification of a mean <span class="math inline">\(\mu\)</span> (or <span class="math inline">\(\log(\mu)\)</span>) and a dispersion <span class="math inline">\(d\)</span>, rather than shape <span class="math inline">\(\alpha\)</span> and rate <span class="math inline">\(\beta\)</span> parameters that more typically characterize the <em>gamma</em> distribution. When we estimate the parameters, we are modeling <span class="math inline">\(\mu\)</span> (or some function of <span class="math inline">\((\mu)\)</span>), so we should explicitly recover the <code>simstudy</code> parameters used to generate the model - illuminating the relationship between the underlying data generating processes and the models.</p>
+<p>The <code>simstudy</code> package is a collection of functions that
+allows users to generate simulated data sets to explore modeling
+techniques or better understand data generating processes. The user
+defines the distributions of individual variables, specifies
+relationships between covariates and outcomes, and generates data based
+on these specifications. The final data sets can represent randomized
+control trials, repeated measure designs, cluster-randomized trials, or
+naturally observed data processes. Other complexities that can be added
+include survival data, correlated data, factorial study designs, step
+wedge designs, and missing data processes.</p>
+<p>Simulation using <code>simstudy</code> has two fundamental steps. The
+user (1) <strong>defines</strong> the data elements of a data set and
+(2) <strong>generates</strong> the data based on these definitions.
+Additional functionality exists to simulate observed or randomized
+<strong>treatment assignment/exposures</strong>, to create
+<strong>longitudinal/panel</strong> data, to create
+<strong>multi-level/hierarchical</strong> data, to create data sets with
+<strong>correlated variables</strong> based on a specified covariance
+structure, to <strong>merge</strong> data sets, to create data sets with
+<strong>missing</strong> data, and to create non-linear relationships
+with underlying <strong>spline</strong> curves.</p>
+<p>The overarching philosophy of <code>simstudy</code> is to create data
+generating processes that mimic the typical models used to fit those
+types of data. So, the parameterization of some of the data generating
+processes may not follow the standard parameterizations for the specific
+distributions. For example, in <code>simstudy</code>
+<em>gamma</em>-distributed data are generated based on the specification
+of a mean <span class="math inline">\(\mu\)</span> (or <span class="math inline">\(\log(\mu)\)</span>) and a dispersion <span class="math inline">\(d\)</span>, rather than shape <span class="math inline">\(\alpha\)</span> and rate <span class="math inline">\(\beta\)</span> parameters that more typically
+characterize the <em>gamma</em> distribution. When we estimate the
+parameters, we are modeling <span class="math inline">\(\mu\)</span> (or
+some function of <span class="math inline">\((\mu)\)</span>), so we
+should explicitly recover the <code>simstudy</code> parameters used to
+generate the model - illuminating the relationship between the
+underlying data generating processes and the models.</p>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>This introduction provides a brief overview to the basics of defining and generating data, including treatment or exposure variables. Subsequent sections in this vignette provide more details on these processes. For information on more elaborate data generating mechanisms, please refer to other vignettes in this package that provide more detailed descriptions.</p>
+<p>This introduction provides a brief overview to the basics of defining
+and generating data, including treatment or exposure variables.
+Subsequent sections in this vignette provide more details on these
+processes. For information on more elaborate data generating mechanisms,
+please refer to other vignettes in this package that provide more
+detailed descriptions.</p>
 <div id="defining-the-data" class="section level3">
 <h3>Defining the Data</h3>
-<p>The key to simulating data in <code>simstudy</code> is the creation of a series of data definition tables that look like this:</p>
+<p>The key to simulating data in <code>simstudy</code> is the creation
+of a series of data definition tables that look like this:</p>
 <table>
 <thead>
 <tr class="header">
@@ -184,19 +414,48 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<p>These definition tables can be generated in two ways. One option is to use any external editor that allows the creation of .csv files, which can be read in with a call to <code>defRead</code>. An alternative is to make repeated calls to the function <code>defData</code>. This script builds a definition table internally:</p>
+<p>These definition tables can be generated in two ways. One option is
+to use any external editor that allows the creation of .csv files, which
+can be read in with a call to <code>defRead</code>. An alternative is to
+make repeated calls to the function <code>defData</code>. This script
+builds a definition table internally:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;age&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;normal&quot;</span>, <span class="at">formula =</span> <span class="dv">10</span>,</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">variance =</span> <span class="dv">2</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(def, <span class="at">varname =</span> <span class="st">&quot;female&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>,</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> <span class="st">&quot;-2 + age * 0.1&quot;</span>, <span class="at">link =</span> <span class="st">&quot;logit&quot;</span>)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(def, <span class="at">varname =</span> <span class="st">&quot;visits&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>,</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> <span class="st">&quot;1.5 - 0.2 * age + 0.5 * female&quot;</span>, <span class="at">link =</span> <span class="st">&quot;log&quot;</span>)</span></code></pre></div>
-<p>The data definition table includes a row for each variable that is to be generated, and has the following fields: <code>varname*</code>, <code>formula</code>, <code>variance</code>, <code>dist</code>, and <code>link</code>. <code>varname</code> provides the name of the variable to be generated. <code>formula</code> is either a value or string representing any valid R formula (which can include function calls) that in most cases defines the mean of the distribution. <code>variance</code> is a value or string that specifies either the variance or other parameter that characterizes the distribution; the default is 0. <code>dist</code> is defines the distribution of the variable to be generated; the default is <em>normal</em>. The <code>link</code> is a function that defines the relationship of the formula with the mean value, and can either <em>identity</em>, <em>log</em>, or <em>logit</em>, depending on the distribution; the default is <em>identity</em>.</p>
-<p>If using <code>defData</code> to create the definition table, the first call to <code>defData</code> without specifying a definition name (in this example the definition name is <em>def</em>) creates a <strong>new</strong> data.table with a single row. An additional row is added to the table <code>def</code> each time the function <code>defData</code> is called. Each of these calls is the definition of a new field in the data set that will be generated.</p>
+<p>The data definition table includes a row for each variable that is to
+be generated, and has the following fields: <code>varname*</code>,
+<code>formula</code>, <code>variance</code>, <code>dist</code>, and
+<code>link</code>. <code>varname</code> provides the name of the
+variable to be generated. <code>formula</code> is either a value or
+string representing any valid R formula (which can include function
+calls) that in most cases defines the mean of the distribution.
+<code>variance</code> is a value or string that specifies either the
+variance or other parameter that characterizes the distribution; the
+default is 0. <code>dist</code> is defines the distribution of the
+variable to be generated; the default is <em>normal</em>. The
+<code>link</code> is a function that defines the relationship of the
+formula with the mean value, and can either <em>identity</em>,
+<em>log</em>, or <em>logit</em>, depending on the distribution; the
+default is <em>identity</em>.</p>
+<p>If using <code>defData</code> to create the definition table, the
+first call to <code>defData</code> without specifying a definition name
+(in this example the definition name is <em>def</em>) creates a
+<strong>new</strong> data.table with a single row. An additional row is
+added to the table <code>def</code> each time the function
+<code>defData</code> is called. Each of these calls is the definition of
+a new field in the data set that will be generated.</p>
 </div>
 <div id="generating-the-data" class="section level3">
 <h3>Generating the data</h3>
-<p>After the data set definitions have been created, a new data set with <span class="math inline">\(n\)</span> observations can be created with a call to function <strong><code>genData</code></strong>. In this example, 1,000 observations are generated using the data set definitions in <strong><code>def</code></strong>, and then stored in the object <strong><code>dd</code></strong>:</p>
+<p>After the data set definitions have been created, a new data set with
+<span class="math inline">\(n\)</span> observations can be created with
+a call to function <strong><code>genData</code></strong>. In this
+example, 1,000 observations are generated using the data set definitions
+in <strong><code>def</code></strong>, and then stored in the object
+<strong><code>dd</code></strong>:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">87261</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">1000</span>, def)</span>
@@ -213,7 +472,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##  998:  998  6.84      0      1
 ##  999:  999  9.28      0      2
 ## 1000: 1000 10.80      1      2</code></pre>
-<p>If no data definition is provided, a simple data set is created with just id’s.</p>
+<p>If no data definition is provided, a simple data set is created with
+just id’s.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">genData</span>(<span class="dv">1000</span>)</span></code></pre></div>
 <pre><code>##         id
 ##    1:    1
@@ -230,22 +490,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="assigning-treatmentexposure" class="section level3">
 <h3>Assigning treatment/exposure</h3>
-<p>In many instances, the data generation process will involve a treatment or exposure. While it is possible to generate a treatment or exposure variable directly using the data definition process, <code>trtAssign</code> and <code>trtObserve</code> offer the ability to generate more involved types of study designs. In particular, with <code>trtAssign</code>, balanced and stratified designs are possible.</p>
+<p>In many instances, the data generation process will involve a
+treatment or exposure. While it is possible to generate a treatment or
+exposure variable directly using the data definition process,
+<code>trtAssign</code> and <code>trtObserve</code> offer the ability to
+generate more involved types of study designs. In particular, with
+<code>trtAssign</code>, balanced and stratified designs are
+possible.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>study1 <span class="ot">&lt;-</span> <span class="fu">trtAssign</span>(dd, <span class="at">n =</span> <span class="dv">3</span>, <span class="at">balanced =</span> <span class="cn">TRUE</span>, <span class="at">strata =</span> <span class="fu">c</span>(<span class="st">&quot;female&quot;</span>),</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">grpName =</span> <span class="st">&quot;rx&quot;</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>study1</span></code></pre></div>
-<pre><code>##         id   age female visits rx
-##    1:    1  9.78      0      0  3
-##    2:    2 10.81      0      0  1
-##    3:    3  8.86      0      1  3
-##    4:    4  9.83      1      1  3
-##    5:    5 10.58      0      0  3
-##   ---                            
-##  996:  996  8.87      1      2  2
-##  997:  997 10.27      0      0  3
-##  998:  998  6.84      0      1  1
-##  999:  999  9.28      0      2  1
-## 1000: 1000 10.80      1      2  3</code></pre>
+<pre><code>##         id age female visits rx
+##    1:    1   9      0      0  3
+##    2:    2  10      0      0  1
+##    3:    3   8      0      1  3
+##    4:    4   9      1      1  3
+##    5:    5  10      0      0  3
+##   ---                          
+##  996:  996   8      1      2  2
+##  997:  997  10      0      0  3
+##  998:  998   6      0      1  1
+##  999:  999   9      0      2  1
+## 1000: 1000  10      1      2  3</code></pre>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>study1[, .N, keyby <span class="ot">=</span> .(female, rx)]</span></code></pre></div>
 <pre><code>##    female rx   N
 ## 1:      0  1 249
@@ -258,18 +524,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="more-details-on-data-definitions" class="section level2">
 <h2>More details on data definitions</h2>
-<p>This section elaborates on the data definition process to provide more details on how to create data sets.</p>
+<p>This section elaborates on the data definition process to provide
+more details on how to create data sets.</p>
 <div id="formulas" class="section level3">
 <h3>Formulas</h3>
-<p>The data definition table for a new data set is constructed sequentially. As each new row or variable is added, the formula (and in some cases the variance) can refer back to a previously defined variable. The first row by necessity cannot refer to another variable, so the formula must be a specific value (i.e. not a string formula). Starting with the second row, the formula can either be a value or any valid <code>R</code> equation with quotes and can include any variables previously defined.</p>
-<p>In the definition we created above, the probability being <strong>female</strong> is a function of <strong>age</strong>, which was previously defined. Likewise, the number of <strong>visits</strong> is a function of both <strong>age</strong> and <strong>female</strong>. Since <strong>age</strong> is the first row in the table, we had to use a scalar to define the mean.</p>
+<p>The data definition table for a new data set is constructed
+sequentially. As each new row or variable is added, the formula (and in
+some cases the variance) can refer back to a previously defined
+variable. The first row by necessity cannot refer to another variable,
+so the formula must be a specific value (i.e. not a string formula).
+Starting with the second row, the formula can either be a value or any
+valid <code>R</code> equation with quotes and can include any variables
+previously defined.</p>
+<p>In the definition we created above, the probability being
+<strong>female</strong> is a function of <strong>age</strong>, which was
+previously defined. Likewise, the number of <strong>visits</strong> is a
+function of both <strong>age</strong> and <strong>female</strong>. Since
+<strong>age</strong> is the first row in the table, we had to use a
+scalar to define the mean.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;age&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;normal&quot;</span>, <span class="at">formula =</span> <span class="dv">10</span>,</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">variance =</span> <span class="dv">2</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(def, <span class="at">varname =</span> <span class="st">&quot;female&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>,</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> <span class="st">&quot;-2 + age * 0.1&quot;</span>, <span class="at">link =</span> <span class="st">&quot;logit&quot;</span>)</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(def, <span class="at">varname =</span> <span class="st">&quot;visits&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>,</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> <span class="st">&quot;1.5 - 0.2 * age + 0.5 * female&quot;</span>, <span class="at">link =</span> <span class="st">&quot;log&quot;</span>)</span></code></pre></div>
-<p>Formulas can include <code>R</code> functions or user-defined functions. Here is an example with a user-defined function <code>myinv</code> and the <code>log</code> function from base <code>R</code>:</p>
+<p>Formulas can include <code>R</code> functions or user-defined
+functions. Here is an example with a user-defined function
+<code>myinv</code> and the <code>log</code> function from base
+<code>R</code>:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>myinv <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span><span class="sc">/</span>x</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>}</span>
@@ -286,7 +568,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 3:  3  9.83     -1.93
 ## 4:  4  9.10     -2.42
 ## 5:  5 10.18     -2.21</code></pre>
-<p>Replication is an important aspect of data simulation - it is often very useful to generate data under different sets of assumptions. <code>simstudy</code> facilitates this in at least two different ways. There is function <code>updateDef</code> which allows row by row changes of a data definition table. In this case, we are changing the formula of <strong>loginvage</strong> in <strong>def</strong> so that it uses the function <code>log10</code> instead of <code>log</code>:</p>
+<p>Replication is an important aspect of data simulation - it is often
+very useful to generate data under different sets of assumptions.
+<code>simstudy</code> facilitates this in at least two different ways.
+There is function <code>updateDef</code> which allows row by row changes
+of a data definition table. In this case, we are changing the formula of
+<strong>loginvage</strong> in <strong>def</strong> so that it uses the
+function <code>log10</code> instead of <code>log</code>:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>def10 <span class="ot">&lt;-</span> <span class="fu">updateDef</span>(def, <span class="at">changevar =</span> <span class="st">&quot;loginvage&quot;</span>, <span class="at">newformula =</span> <span class="st">&quot;log10(myinv(age))&quot;</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>def10</span></code></pre></div>
 <pre><code>##      varname           formula variance   dist     link
@@ -299,7 +587,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 3:  3 11.79    -1.267
 ## 4:  4  9.74    -0.882
 ## 5:  5 10.11    -1.519</code></pre>
-<p>A more powerful feature of <code>simstudy</code> that allows for dynamic definition tables is the external reference capability through the <em>double-dot</em> notation. Any variable reference in a formula that is preceded by “..” refers to an externally defined variable:</p>
+<p>A more powerful feature of <code>simstudy</code> that allows for
+dynamic definition tables is the external reference capability through
+the <em>double-dot</em> notation. Any variable reference in a formula
+that is preceded by “..” refers to an externally defined variable:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>age_effect <span class="ot">&lt;-</span> <span class="dv">3</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;age&quot;</span>, <span class="at">formula =</span> <span class="dv">10</span>, <span class="at">variance =</span> <span class="dv">2</span>,</span>
@@ -315,7 +606,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>##    id  age agemult
 ## 1:  1 9.69    29.1
 ## 2:  2 9.63    28.9</code></pre>
-<p>But the real power of dynamic definition is seen in the context of iteration over multiple values:</p>
+<p>But the real power of dynamic definition is seen in the context of
+iteration over multiple values:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>age_effects <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>list_of_data <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -342,8 +634,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="distributions" class="section level3">
 <h3>Distributions</h3>
-<p>The foundation of generating data is the assumptions we make about the distribution of each variable. <code>simstudy</code> provides 15 types of distributions, which are listed in the following table:</p>
-<table>
+<p>The foundation of generating data is the assumptions we make about
+the distribution of each variable. <code>simstudy</code> provides 15
+types of distributions, which are listed in the following table:</p>
+<table style="width:100%;">
+<colgroup>
+<col width="12%" />
+<col width="10%" />
+<col width="11%" />
+<col width="33%" />
+<col width="13%" />
+<col width="8%" />
+<col width="4%" />
+<col width="6%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">name</th>
@@ -511,69 +815,189 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </table>
 <div id="beta" class="section level4">
 <h4>beta</h4>
-<p>A <em>beta</em> distribution is a continuous data distribution that takes on values between <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span>. The <code>formula</code> specifies the mean <span class="math inline">\(\mu\)</span> (with the ‘identity’ link) or the log-odds of the mean (with the ‘logit’ link). The scalar value in the ‘variance’ represents the dispersion value <span class="math inline">\(d\)</span>. The variance <span class="math inline">\(\sigma^2\)</span> for a beta distributed variable will be <span class="math inline">\(\mu (1- \mu)/(1 + d)\)</span>. Typically, the beta distribution is specified using two shape parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, where <span class="math inline">\(\mu = \alpha/(\alpha + \beta)\)</span> and <span class="math inline">\(\sigma^2 = \alpha\beta/[(\alpha + \beta)^2 (\alpha + \beta + 1)]\)</span>.</p>
+<p>A <em>beta</em> distribution is a continuous data distribution that
+takes on values between <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span>. The <code>formula</code> specifies the
+mean <span class="math inline">\(\mu\)</span> (with the ‘identity’ link)
+or the log-odds of the mean (with the ‘logit’ link). The scalar value in
+the ‘variance’ represents the dispersion value <span class="math inline">\(d\)</span>. The variance <span class="math inline">\(\sigma^2\)</span> for a beta distributed variable
+will be <span class="math inline">\(\mu (1- \mu)/(1 + d)\)</span>.
+Typically, the beta distribution is specified using two shape parameters
+<span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, where <span class="math inline">\(\mu = \alpha/(\alpha + \beta)\)</span> and <span class="math inline">\(\sigma^2 = \alpha\beta/[(\alpha + \beta)^2 (\alpha
++ \beta + 1)]\)</span>.</p>
 </div>
 <div id="binary" class="section level4">
 <h4>binary</h4>
-<p>A <em>binary</em> distribution is a discrete data distribution that takes values <span class="math inline">\(0\)</span> or <span class="math inline">\(1\)</span>. (It is more conventionally called a <em>Bernoulli</em> distribution, or is a <em>binomial</em> distribution with a single trial <span class="math inline">\(n=1\)</span>.) The <code>formula</code> represents the probability (with the ‘identity’ link) or the log odds (with the ‘logit’ link) that the variable takes the value of 1. The mean of this distribution is <span class="math inline">\(p\)</span>, and variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(p(1-p)\)</span>.</p>
+<p>A <em>binary</em> distribution is a discrete data distribution that
+takes values <span class="math inline">\(0\)</span> or <span class="math inline">\(1\)</span>. (It is more conventionally called a
+<em>Bernoulli</em> distribution, or is a <em>binomial</em> distribution
+with a single trial <span class="math inline">\(n=1\)</span>.) The
+<code>formula</code> represents the probability (with the ‘identity’
+link) or the log odds (with the ‘logit’ link) that the variable takes
+the value of 1. The mean of this distribution is <span class="math inline">\(p\)</span>, and variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(p(1-p)\)</span>.</p>
 </div>
 <div id="binomial" class="section level4">
 <h4>binomial</h4>
-<p>A <em>binomial</em> distribution is a discrete data distribution that represents the count of the number of successes given a number of trials. The formula specifies the probability of success <span class="math inline">\(p\)</span>, and the variance field is used to specify the number of trials <span class="math inline">\(n\)</span>. Given a value of <span class="math inline">\(p\)</span>, the mean <span class="math inline">\(\mu\)</span> of this distribution is <span class="math inline">\(n*p\)</span>, and the variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(np(1-p)\)</span>.</p>
+<p>A <em>binomial</em> distribution is a discrete data distribution that
+represents the count of the number of successes given a number of
+trials. The formula specifies the probability of success <span class="math inline">\(p\)</span>, and the variance field is used to
+specify the number of trials <span class="math inline">\(n\)</span>.
+Given a value of <span class="math inline">\(p\)</span>, the mean <span class="math inline">\(\mu\)</span> of this distribution is <span class="math inline">\(n*p\)</span>, and the variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(np(1-p)\)</span>.</p>
 </div>
 <div id="categorical" class="section level4">
 <h4>categorical</h4>
-<p>A <em>categorical</em> distribution is a discrete data distribution taking on values from <span class="math inline">\(1\)</span> to <span class="math inline">\(K\)</span>, with each value representing a specific category, and there are <span class="math inline">\(K\)</span> categories. The categories may or may not be ordered. For a categorical variable with <span class="math inline">\(k\)</span> categories, the <code>formula</code> is a string of probabilities that sum to 1, each separated by a semi-colon: <span class="math inline">\((p_1 ; p_2 ; ... ; p_k)\)</span>. <span class="math inline">\(p_1\)</span> is the probability of the random variable falling in category <span class="math inline">\(1\)</span>, <span class="math inline">\(p_2\)</span> is the probability of category <span class="math inline">\(2\)</span>, etc. The probabilities can be specified as functions of other variables previously defined. The helper function <code>genCatFormula</code> is an easy way to create different probability strings. The <code>link</code> options are <em>identity</em> or <em>logit</em>. The <code>variance</code> field is optional an allows to provide categories other than the default <code>1...n</code> in the same format as <code>formula</code>: “a;b;c”. Numeric variance Strings (e.g. “50;100;200”) will be converted to numeric when possible. All probabilities will be rounded to 1e12 decimal points to prevent possible rounding errors.</p>
+<p>A <em>categorical</em> distribution is a discrete data distribution
+taking on values from <span class="math inline">\(1\)</span> to <span class="math inline">\(K\)</span>, with each value representing a
+specific category, and there are <span class="math inline">\(K\)</span>
+categories. The categories may or may not be ordered. For a categorical
+variable with <span class="math inline">\(k\)</span> categories, the
+<code>formula</code> is a string of probabilities that sum to 1, each
+separated by a semi-colon: <span class="math inline">\((p_1 ; p_2 ; ...
+; p_k)\)</span>. <span class="math inline">\(p_1\)</span> is the
+probability of the random variable falling in category <span class="math inline">\(1\)</span>, <span class="math inline">\(p_2\)</span> is the probability of category <span class="math inline">\(2\)</span>, etc. The probabilities can be
+specified as functions of other variables previously defined. The helper
+function <code>genCatFormula</code> is an easy way to create different
+probability strings. The <code>link</code> options are <em>identity</em>
+or <em>logit</em>. The <code>variance</code> field is optional an allows
+to provide categories other than the default <code>1...n</code> in the
+same format as <code>formula</code>: “a;b;c”. Numeric variance Strings
+(e.g. “50;100;200”) will be converted to numeric when possible. All
+probabilities will be rounded to 1e12 decimal points to prevent possible
+rounding errors.</p>
 </div>
 <div id="exponential" class="section level4">
 <h4>exponential</h4>
-<p>An <em>exponential</em> distribution is a continuous data distribution that takes on non-negative values. The <code>formula</code> represents the mean <span class="math inline">\(\theta\)</span> (with the ‘identity’ link) or log of the mean (with the ‘log’ link). The <code>variance</code> argument does not apply to the <em>exponential</em> distribution. The variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(\theta^2\)</span>.</p>
+<p>An <em>exponential</em> distribution is a continuous data
+distribution that takes on non-negative values. The <code>formula</code>
+represents the mean <span class="math inline">\(\theta\)</span> (with
+the ‘identity’ link) or log of the mean (with the ‘log’ link). The
+<code>variance</code> argument does not apply to the
+<em>exponential</em> distribution. The variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(\theta^2\)</span>.</p>
 </div>
 <div id="gamma" class="section level4">
 <h4>gamma</h4>
-<p>A <em>gamma</em> distribution is a continuous data distribution that takes on non-negative values. The <code>formula</code> specifies the mean <span class="math inline">\(\mu\)</span> (with the ‘identity’ link) or the log of the mean (with the ‘log’ link). The <code>variance</code> field represents a dispersion value <span class="math inline">\(d\)</span>. The variance <span class="math inline">\(\sigma^2\)</span> is is <span class="math inline">\(d \mu^2\)</span>.</p>
+<p>A <em>gamma</em> distribution is a continuous data distribution that
+takes on non-negative values. The <code>formula</code> specifies the
+mean <span class="math inline">\(\mu\)</span> (with the ‘identity’ link)
+or the log of the mean (with the ‘log’ link). The <code>variance</code>
+field represents a dispersion value <span class="math inline">\(d\)</span>. The variance <span class="math inline">\(\sigma^2\)</span> is is <span class="math inline">\(d \mu^2\)</span>.</p>
 </div>
 <div id="mixture" class="section level4">
 <h4>mixture</h4>
-<p>The <em>mixture</em> distribution is a mixture of other predefined variables, which can be defined based on any of the other available distributions. The formula is a string structured with a sequence of variables <span class="math inline">\(x_i\)</span> and probabilities <span class="math inline">\(p_i\)</span>: <span class="math inline">\(x_1 | p_1 + … + x_n | p_n\)</span>. All of the <span class="math inline">\(x_i\)</span>’s are required to have been previously defined, and the probabilities must sum to <span class="math inline">\(1\)</span> (i.e. <span class="math inline">\(\sum_1^n p_i = 1\)</span>). The result of generating from a mixture is the value <span class="math inline">\(x_i\)</span> with probability <span class="math inline">\(p_i\)</span>. The <code>variance</code> and <code>link</code> fields do not apply to the <em>mixture</em> distribution.</p>
+<p>The <em>mixture</em> distribution is a mixture of other predefined
+variables, which can be defined based on any of the other available
+distributions. The formula is a string structured with a sequence of
+variables <span class="math inline">\(x_i\)</span> and probabilities
+<span class="math inline">\(p_i\)</span>: <span class="math inline">\(x_1 | p_1 + … + x_n | p_n\)</span>. All of the
+<span class="math inline">\(x_i\)</span>’s are required to have been
+previously defined, and the probabilities must sum to <span class="math inline">\(1\)</span> (i.e. <span class="math inline">\(\sum_1^n p_i = 1\)</span>). The result of
+generating from a mixture is the value <span class="math inline">\(x_i\)</span> with probability <span class="math inline">\(p_i\)</span>. The <code>variance</code> and
+<code>link</code> fields do not apply to the <em>mixture</em>
+distribution.</p>
 </div>
 <div id="negbinomial" class="section level4">
 <h4>negBinomial</h4>
-<p>A <em>negative binomial</em> distribution is a discrete data distribution that represents the number of successes that occur in a sequence of <em>Bernoulli</em> trials before a specified number of failures occurs. It is often used to model count data more generally when a <em>Poisson</em> distribution is not considered appropriate; the variance of the negative binomial distribution is larger than the <em>Poisson</em> distribution. The <code>formula</code> specifies the mean <span class="math inline">\(\mu\)</span> or the log of the mean. The variance field represents a dispersion value <span class="math inline">\(d\)</span>. The variance <span class="math inline">\(\sigma^2\)</span> will be <span class="math inline">\(\mu + d\mu^2\)</span>.</p>
+<p>A <em>negative binomial</em> distribution is a discrete data
+distribution that represents the number of successes that occur in a
+sequence of <em>Bernoulli</em> trials before a specified number of
+failures occurs. It is often used to model count data more generally
+when a <em>Poisson</em> distribution is not considered appropriate; the
+variance of the negative binomial distribution is larger than the
+<em>Poisson</em> distribution. The <code>formula</code> specifies the
+mean <span class="math inline">\(\mu\)</span> or the log of the mean.
+The variance field represents a dispersion value <span class="math inline">\(d\)</span>. The variance <span class="math inline">\(\sigma^2\)</span> will be <span class="math inline">\(\mu + d\mu^2\)</span>.</p>
 </div>
 <div id="nonrandom" class="section level4">
 <h4>nonrandom</h4>
-<p>Deterministic data can be “generated” using the <em>nonrandom</em> distribution. The <code>formula</code> explicitly represents the value of the variable to be generated, without any uncertainty. The <code>variance</code> and <code>link</code> fields do not apply to <em>nonrandom</em> data generation.</p>
+<p>Deterministic data can be “generated” using the <em>nonrandom</em>
+distribution. The <code>formula</code> explicitly represents the value
+of the variable to be generated, without any uncertainty. The
+<code>variance</code> and <code>link</code> fields do not apply to
+<em>nonrandom</em> data generation.</p>
 </div>
 <div id="normal" class="section level4">
 <h4>normal</h4>
-<p>A <em>normal</em> or <em>Gaussian</em> distribution is a continuous data distribution that takes on values between <span class="math inline">\(-\infty\)</span> and <span class="math inline">\(\infty\)</span>. The <code>formula</code> represents the mean <span class="math inline">\(\mu\)</span> and the <code>variance</code> represents <span class="math inline">\(\sigma^2\)</span>. The <code>link</code> field is not applied to the <em>normal</em> distribution.</p>
+<p>A <em>normal</em> or <em>Gaussian</em> distribution is a continuous
+data distribution that takes on values between <span class="math inline">\(-\infty\)</span> and <span class="math inline">\(\infty\)</span>. The <code>formula</code>
+represents the mean <span class="math inline">\(\mu\)</span> and the
+<code>variance</code> represents <span class="math inline">\(\sigma^2\)</span>. The <code>link</code> field is
+not applied to the <em>normal</em> distribution.</p>
 </div>
 <div id="nozeropoisson" class="section level4">
 <h4>noZeroPoisson</h4>
-<p>The <em>noZeroPoisson</em> distribution is a discrete data distribution that takes on positive integers. This is a truncated <em>poisson</em> distribution that excludes <span class="math inline">\(0\)</span>. The <code>formula</code> specifies the parameter <span class="math inline">\(\lambda\)</span> (link is ‘identity’) or log() (<code>link</code> is log). The <code>variance</code> field does not apply to this distribution. The mean <span class="math inline">\(\mu\)</span> of this distribution is <span class="math inline">\(\lambda/(1-e^{-\lambda})\)</span> and the variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\((\lambda + \lambda^2)/(1-e^{-\lambda}) - \lambda^2/(1-e^{-\lambda})^2\)</span>. We are not typically interested in modeling data drawn from this distribution (except in the case of a <em>hurdle model</em>), but it is useful to generate positive count data where it is not desirable to have any <span class="math inline">\(0\)</span> values.</p>
+<p>The <em>noZeroPoisson</em> distribution is a discrete data
+distribution that takes on positive integers. This is a truncated
+<em>poisson</em> distribution that excludes <span class="math inline">\(0\)</span>. The <code>formula</code> specifies the
+parameter <span class="math inline">\(\lambda\)</span> (link is
+‘identity’) or log() (<code>link</code> is log). The
+<code>variance</code> field does not apply to this distribution. The
+mean <span class="math inline">\(\mu\)</span> of this distribution is
+<span class="math inline">\(\lambda/(1-e^{-\lambda})\)</span> and the
+variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\((\lambda + \lambda^2)/(1-e^{-\lambda}) -
+\lambda^2/(1-e^{-\lambda})^2\)</span>. We are not typically interested
+in modeling data drawn from this distribution (except in the case of a
+<em>hurdle model</em>), but it is useful to generate positive count data
+where it is not desirable to have any <span class="math inline">\(0\)</span> values.</p>
 </div>
 <div id="poisson" class="section level4">
 <h4>poisson</h4>
-<p>The <em>poisson</em> distribution is a discrete data distribution that takes on non-negative integers. The <code>formula</code> specifies the mean <span class="math inline">\(\lambda\)</span> (link is ‘identity’) or log of the mean (<code>link</code> is log). The <code>variance</code> field does not apply to this distribution. The variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(\lambda\)</span> itself.</p>
+<p>The <em>poisson</em> distribution is a discrete data distribution
+that takes on non-negative integers. The <code>formula</code> specifies
+the mean <span class="math inline">\(\lambda\)</span> (link is
+‘identity’) or log of the mean (<code>link</code> is log). The
+<code>variance</code> field does not apply to this distribution. The
+variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(\lambda\)</span> itself.</p>
 </div>
 <div id="trtassign" class="section level4">
 <h4>trtAssign</h4>
-<p>The <em>trtAssign</em> distribution is an implementation of the <code>trtAssign</code> functionality in the context of the <code>defData</code> workflow. Sometimes, it might be convenient to assign treatment or group membership while defining other variables. The <code>formula</code> specifies the relative allocation to the different groups. For example three-arm randomization with equal allocation to each arm would be specified as <em>“1;1;1”</em>. The <code>variance</code> field defines the stratification variables, and would be specified as <em>“s_1;s_2”</em> if <em>s_1</em> and <em>s_2</em> are the stratification variables. The <code>link</code> field is used to indicate if the allocations should be perfectly balanced; if nothing is specified (and link defaults to <em>identity</em>), the allocation will be balanced; if link is specified to be different from <em>identity</em>, then the allocation will not be balanced.</p>
+<p>The <em>trtAssign</em> distribution is an implementation of the
+<code>trtAssign</code> functionality in the context of the
+<code>defData</code> workflow. Sometimes, it might be convenient to
+assign treatment or group membership while defining other variables. The
+<code>formula</code> specifies the relative allocation to the different
+groups. For example three-arm randomization with equal allocation to
+each arm would be specified as <em>“1;1;1”</em>. The
+<code>variance</code> field defines the stratification variables, and
+would be specified as <em>“s_1;s_2”</em> if <em>s_1</em> and
+<em>s_2</em> are the stratification variables. The <code>link</code>
+field is used to indicate if the allocations should be perfectly
+balanced; if nothing is specified (and link defaults to
+<em>identity</em>), the allocation will be balanced; if link is
+specified to be different from <em>identity</em>, then the allocation
+will not be balanced.</p>
 </div>
 <div id="uniform" class="section level4">
 <h4>uniform</h4>
-<p>A <em>uniform</em> distribution is a continuous data distribution that takes on values from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span>, where <span class="math inline">\(b\)</span> &gt; <span class="math inline">\(a\)</span>, and they both lie anywhere on the real number line. The <code>formula</code> is a string with the format “a;b”, where <em>a</em> and <em>b</em> are scalars or functions of previously defined variables. The <code>variance</code> and <code>link</code> arguments do not apply to the <em>uniform</em> distribution.</p>
+<p>A <em>uniform</em> distribution is a continuous data distribution
+that takes on values from <span class="math inline">\(a\)</span> to
+<span class="math inline">\(b\)</span>, where <span class="math inline">\(b\)</span> &gt; <span class="math inline">\(a\)</span>, and they both lie anywhere on the real
+number line. The <code>formula</code> is a string with the format “a;b”,
+where <em>a</em> and <em>b</em> are scalars or functions of previously
+defined variables. The <code>variance</code> and <code>link</code>
+arguments do not apply to the <em>uniform</em> distribution.</p>
 </div>
 <div id="uniformint" class="section level4">
 <h4>uniformInt</h4>
-<p>A <em>uniform integer</em> distribution is a discrete data distribution that takes on values from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span>, where <span class="math inline">\(b\)</span> &gt; <span class="math inline">\(a\)</span>, and they both lie anywhere on the integer number line. The <code>formula</code> is a string with the format “a;b”, where <em>a</em> and <em>b</em> are scalars or functions of previously defined variables. The <code>variance</code> and <code>link</code> arguments do not apply to the <em>uniform integer</em> distribution.</p>
+<p>A <em>uniform integer</em> distribution is a discrete data
+distribution that takes on values from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span>, where <span class="math inline">\(b\)</span> &gt; <span class="math inline">\(a\)</span>, and they both lie anywhere on the
+integer number line. The <code>formula</code> is a string with the
+format “a;b”, where <em>a</em> and <em>b</em> are scalars or functions
+of previously defined variables. The <code>variance</code> and
+<code>link</code> arguments do not apply to the <em>uniform integer</em>
+distribution.</p>
 </div>
 </div>
 </div>
 <div id="generating-multiple-variables-with-a-single-definition" class="section level2">
 <h2>Generating multiple variables with a single definition</h2>
-<p><code>defRepeat</code> allows us to specify multiple versions of a variable based on a single set of distribution assumptions. The function will add <code>nvar</code> variables to the <em>data definition</em> table, each of which will be specified with a single set of distribution assumptions. The names of the variables will be based on the <code>prefix</code> argument and the distribution assumptions are specified as they are in the <code>defData</code> function. Calls to <code>defRepeat</code> can be integrated with calls to <code>defData</code>.</p>
+<p><code>defRepeat</code> allows us to specify multiple versions of a
+variable based on a single set of distribution assumptions. The function
+will add <code>nvar</code> variables to the <em>data definition</em>
+table, each of which will be specified with a single set of distribution
+assumptions. The names of the variables will be based on the
+<code>prefix</code> argument and the distribution assumptions are
+specified as they are in the <code>defData</code> function. Calls to
+<code>defRepeat</code> can be integrated with calls to
+<code>defData</code>.</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defRepeat</span>(<span class="at">nVars =</span> <span class="dv">4</span>, <span class="at">prefix =</span> <span class="st">&quot;g&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;1/3;1/3;1/3&quot;</span>,</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">variance =</span> <span class="dv">0</span>, <span class="at">dist =</span> <span class="st">&quot;categorical&quot;</span>)</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(def, <span class="at">varname =</span> <span class="st">&quot;a&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;1;1&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;trtAssign&quot;</span>)</span>
@@ -595,10 +1019,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="adding-data-to-an-existing-data-table" class="section level2">
 <h2>Adding data to an existing data table</h2>
-<p>Until this point, we have been generating new data sets, building them up from scratch. However, it is often necessary to generate the data in multiple stages so that we would need to add data as we go along. For example, we may have multi-level data with clusters that contain collections of individual observations. The data generation might begin with defining and generating cluster-level variables, followed by the definition and generation of the individual-level data; the individual-level data set would be adding to the cluster-level data set.</p>
+<p>Until this point, we have been generating new data sets, building
+them up from scratch. However, it is often necessary to generate the
+data in multiple stages so that we would need to add data as we go
+along. For example, we may have multi-level data with clusters that
+contain collections of individual observations. The data generation
+might begin with defining and generating cluster-level variables,
+followed by the definition and generation of the individual-level data;
+the individual-level data set would be adding to the cluster-level data
+set.</p>
 <div id="defdataadddefrepeataddreaddataadd-and-addcolumns" class="section level3">
 <h3>defDataAdd/defRepeatAdd/readDataAdd and addColumns</h3>
-<p>There are several important functions that facilitate the augmentation of data sets. <code>defDataAdd</code>, <code>defRepeatAdd</code>, and <code>readDataAdd</code> are similar to their counterparts <code>defData</code>, <code>defRepeat</code>, and <code>readData</code>, respectively; they create data definition tables that will be used by the function <code>addColumns</code>. The formulas in these “<em>add</em>-ing” functions are permitted to refer to fields that exist in the data set to be augmented, so all variables need not be defined in the current definition able.</p>
+<p>There are several important functions that facilitate the
+augmentation of data sets. <code>defDataAdd</code>,
+<code>defRepeatAdd</code>, and <code>readDataAdd</code> are similar to
+their counterparts <code>defData</code>, <code>defRepeat</code>, and
+<code>readData</code>, respectively; they create data definition tables
+that will be used by the function <code>addColumns</code>. The formulas
+in these “<em>add</em>-ing” functions are permitted to refer to fields
+that exist in the data set to be augmented, so all variables need not be
+defined in the current definition able.</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;x1&quot;</span>, <span class="at">formula =</span> <span class="dv">0</span>, <span class="at">variance =</span> <span class="dv">1</span>,</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">dist =</span> <span class="st">&quot;normal&quot;</span>)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1, <span class="at">varname =</span> <span class="st">&quot;x2&quot;</span>, <span class="at">formula =</span> <span class="fl">0.5</span>, <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>)</span>
@@ -611,25 +1051,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">5</span>, d1)</span>
 <span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">trtAssign</span>(dd, <span class="at">nTrt =</span> <span class="dv">2</span>, <span class="at">grpName =</span> <span class="st">&quot;rx&quot;</span>)</span>
 <span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>dd</span></code></pre></div>
-<pre><code>##    id      x1 x2 rx
-## 1:  1 -1.3230  1  0
-## 2:  2 -0.0494  0  1
-## 3:  3 -0.4064  1  0
-## 4:  4 -0.5562  1  0
-## 5:  5 -0.0941  0  1</code></pre>
+<pre><code>##    id x1 x2 rx
+## 1:  1 -1  1  0
+## 2:  2  0  0  1
+## 3:  3  0  1  0
+## 4:  4  0  1  0
+## 5:  5  0  0  1</code></pre>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">addColumns</span>(d2, dd)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>dd</span></code></pre></div>
-<pre><code>##    id      x1 x2 rx    q1    q2 y
-## 1:  1 -1.3230  1  0 4.589  5.70 0
-## 2:  2 -0.0494  0  1 9.829 11.74 1
-## 3:  3 -0.4064  1  0 2.117  4.47 0
-## 4:  4 -0.5562  1  0 0.798  3.24 0
-## 5:  5 -0.0941  0  1 7.601  6.98 0</code></pre>
+<pre><code>##    id x1 x2 rx    q1    q2 y
+## 1:  1 -1  1  0 4.589  5.70 0
+## 2:  2  0  0  1 9.829 11.74 1
+## 3:  3  0  1  0 2.117  4.47 0
+## 4:  4  0  1  0 0.798  3.24 1
+## 5:  5  0  0  1 7.601  6.98 0</code></pre>
 </div>
 <div id="defcondition-and-addcondition" class="section level3">
 <h3>defCondition and addCondition</h3>
-<p>In certain situations, it might be useful to define a data distribution conditional on previously generated data in a way that is more complex than might be easily handled by a single formula. <code>defCondition</code> creates a special table of definitions and the new variable is added to an existing data set by calling <code>addCondition</code>. <code>defCondition</code> specifies a condition argument that will be based on a variable that already exists in the data set. The new variable can take on any <code>simstudy</code> distribution specified with the appropriate <code>formula</code>, <code>variance</code>, and <code>link</code> arguments.</p>
-<p>In this example, the slope of a regression line of <span class="math inline">\(y\)</span> on <span class="math inline">\(x\)</span> varies depending on the value of the predictor <span class="math inline">\(x\)</span>:</p>
+<p>In certain situations, it might be useful to define a data
+distribution conditional on previously generated data in a way that is
+more complex than might be easily handled by a single formula.
+<code>defCondition</code> creates a special table of definitions and the
+new variable is added to an existing data set by calling
+<code>addCondition</code>. <code>defCondition</code> specifies a
+condition argument that will be based on a variable that already exists
+in the data set. The new variable can take on any <code>simstudy</code>
+distribution specified with the appropriate <code>formula</code>,
+<code>variance</code>, and <code>link</code> arguments.</p>
+<p>In this example, the slope of a regression line of <span class="math inline">\(y\)</span> on <span class="math inline">\(x\)</span> varies depending on the value of the
+predictor <span class="math inline">\(x\)</span>:</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;x&quot;</span>, <span class="at">formula =</span> <span class="dv">0</span>, <span class="at">variance =</span> <span class="dv">9</span>, <span class="at">dist =</span> <span class="st">&quot;normal&quot;</span>)</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>dc <span class="ot">&lt;-</span> <span class="fu">defCondition</span>(<span class="at">condition =</span> <span class="st">&quot;x &lt;= -2&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;4 + 3*x&quot;</span>,</span>

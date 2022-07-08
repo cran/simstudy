@@ -260,29 +260,58 @@ addMarkov <- function(dd, transMat, chainLen, wide = FALSE, id = "id",
   # 'declare' vars created in data.table
   variable <- NULL
   .e <- NULL
-
-  # check transMat is square matrix and row sums = 1
-
-  if (!is.matrix(transMat) |
-    (length(dim(transMat)) != 2) |
-    (dim(transMat)[1] != dim(transMat)[2])
-  ) {
-    stop("Transition matrix needs to be a square matrix")
+  
+  ######
+  # check transMat is matrix
+  if (!is.matrix(transMat)) {
+    c <- condition(c("simstudy::typeMatrix", "error"),
+                   "transMat is not a matrix!")
+    stop(c)
   }
 
-  # check row sums = 1
+  # check transMat is square matrix
+  if ((length(dim(transMat)) != 2) |
+      (dim(transMat)[1] != dim(transMat)[2])) {
+    c <- condition(c("simstudy::squareMatrix", "error"),
+                   "transMat is not a square matrix!")
+    stop(c)
+  }
 
+  # check transMat row sums = 1
   if (!all(round(apply(transMat, 1, sum), 5) == 1)) {
-    stop("Rows in transition matrix must sum to 1")
+    c <- condition(c("simstudy::rowSums1", "error"),
+                   "transMat rows do not sum to 1!")
+    stop(c)
   }
 
-  # check chainLen is > 1
+  # check chainLen greater than 1
+  if (chainLen <= 1) {
+    c <- condition(c("simstudy::chainLen", "error"),
+                   "chainLen must be greater than 1!")
+    stop(c)
+  }
+  
+  # if start0lab defined, check that it is defined in dd
+  if (!is.null(start0lab)) {
+    assertInDataTable(vars = start0lab, dt = dd)
+    
+  }
 
-  if (chainLen <= 1) stop("Chain length must be greater than 1")
+  # if start0lab defined, check that it exists in the transition matrix
+  if (!is.null(start0lab)) {
+    if (any(1 > dd[, start0lab, with = FALSE] | dd[, start0lab, with = FALSE] > dim(transMat)[1])) {
+      c <- condition(c("simstudy::start0probNotInTransMat", "error"),
+                     "all start states in start0prob must exist in the transistion matrix!")
+      stop(c)
+    }
+
+  }
+  ######
 
   # verify id is in data.table dd
 
-  if (!(id %in% names(dd))) stop(paste(id, "is not in data table"))
+  #if (!(id %in% names(dd))) stop(paste(id, "is not in data table"))
+  assertInDataTable(vars = id, dt = dd)
 
   ####
 
@@ -290,8 +319,6 @@ addMarkov <- function(dd, transMat, chainLen, wide = FALSE, id = "id",
 
   if (is.null(start0lab)) {
     s0 <- rep(1, n)
-  } else if (!(start0lab %in% names(dd))) {
-    stop(paste("Start state field", start0lab, "does not exist"))
   } else {
     s0 <- dd[, get(start0lab)]
   }
@@ -432,4 +459,67 @@ addMultiFac <- function(dtOld, nFactors, levels = 2, coding = "dummy", colNames 
   dreturn <- cbind(dtOld, all)
 
   return(dreturn[])
+}
+
+#' Add synthetic data
+#' @title Add synthetic data to existing data set
+#' @description This function generates synthetic data from an existing 
+#' data.table and adds it to another (simstudy) data.table.
+#' @param dtOld data.table that is to be modified
+#' @param dtFrom Data table that contains the source data
+#' @param vars A vector of string names specifying the fields that will be
+#' sampled. The default is that all variables will be selected.
+#' @param id A string specifying the field that serves as the record id. The
+#' default field is "id".
+#' @return A data.table that contains the added synthetic data.
+#' @examples
+#' ### Create fake "real" data set - this is the source of the synthetic data
+#' 
+#' d <- defData(varname = "a", formula = 3, variance = 1, dist = "normal")
+#' d <- defData(d, varname = "b", formula = 5, dist = "poisson")
+#' d <- defData(d, varname = "c", formula = 0.3, dist = "binary")
+#' d <- defData(d, varname = "d", formula = "a + b + 3*c", variance = 2, dist = "normal")
+#' 
+#' ### Create synthetic data set from "observed" data set A (normally this
+#' ### would be an actual external data set):
+#' 
+#' A <- genData(1000, d)
+#' 
+#' ### Generate new simstudy data set (using 'def')
+#' 
+#' def <- defData(varname = "x", formula = 0, variance = 5)
+#' S <- genData(120, def)
+#' 
+#' ### Create synthetic data from 'A' and add to simulated data in 'S'
+#' 
+#' S <- addSynthetic(dtOld = S, dtFrom = A, vars = c("b", "d"))
+#' @export
+#' @concept generate_data
+addSynthetic <- function(dtOld, dtFrom, 
+  vars = NULL, id = "id") {
+  
+  assertNotMissing(
+    dtOld = missing(dtOld),
+    dtFrom = missing(dtFrom),
+    call = sys.call(-1)
+  )
+  
+  assertClass(
+    dtOld = dtOld,
+    dtFrom = dtFrom, 
+    class = "data.table",
+    call = sys.call(-1)
+  )
+  
+  if (is.null(vars)) { vars <- names(dtFrom)[names(dtFrom) != id] }
+  
+  assertInDataTable(vars = id, dt = dtOld)
+  assertInDataTable(vars = id, dt = dtFrom)
+  assertNotInDataTable(vars = vars, dt = dtOld)
+  
+  n <- nrow(dtOld)
+  dS <- genSynthetic(dtFrom = dtFrom, n = n, vars = vars, id = id)
+  dS <- dtOld[dS, on = id]
+  dS[]
+  
 }

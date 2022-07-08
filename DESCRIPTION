@@ -1,8 +1,8 @@
 Type: Package
 Package: simstudy
 Title: Simulation of Study Data
-Version: 0.4.0
-Date: 2022-01-18
+Version: 0.5.0
+Date: 2022-07-08
 Authors@R: 
     c(person(given = "Keith",
              family = "Goldfeld",
@@ -30,15 +30,16 @@ Depends: R (>= 3.3.0)
 Imports: data.table, glue, methods, mvnfast, mvtnorm, Rcpp, backports
 Suggests: covr, dplyr, formatR, gee, ggplot2, grid, gridExtra,
         hedgehog, knitr, magrittr, Matrix, mgcv, ordinal, pracma,
-        rmarkdown, scales, splines, survival, testthat, gtsummary
+        rmarkdown, scales, splines, survival, testthat, gtsummary,
+        survminer
 LinkingTo: Rcpp
 VignetteBuilder: knitr
 Encoding: UTF-8
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 NeedsCompilation: yes
-Packaged: 2022-01-20 15:38:48 UTC; keith
+Packaged: 2022-07-08 16:00:28 UTC; keith
 Author: Keith Goldfeld [aut, cre] (<https://orcid.org/0000-0002-0292-8780>),
   Jacob Wujciak-Jens [aut] (<https://orcid.org/0000-0002-7281-3989>)
 Maintainer: Keith Goldfeld <keith.goldfeld@nyulangone.org>
 Repository: CRAN
-Date/Publication: 2022-01-20 16:00:02 UTC
+Date/Publication: 2022-07-08 16:40:02 UTC
