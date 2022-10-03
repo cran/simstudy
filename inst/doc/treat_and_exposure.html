@@ -120,13 +120,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -364,17 +371,17 @@ category (not blood pressure)</em></p>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>study1</span></code></pre></div>
 <pre><code>##      cid male over65 baseDBP rxGrp
-##   1:   1    1      0      74     1
-##   2:   2    0      0      66     2
-##   3:   3    1      1      64     2
-##   4:   4    0      0      63     2
-##   5:   5    1      0      55     3
+##   1:   1    1      0    74.6     1
+##   2:   2    0      0    66.9     2
+##   3:   3    1      1    64.8     2
+##   4:   4    0      0    63.8     2
+##   5:   5    1      0    55.2     3
 ##  ---                              
-## 326: 326    0      0      68     3
-## 327: 327    0      0      57     3
-## 328: 328    0      0      70     3
-## 329: 329    1      0      69     2
-## 330: 330    0      0      67     2</code></pre>
+## 326: 326    0      0    68.5     3
+## 327: 327    0      0    57.5     3
+## 328: 328    0      0    70.8     3
+## 329: 329    1      0    69.4     2
+## 330: 330    0      0    67.9     2</code></pre>
 <p><em>Balanced treatment assignment (without stratification)</em></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>study2 <span class="ot">&lt;-</span> <span class="fu">trtAssign</span>(dtstudy, <span class="at">n =</span> <span class="dv">3</span>, <span class="at">balanced =</span> <span class="cn">TRUE</span>, <span class="at">grpName =</span> <span class="st">&quot;rxGrp&quot;</span>)</span></code></pre></div>
 <p><em>Random (unbalanced) treatment assignment</em></p>
