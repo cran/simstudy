@@ -49,6 +49,23 @@ assertEqual <- function(..., val, call = sys.call(-1)) {
   }
 }
 
+#' Are arguments not equal to value?
+#'
+#' @description Checks if all passed vars are not equal to given value.
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @param val Value to check if variables are equal to
+#' @noRd
+assertNotEqual <- function(..., val, call = sys.call(-1), msg="") {
+  dots <- dots2argNames(...)
+  
+  Equal <- !sapply(dots$args, function(i) {
+    i != val
+  })
+  if (any(Equal)) {
+    equalError(dots$names, val, call = call, msg)
+  }
+}
+
 #' Is length correct?
 #'
 #' @description Checks if all passed vars are of length 'length'. Caveat:
@@ -84,6 +101,21 @@ assertAtLeastLength <- function(..., length, call = sys.call(-1)) {
       prop = length,
       msg = "{ names *} should be at least length { prop }!", call = call
     )
+  }
+}
+
+#' Are all elements of vector probabilities?
+#'
+#' @description Checks if passed vector includes only proper probabilities
+#' @param vec Vector under consideration
+#' @noRd
+assertAtLeast <- function(..., minVal, call = sys.call(-1)) {
+  
+  dots <- dots2argNames(...)
+  correctSize <- dots$args >= minVal
+  
+  if (!all(correctSize)) {
+    minError(dots$names[!correctSize], minVal, call = call)
   }
 }
 
@@ -125,6 +157,19 @@ assertType <- function(..., type, deep = TRUE, call = sys.call(-1)) {
   wrongType <- !sapply(dots$args, reduceType)
   if (any(wrongType)) {
     typeError(dots$names[wrongType], type = type, call = call)
+  }
+}
+
+#' Check for Numeric
+#'
+#' @description Checks if all passed vars and their content are not null
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @noRd
+assertNotNull <- function(..., call = sys.call(-1)) {
+  dots <- dots2argNames(...)
+  isNull <- sapply(dots$args, function(x) is.null(x))
+  if (any(isNull)) {
+    nullError(dots$names[isNull], type = "numeric", call = call)
   }
 }
 
@@ -178,6 +223,23 @@ assertFactor <- function(..., type, call = sys.call(-1)) {
   })
   if (any(notFactor)) {
     typeError(dots$names[notFactor], type = "factor", call = call)
+  }
+}
+
+#' Check for numeric matrix (character matrices not allowed)
+#'
+#' @description Checks if all passed vars and their content are numeric matrices
+#' @param ... Any number of variables as named elements e.g. var1 = var1.
+#' @noRd
+assertNumericMatrix <- function(..., call = sys.call(-1)) {
+  dots <- dots2argNames(...)
+  notNumericMatrix <- !sapply(dots$args, function(mat) {
+    isMatrix <- is.matrix(mat)
+    isNumeric <- is.numeric(c(mat))
+    isMatrix & isNumeric
+  })
+  if (any(notNumericMatrix)) {
+    typeError(dots$names[notNumericMatrix], type = "numeric matrix", call = call)
   }
 }
 
@@ -307,6 +369,7 @@ assertDescending <- function(vec, call = sys.call(-1)) {
   }
 }
 
+
 #' Are all elements of vector positive?
 #'
 #' @description Checks if passed vector is includes only positive values
@@ -334,6 +397,8 @@ assertProbability <- function(vec, call = sys.call(-1)) {
     probError(name, call = call)
   }
 }
+
+
 
 #' Ensure Length
 #'
@@ -395,10 +460,10 @@ assertPositiveDefinite <- function(..., call = sys.call(-1)) {
   stopifnot(...length() == 1)
   dots <- dots2argNames(...)
   matrix <- dots$args[[1]]
-  isSym <- isSymmetric(matrix)
-  eigenValues <- unlist(eigen(matrix, only.values = TRUE))
+  isSym <- isSymmetric(round(matrix, 7))
+  eigenValues <- round(unlist(eigen(matrix, only.values = TRUE)), 8)
 
-  if (!all(eigenValues > 0) || !isSym) {
+  if (!all(eigenValues >= 0) || !isSym) {
     notPositiveDefiniteError(dots$names, call = call)
   }
 }

@@ -258,35 +258,20 @@ genCorFlex <- function(n, defs, rho = 0, tau = NULL, corstr = "cs", corMatrix = 
 #' Multivariate Binary Variates. The American Statistician 1991;45:302-4.
 #' @examples
 #' set.seed(23432)
-#' l <- c(8, 10, 12)
+#' lambda <- c(8, 10, 12)
 #'
-#' genCorGen(1000, nvars = 3, params1 = l, dist = "poisson", rho = .7, corstr = "cs")
-#' genCorGen(1000, nvars = 3, params1 = 5, dist = "poisson", rho = .7, corstr = "cs")
-#' genCorGen(1000, nvars = 3, params1 = l, dist = "poisson", rho = .7, corstr = "cs", wide = TRUE)
-#' genCorGen(1000, nvars = 3, params1 = 5, dist = "poisson", rho = .7, corstr = "cs", wide = TRUE)
+#' genCorGen(100, nvars = 3, params1 = lambda, dist = "poisson", rho = .7, corstr = "cs")
+#' genCorGen(100, nvars = 3, params1 = 5, dist = "poisson", rho = .7, corstr = "cs")
+#' genCorGen(100, nvars = 3, params1 = lambda, dist = "poisson", rho = .7, corstr = "cs", wide = TRUE)
+#' genCorGen(100, nvars = 3, params1 = 5, dist = "poisson", rho = .7, corstr = "cs", wide = TRUE)
 #'
-#' genCorGen(1000,
-#'   nvars = 3, params1 = l, dist = "poisson", rho = .7, corstr = "cs",
+#' genCorGen(100,
+#'   nvars = 3, params1 = lambda, dist = "poisson", rho = .7, corstr = "cs",
 #'   cnames = "new_var"
 #' )
-#' genCorGen(1000,
-#'   nvars = 3, params1 = l, dist = "poisson", rho = .7, corstr = "cs",
+#' genCorGen(100,
+#'   nvars = 3, params1 = lambda, dist = "poisson", rho = .7, corstr = "cs",
 #'   wide = TRUE, cnames = "a, b, c"
-#' )
-#'
-#' genCorGen(1000, nvars = 3, params1 = c(.3, .5, .7), dist = "binary", rho = .3, corstr = "cs")
-#' genCorGen(1000,
-#'   nvars = 3, params1 = l, params2 = c(1, 1, 1), dist = "gamma", rho = .3,
-#'   corstr = "cs", wide = TRUE
-#' )
-#'
-#' genCorGen(1000,
-#'   nvars = 3, params1 = c(.3, .5, .7), dist = "binary",
-#'   corMatrix = genCorMat(3), method = "ep"
-#' )
-#' genCorGen(1000,
-#'   nvars = 3, params1 = c(.3, .5, .7), dist = "binary",
-#'   corMatrix = genCorMat(3), method = "copula"
 #' )
 #' @export
 #' @concept correlated
@@ -359,6 +344,10 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
   if (dist != "binary" & method == "ep") {
     stop("Method `ep` applies only to binary data generation")
   }
+  
+  if (!is.null(corMatrix)) {
+    assertClass(corMatrix = corMatrix, class = "matrix")
+  }
 
   ####
 
@@ -404,9 +393,10 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
 
     if (!is.null(cnames)) setnames(dFinal, "X", cnames)
   } else {
-    dFinal <- dcast(dtM, id ~ seq, value.var = "X")
+    dFinal <- data.table::dcast(dtM, id ~ seq, value.var = "X")
     if (!is.null(cnames)) {
       nnames <- trimws(unlist(strsplit(cnames, split = ",")))
+      assertLength(cnames = nnames, length = nvars)
       setnames(dFinal, paste0("V", 1:nvars), nnames)
     }
   }
@@ -414,66 +404,6 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
   setnames(dFinal, "id", idname)
 
   return(dFinal[])
-}
-
-
-# TODO Implement Emrich and Piedmonte algorithm for correlated binary data?
-#' Internal functions called by genCorGen and addCorGen - returns matrix
-#'
-#' @param nvars Number of new variables to generate
-#' @param corMatrix Correlation matrix
-#' @param rho Correlation coefficient
-#' @param corstr Correlation structure
-#' @return A correlation matrix
-#' @noRd
-.checkBoundsBin <- function(p1, p2, d) {
-  l <- (p1 * p2) / ((1 - p1) * (1 - p2))
-  L <- max(-sqrt(l), -sqrt(1 / l))
-
-  u <- (p1 * (1 - p2)) / (p2 * (1 - p1))
-  U <- min(sqrt(u), sqrt(1 / u))
-
-  if ((d < L & isTRUE(all.equal(d, L)) == FALSE) |
-    (d > U & isTRUE(all.equal(d, U)) == FALSE)) {
-    LU <- paste0("(", round(L, 2), " ... ", round(U, 2), ")")
-    stopText <- paste("Specified correlation", d, "out of range", LU)
-    stop(stopText)
-  }
-}
-
-
-#'
-.findRhoBin <- function(p1, p2, d) {
-  .checkBoundsBin(p1, p2, d)
-
-  target <- d * sqrt(p1 * p2 * (1 - p1) * (1 - p2)) + p1 * p2
-
-  # given p1, p2 & d, bisection search for corresponding rho
-
-  Max <- 1
-  Min <- -1
-  test <- 0
-  found <- FALSE
-
-  while (!found) {
-    corr <- diag(2)
-    corr[1, 2] <- corr[2, 1] <- test
-
-    est <- mvtnorm::pmvnorm(lower = rep(-Inf, 2), upper = c(stats::qnorm(p1), stats::qnorm(p2)), mean = c(0, 0), corr = corr)
-
-    if (round(est, 5) == round(target, 5)) {
-      found <- TRUE
-      rho <- test
-    } else if (est < target) {
-      Min <- test
-      test <- (Min + Max) / 2
-    } else {
-      Max <- test
-      test <- (Min + Max) / 2
-    }
-  }
-
-  return(rho)
 }
 
 #'
@@ -486,16 +416,9 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
 
   np <- length(p)
   phicorr <- diag(length(p))
-
-  for (i in (1:(np - 1))) {
-    for (j in ((i + 1):np)) {
-      p1 <- p[i]
-      p2 <- p[j]
-
-      phicorr[j, i] <- phicorr[i, j] <- .findRhoBin(p1, p2, tcorr[i, j])
-    }
-  }
-
+  
+  phicorr <- getRhoMat(np, p, tcorr)
+  
   # check that phicorr is positive definite (PD), if not adjust to nearest PD matrix
   if (!all(eigen(phicorr)$values > 0)) {
     phicorr <- Matrix::nearPD(phicorr)$mat
@@ -519,52 +442,223 @@ genCorGen <- function(n, nvars, params1, params2 = NULL, dist, rho, corstr,
 
 #' Create a correlation matrix
 #'
-#' @param nvars number of rows and columns (i.e. number of variables) for correlation matrix
+#' @param nvars number of rows and columns (i.e. number of variables) for correlation matrix. It can be
+#' a scalar or vector (see details).
 #' @param cors vector of correlations.
-#' @return correlation matrix of size nvars x nvars
-#' @details If the vector cors is not specified, a random correlation matrix is generated with no assumptions.
-#' If the vector is provided, it should be interpreted as the lower triangle of the correlation
-#' matrix, and is specified by reading down the columns. For example, if CM is the correlation matrix and
-#' nvars = 3, then CM[2,1] = cors[1],  CM[3,1] = cors[2], and CM[3,2] = cors[3].
+#' @param rho Correlation coefficient, \code{-1 <= rho <= 1}. Use if corMatrix is not provided. It can
+#' be a scalar or vector (see details).
+#' @param corstr Correlation structure. Options include "cs" for a compound symmetry structure, "ar1" 
+#' for an autoregressive structure of order 1, "arx" for an autoregressive structure 
+#' that has a general decay pattern, and "structured" that imposes a prescribed
+#' pattern between observation based on distance (see details).
+#' @param nclusters An integer that indicates the number of matrices that will be generated.
+#' @return A single correlation matrix of size \code{nvars x nvars}, or a list of matrices of potentially
+#' different sizes with length indicated by \code{nclusters}.
+#' @details This function can generate correlation matrices randomly or deterministically, 
+#' depending on the combination of arguments provided. A single matrix will be
+#' generated when \code{nclusters == 1} (the default), and a list of matrices of matrices will be generated when
+#' \code{nclusters > 1}.
+#' 
+#' If the vector `cors` is specified with length `nvars - 1` then `corstr` must be "structured". If
+#' `cors` is specified with length `choose(nvars, 2)` then `corstr` should not be specified as
+#' "structured". In this case the `cors` vector should be interpreted as the lower triangle of the correlation
+#' matrix, and is specified by reading down the columns. For example, if \bold{CM} is the correlation matrix and
+#' \code{nvars = 3}, then \code{CM[2,1] = CM[1,2] = cors[1]},  \code{CM[3,1] = CM[1,3] = cors[2]}, 
+#' and \code{CM[3,2] = CM[2,3] = cors[3]}.
+#' 
+#' If the vector \code{cors} and \code{rho} are not specified, random correlation matrices are generated
+#' based on the specified \code{corstr}. If the structure is "arx", then a random vector of 
+#' length \code{nvars - 1} is randomly generated and sorted in descending order; the correlation matrix
+#' will be generated base on this set of structured correlations. If the structure is \emph{not} specified
+#' as "arx" then a random positive definite of dimensions nvars x nvars with no structural 
+#' assumptions is generated.
+#' 
+#' If \code{cors} is not specified but \code{rho} is specified, then a matrix with either a "cs" or "ar1" 
+#' structure is generated.
+#' 
+#' If \code{nclusters > 1}, \code{nvars} can be of length 1 or \code{nclusters}. If it is of length 1,
+#' each cluster will have correlation matrices with the same dimension. Likewise, if \code{nclusters > 1}, 
+#' \code{rho} can be of length 1 or \code{nclusters}. If length of \code{rho} is 1,
+#' each cluster will have correlation matrices with the same autocorrelation.
+#' 
 #' @examples
-#' genCorMat(3, c(.3, -.2, .1))
-#' genCorMat(3)
+#' genCorMat(nvars = 3, cors = c(.3, -.2, .1))
+#' genCorMat(nvars = 3)
 #'
-#' genCorMat(5, c(.3, -.2, .1, .2, .5, .2, -.1, .3, .1, .2))
-#' genCorMat(5)
+#' genCorMat(nvars = 4, c(.3, -.2, .1, .2, .5, .2))
+#' genCorMat(4)
+#' 
+#' genCorMat(nvars = 4, cors = c(.3, .2, .1), corstr = "structured") 
+#' genCorMat(nvars = 4, corstr = "arx") 
+#' 
+#' genCorMat(nvars = 4, rho = .4, corstr = "cs") 
+#' genCorMat(nvars = 4, rho = .4, corstr = "ar1") 
+#' 
+#' genCorMat(nvars = c(3, 2, 5), rho = c(.4, .8, .7), corstr = "ar1", nclusters = 3) 
+#' 
 #' @export
 #' @concept correlated
-genCorMat <- function(nvars, cors = NULL) {
-  if (is.null(cors)) {
-    ev <- stats::runif(nvars, 0, 10)
-
-    Z <- matrix(ncol = nvars, stats::rnorm(nvars^2))
-
-    decomp <- qr(Z)
-    Q <- qr.Q(decomp)
-    R <- qr.R(decomp)
-    d <- diag(R)
-    ph <- d / abs(d)
-    O <- Q %*% diag(ph)
-    Z <- t(O) %*% diag(ev) %*% O
-
-    cm <- stats::cov2cor(Z)
-  } else {
-    if (choose(nvars, 2) != length(cors)) stop("Correlations improperly specified")
-
+genCorMat <- function(nvars, cors = NULL, rho = NULL, corstr = "cs", nclusters = 1) {
+  
+  assertNotMissing(nvars = missing(nvars))
+  assertInteger(nvars = nvars, nclusters = nclusters)
+  assertLength(corstr = corstr, length = 1)
+  assertOption(corstr = corstr, options = c("cs", "ar1", "arx", "structured"))
+  
+  .randMat <- function(nvars) {
+    
+    posDef <- FALSE
+    
+    while (!posDef) {
+      
+      ev <- stats::runif(nvars, 0, 10)
+      Z <- matrix(ncol = nvars, stats::rnorm(nvars^2))
+      decomp <- qr(Z)
+      Q <- qr.Q(decomp)
+      R <- qr.R(decomp)
+      d <- diag(R)
+      ph <- d / abs(d)
+      O <- Q %*% diag(ph)
+      Z <- t(O) %*% diag(ev) %*% O
+      
+      cm <- stats::cov2cor(Z)
+      
+      eigenValues <- unlist(eigen(cm, only.values = TRUE))
+      if (all(eigenValues > 0)) posDef <- TRUE
+    }
+    
+    assertPositiveDefinite(corMat = cm)
+    cm
+  }
+  
+  .structCors <- function(x) {
+    for (i in seq_along(x)) {
+      if (i == 1) y <- x[1]
+      else y <- c(x[1:i], y)
+    }
+    
+    return(y)
+  }
+  
+  .rhoMat <- function(nvars, rho, corstr) {
+    assertNumeric(rho = rho)
+    assertInRange(rho = rho, range = c(-1, 1))
+    
+    cm <- .buildCorMat(nvars = nvars, corMatrix = NULL, corstr, rho)
+    assertPositiveDefinite(corMat = cm)
+    
+    cm
+    
+  }
+  
+  .fillCor <- function(nvars, cors) {
+    
     cmLower <- matrix(0, nrow = nvars, ncol = nvars)
     cmLower[lower.tri(cmLower)] <- cors
     cmUpper <- t(cmLower)
-
+    
     cm <- cmLower + cmUpper
-
     diag(cm) <- 1
+    cm
   }
+  
+  .corMat <- function(nvars, cors) {
+    
+    assertLength(cors = cors, length = choose(nvars, 2))
+    cm <- .fillCor(nvars, cors)
+    assertPositiveDefinite(corMat = cm)
+    
+    cm
+    
+  }
+  
+  .arxRandMat <- function(nvars) {
+    
+    posDef <- FALSE
+    
+    while (!posDef) {
+      x <- stats::rbeta((nvars - 1), 1, 1)
+      x <- x[order(x, decreasing = TRUE)]
+      cm <- .fillCor(nvars, cors = .structCors(x))
+      
+      eigenValues <- unlist(eigen(cm, only.values = TRUE))
+      if (all(eigenValues > 0)) posDef <- TRUE
+    }
+    
+    assertPositiveDefinite(corMat = cm)
+    cm
+    
+  }
+  
+  if ( !is.null(cors) & (corstr == "structured")) {
+    
+    assertEqual(nlusters = nclusters, val = 1)
+    assertLength(nvars = nvars, length = 1)
+    assertLength(cors = cors, length = (nvars - 1))
+    cm <- .corMat(nvars, cors = .structCors(cors))
+      
+  } else if ( !is.null(cors) & (corstr != "structured") ) {  
+    
+    assertEqual(nlusters = nclusters, val = 1)
+    assertLength(nvars = nvars, length = 1)
+    cm <- .corMat(nvars, cors)
 
-  assertPositiveDefinite(corMat = cm)
+  } else if ( is.null(cors) & is.null(rho) & (corstr == "arx") ) {
+    
+    if (nclusters == 1) {
+      
+      assertLength(nvars = nvars, length = 1)
+      cm <- .arxRandMat(nvars)
+      
+    } else {
+      
+      if (length(nvars) == 1) nvars <- rep(nvars, nclusters)
+      assertLength(nvars = nvars, length = nclusters)
+      
+      cm <- lapply(nvars, function(x) .arxRandMat(x))
+      
+    }
+
+  } else if ( is.null(cors) & is.null(rho) & (corstr != "arx") )  {
+
+    if (nclusters == 1) {
+      
+      assertLength(nvars = nvars, length = 1)
+      cm <- .randMat(nvars)
+      
+    } else {
+      
+      if (length(nvars) == 1) nvars <- rep(nvars, nclusters)
+        
+      assertLength(nvars = nvars, length = nclusters)
+      cm <- lapply(nvars, function(x) .randMat(x))
+      
+    }
+
+  } else if  (is.null(cors) & !is.null(rho)) {
+
+    if (nclusters == 1) {
+      
+      assertLength(nvars = nvars, length = nclusters)
+      assertLength(rho = rho, length = nclusters)
+      cm <- .rhoMat(nvars, rho, corstr)
+      
+    } else {
+
+      if (length(nvars) == 1) nvars <- rep(nvars, nclusters)
+      if (length(rho) == 1) rho <- rep(rho, nclusters)
+      assertLength(nvars = nvars, length = nclusters)
+      assertLength(rho = rho, length = nclusters)
+
+      xx <- data.table(nvars = nvars, rho = rho, corstr = rep(corstr, nclusters))
+      cm <- lapply(split(xx, seq(nrow(xx))), function(x) .rhoMat(x$nvars, x$rho, x$corstr))
+      
+    }
+  }
+  
   cm
+  
 }
-
 
 #' @title Generate correlated ordinal categorical data
 #' @description This function is deprecated, please use [genOrdCat] instead.
@@ -585,4 +679,351 @@ genCorOrdCat <- function(dtName, idname = "id", adjVar = NULL, baseprobs,
     corMatrix = corMatrix,
     asFactor = FALSE
   )
+}
+
+
+
+# internal function used by blockExchangeMat and blockDecayMat
+
+.genMat <- function(ninds, nperiods, rho_w, rho_b, rho_a, r, pattern, type) {
+  
+  .assignDiag <- function(block, value) {
+    diag(block) <- value
+    return(block)
+  }
+  
+  diagblocks <- lapply(1:nperiods, function(x) matrix(rho_w, nrow = ninds[x], ncol = ninds[x]))
+  diagblocks <- lapply(1:nperiods, function(x) .assignDiag(diagblocks[[x]],1))
+  
+  if (type == "exchange") {
+    
+    combos <- utils::combn(ninds, 2)
+    ncombos <- ncol(combos)
+    lower <- lapply(1:ncombos, 
+                    function(x) matrix(rho_b, nrow = combos[2, x], ncol = combos[1, x]))
+    
+    offdiag <- append(lower, lapply(lower, function(x) t(x)))
+    
+    if (pattern == "cohort") {
+      offdiag <- lapply(1:(ncombos*2), function(x) .assignDiag(offdiag[[x]], rho_a))  
+    }
+    
+  } else if (type == "decay") {
+    
+    combos <- utils::combn(ninds, 2)
+    ncombos <- ncol(combos)
+    z <- unlist(lapply((nperiods-1):1, function(x) 1:x))
+    lower <- lapply(1:ncombos, 
+                    function(x) matrix(rho_w*(r^z[x]), nrow = combos[2, x], ncol = combos[1, x]))
+    
+    offdiag <- append(lower, lapply(lower, function(x) t(x)))
+    
+    if (pattern == "cohort") {
+      z <- c(z, z)
+      offdiag <- lapply(1:(ncombos*2), function(x) .assignDiag(offdiag[[x]], r^z[x]))  
+    }
+  }
+  
+  # construct block matrix from diagblocks and offdiag
+  
+  names(diagblocks) <- paste0("D", 1:nperiods)
+  names(offdiag) <- paste0("O", c(1 : (ncombos * 2)))
+  
+  blocks <- diagblocks
+  blocks <- append(blocks, offdiag)
+  
+  block_str <- matrix(0, nperiods, nperiods)
+  block_str[lower.tri(block_str)] <- paste0("O", c((ncombos + 1) : (ncombos*2) ))
+  block_str <- t(block_str)
+  block_str[lower.tri(block_str)] <- paste0("O", c(1 : ncombos ))
+  diag(block_str) <- names(diagblocks)
+  
+  cbinds <- NULL
+  for (i in 1: nperiods) {
+    cbinds[[i]] <- do.call("cbind", lapply(1:nperiods, function(x) blocks[[ block_str[i, x] ]]))  
+  }
+  newCorMatrix <- do.call("rbind", cbinds)
+  
+  # Check and return
+  
+  assertPositiveDefinite(newCorMatrix = newCorMatrix)
+  
+  newCorMatrix
+  
+}
+
+#' Create a block correlation matrix with exchangeable structure
+#' @description  The function \code{blockExchangeMat} generates exchangeable correlation matrices that 
+#' can accommodate clustered observations over time where the within-cluster 
+#' between-individual correlation in the same time period can be different from the 
+#' within-cluster between-individual correlation across time periods. The matrix
+#' generated here can be used in function \code{addCorGen}.
+#' @param ninds The number of units (individuals) in each cluster in each period. 
+#' @param nperiods The number periods that data are observed.
+#' @param rho_w The within-period/between-individual correlation coefficient between -1 and 1. 
+#' @param rho_b The between-period/between-individual correlation coefficient between -1 and 1. 
+#' @param rho_a The between-period/within-individual auto-correlation coefficient
+#' between -1 and 1.
+#' @param pattern A string argument with options "xsection" (default) or "cohort".
+#' @param nclusters An integer that indicates the number of matrices that will be generated.
+#' @return A single correlation matrix or a list of matrices of potentially
+#' different sizes with length indicated by \code{nclusters}.
+#' @details Two general exchangeable correlation structures are currently supported: a *cross-sectional* exchangeable
+#' structure and a *closed cohort* exchangeable structure. In the *cross-sectional* case, individuals or units in each time period are distinct.
+#' In the *closed cohort* structure, individuals or units are repeated in each time period. 
+#' The desired structure is specified using \code{pattern}, which defaults to "xsection" if not specified. \code{rho_a} is the within-individual/unit 
+#' exchangeable correlation over time, and can only be used when \code{xsection = FALSE}.
+#' 
+#' This function can generate correlation matrices of different sizes, depending on the combination of arguments provided. 
+#' A single matrix will be generated when \code{nclusters == 1} (the default), and a list of matrices of matrices will be generated when
+#' \code{nclusters > 1}.
+#' 
+#' If \code{nclusters > 1}, the length of \code{ninds} will depend on if sample sizes will vary by cluster
+#' and/or period. There are three scenarios,  and function evaluates the length of \code{ninds} to determine which approach 
+#' to take:
+#' 
+#' \itemize{
+#' 
+#' \item{if the sample size is the same for all clusters in all periods, \code{ninds} will be
+#' a single value (i.e., length = 1).}
+#' 
+#' \item{if the sample size differs by cluster but is the same for each period within each cluster
+#' each period, then \code{ninds} will have a value for each cluster (i.e., length = \code{nclusters}).} 
+#' 
+#' \item{if the sample size differs across clusters and across periods within clusters, \code{ninds} will have a
+#' value for each cluster-period combination (i.e., length = \code{nclusters x nperiods}).} This option is
+#' only valid when \code{pattern = "xsection"}.
+#' 
+#' }
+#' 
+#' In addition, \code{rho_w}, \code{rho_b}, and \code{rho_a} can be specified as a single value (in which case they are consistent
+#' across all clusters) or as a vector of length \code{nclusters}, in which case any or all of these parameters can vary by cluster.
+#' 
+#' See vignettes for more details.
+#' 
+#' @references Li et al. Mixed-effects models for the design and analysis of stepped wedge cluster randomized trials: An overview. 
+#' Statistical Methods in Medical Research. 2021;30(2):612-639. doi:10.1177/0962280220932962
+#' 
+#' @seealso \code{\link{blockDecayMat}} and \code{\link{addCorGen}}
+#' 
+#' @examples
+#' blockExchangeMat(ninds = 4, nperiods = 3, rho_w = .8)
+#' blockExchangeMat(ninds = 4, nperiods = 3, rho_w = .8, rho_b = 0.5)
+#' blockExchangeMat(ninds = 4, nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, 
+#'     pattern = "cohort")
+#' blockExchangeMat(ninds = 2, nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, 
+#'     nclusters = 3, pattern = "cohort")
+#' blockExchangeMat(ninds = c(2, 3), nperiods = 3, rho_w = .8, rho_b = 0.5, rho_a = 0.7, 
+#'     nclusters = 2, pattern="cohort")
+#' blockExchangeMat(ninds = c(2, 3, 4, 4, 2, 1), nperiods = 3, rho_w = .8, rho_b = 0.5, 
+#'     nclusters = 2)
+#' @export
+#' @concept correlated
+blockExchangeMat <- function(ninds, nperiods, rho_w, rho_b = 0, rho_a = NULL, 
+                             pattern = "xsection", nclusters = 1) {
+  ### Checking
+  
+  # check rho_a and pattern == "cohort"
+
+  assertNotMissing(
+    ninds = missing(ninds),
+    nperiods = missing(nperiods),
+    rho_w = missing(rho_w)
+  )
+  
+  assertInteger(ninds = ninds, nperiods = nperiods, nclusters = nclusters)
+  assertAtLeast(nperiods = nperiods, minVal = 2)
+  assertInRange(rho_b = rho_b, rho_w = rho_w, range = c(-1,1))
+  if (!is.null(rho_a))  assertInRange(rho_a = rho_a, range = c(-1,1))
+
+  assertOption(pattern = pattern, options = c("xsection", "cohort"))
+  
+  if (!is.null(rho_a) & pattern == "xsection") {
+    stop("rho_a has been specified but is not valid for a cross-sectional design")
+  }
+  
+  if (is.null(rho_a) & pattern == "cohort") {
+    stop("A cohort design has been specified so rho_a must also be specified")
+  }
+  
+  ### generate blocks
+  
+  if (length(ninds) == 1) {
+    ninds <- matrix(ninds, nclusters, nperiods, byrow = T)
+  } else if (length(ninds) == nclusters) {
+    ninds <- rep(ninds, each = nperiods )
+    ninds <- matrix(ninds, nclusters, nperiods, byrow = T)
+  } else if (length(ninds) == nclusters*nperiods) {
+    if (pattern == "cohort") stop("The number of individuals per period must be constant across periods with a cohort design")
+    ninds <- matrix(ninds, nclusters, nperiods, byrow = T)
+  } else {
+    stop("Length of ninds must be 1, nclusters, or nclusters x nperiods (for cross-section only)")
+  }
+  
+  if (length(rho_w) == 1) rho_w <- rep(rho_w, nclusters)
+  if (length(rho_b) == 1) rho_b <- rep(rho_b, nclusters)
+  if (length(rho_a) == 1) rho_a <- rep(rho_a, nclusters)
+  
+  assertLength(rho_w = rho_w, length = nclusters)
+  assertLength(rho_b = rho_b, length = nclusters)
+  if (!is.null(rho_a)) assertLength(rho_a = rho_a, length = nclusters)
+   
+  dd <- lapply(1:nclusters, 
+               function(x) list(
+                 ninds = ninds[x,], 
+                 rho_w = rho_w[x], 
+                 rho_b = rho_b[x], 
+                 rho_a = rho_a[x]
+               )
+  )
+  
+  cm <- lapply(dd, function(x) {
+    .genMat(ninds = x$ninds, 
+            nperiods = nperiods,
+            rho_w = x$rho_w, 
+            rho_b = x$rho_b,
+            rho_a = x$rho_a,
+            r = NULL,
+            pattern = pattern,
+            type = "exchange"
+    ) }
+  )
+    
+  if (nclusters == 1) cm <- cm[[1]]
+  cm
+  
+}
+
+#' Create a block correlation matrix
+#' @description  The function genBlockMat() generates correlation matrices that 
+#' can accommodate clustered observations over time where the within-cluster 
+#' between-individual correlation in the same time period can be different from the 
+#' within-cluster between-individual correlation across time periods.The matrix
+#' generated here can be used in function addCorGen().
+#' @param ninds The number of units (individuals) in each cluster in each period. 
+#' @param nperiods The number periods that data are observed.
+#' @param rho_w The within-period/between-individual correlation coefficient between -1 and 1. 
+#' @param r The decay parameter if correlation declines over time, and can have values of
+#' "exp" or "prop". See details.
+#' @param pattern A string argument with options "xsection" (default) or "cohort".
+#' @param nclusters An integer that indicates the number of matrices that will be generated.
+
+#' @param nclusters An integer that indicates the number of matrices that will be generated.
+#' @return A single correlation matrix of size \code{nvars x nvars}, or a list of matrices of potentially
+#' different sizes with length indicated by \code{nclusters}.
+#' @return A single correlation matrix or a list of matrices of potentially
+#' different sizes with length indicated by \code{nclusters}.
+#' @details Two general decay correlation structures are currently supported: a *cross-sectional* 
+#' exchangeable structure and a *closed cohort* exchangeable structure. In the *cross-sectional* 
+#' case, individuals or units in each time period are distinct. In the *closed cohort* structure, 
+#' individuals or units are repeated in each time period. The desired structure is specified 
+#' using \code{pattern}, which defaults to "xsection" if not specified. 
+#' 
+#' This function can generate correlation matrices of different sizes, depending on the 
+#' combination of arguments provided. A single matrix will be generated when 
+#' \code{nclusters == 1} (the default), and a list of matrices of matrices will be generated when
+#' \code{nclusters > 1}.
+#' 
+#' If \code{nclusters > 1}, the length of \code{ninds} will depend on if sample sizes will vary by cluster
+#' and/or period. There are three scenarios,  and function evaluates the length of \code{ninds} to 
+#' determine which approach to take:
+#' 
+#' \itemize{
+#' 
+#' \item{if the sample size is the same for all clusters in all periods, \code{ninds} will be
+#' a single value (i.e., length = 1).}
+#' 
+#' \item{if the sample size differs by cluster but is the same for each period within each cluster
+#' each period, then \code{ninds} will have a value for each cluster (i.e., length = \code{nclusters}).} 
+#' 
+#' \item{if the sample size differs across clusters and across periods within clusters, \code{ninds} will have a
+#' value for each cluster-period combination (i.e., length = \code{nclusters x nperiods}).} This option is
+#' only valid when \code{pattern = "xsection"}.
+#' 
+#' }
+#' 
+#' In addition, \code{rho_w} and \code{r} can be specified as a single value (in which case they are consistent
+#' across all clusters) or as a vector of length \code{nclusters}, in which case either one or 
+#' both of these parameters can vary by cluster.
+#' 
+#' See vignettes for more details.
+#' 
+#' @references Li et al. Mixed-effects models for the design and analysis of stepped wedge 
+#' cluster randomized trials: An overview. Statistical Methods in Medical Research. 
+#' 2021;30(2):612-639. doi:10.1177/0962280220932962
+#' 
+#' @seealso \code{\link{blockExchangeMat}} and \code{\link{addCorGen}}
+#' 
+#' @examples
+#' blockDecayMat(ninds = 4, nperiods = 3, rho_w = .8, r = .9)
+#' blockDecayMat(ninds = 4, nperiods = 3, rho_w = .8, r = .9, pattern = "cohort")
+#' 
+#' blockDecayMat(ninds = 2, nperiods = 3, rho_w = .8, r = .9, pattern = "cohort", nclusters=2)
+#' blockDecayMat(ninds = c(2, 3), nperiods = 3, rho_w = c(.8,0.7), r = c(.9,.8), 
+#'   pattern = "cohort", nclusters=2)
+#' blockDecayMat(ninds = c(2, 3, 4, 4, 2, 1), nperiods = 3, rho_w = .8, r = .9, nclusters=2)
+#' 
+#' @export
+#' @concept correlated
+blockDecayMat <- function(ninds, nperiods, rho_w, r, pattern = "xsection", nclusters = 1) {
+  
+  ### Checking
+  
+  assertNotMissing(
+    ninds = missing(ninds),
+    nperiods = missing(nperiods),
+    rho_w = missing(rho_w),
+    r = missing(r)
+  )
+  
+  assertInteger(ninds = ninds, nperiods = nperiods, nclusters = nclusters)
+  assertAtLeast(nperiods = nperiods, minVal = 2)
+  assertInRange(rho_w = rho_w, range = c(-1,1))
+  assertInRange(r = r, range = c(0,1))
+  
+  assertOption(pattern = pattern, options = c("xsection", "cohort"))
+  
+  ### generate blocks
+  
+  if (length(ninds) == 1) {
+    ninds <- matrix(ninds, nclusters, nperiods, byrow = T)
+  } else if (length(ninds) == nclusters) {
+    ninds <- rep(ninds, each = nperiods )
+    ninds <- matrix(ninds, nclusters, nperiods, byrow = T)
+  } else if (length(ninds) == nclusters*nperiods) {
+    if (pattern == "cohort") stop("The number of individuals per period must be constant across periods with a cohort design")
+    ninds <- matrix(ninds, nclusters, nperiods, byrow = T)
+  } else {
+    stop("Length of ninds must be 1, nclusters, or nclusters x nperiods (for cross-section only)")
+  }
+  
+  if (length(rho_w) == 1) rho_w <- rep(rho_w, nclusters)
+  if (length(r) == 1) r <- rep(r, nclusters)
+  
+  assertLength(rho_w = rho_w, length = nclusters)
+  assertLength(r = r, length = nclusters)
+  
+  dd <- lapply(1:nclusters, 
+               function(x) list(
+                 ninds = ninds[x,], 
+                 rho_w = rho_w[x], 
+                 r = r[x]
+               )
+  )
+  
+  cm <- lapply(dd, function(x) {
+    .genMat(ninds = x$ninds, 
+            nperiods = nperiods,
+            rho_w = x$rho_w, 
+            rho_b = NULL,
+            rho_a = NULL,
+            r = x$r,
+            pattern = pattern,
+            type = "decay"
+    ) }
+  )
+  
+  if (nclusters == 1) cm <- cm[[1]]
+  cm
+ 
 }

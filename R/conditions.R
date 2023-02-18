@@ -49,6 +49,24 @@ lengthError <- function(names,
   stop(c)
 }
 
+#' Value below threshold error
+#'
+#' @param names Names of fields below threshold
+#' @param prop Which property should hold e.g. "equal".
+#' @param call sys.call to pass on to the error.
+#' @param msg Error message as glueCollapse'able string.
+#' @noRd
+minError <- function(names,
+                        value = 1,
+                        call = sys.call(-1),
+                        msg = "{ names *} should be at least { value }!", ...) {
+  c <- condition(
+    c("simstudy::minError", "error"),
+    glueCollapse(msg), call, ...
+  )
+  stop(c)
+}
+
 #' Order Error
 #'
 #' @param name Name of the incorrectly ordered vector
@@ -135,6 +153,26 @@ typeError <- function(names, type, call = sys.call(-1), msg = "", ...) {
 
   c <- condition(
     c("simstudy::wrongType", "error"),
+    message, call, ...
+  )
+  stop(c)
+}
+
+#' Null Error
+#'
+#' @param names Names of the vars.
+#' @param call sys.call to pass on to the error.
+#' @param msg Additional information for the error message as
+#' glueCollapse'able string.
+#' @noRd
+nullError <- function(names, call = sys.call(-1), msg = "", ...) {
+  message <- glueCollapse(
+    "{ names *} should not be NULL!",
+    msg
+  )
+  
+  c <- condition(
+    c("simstudy::nullError", "error"),
     message, call, ...
   )
   stop(c)
@@ -402,6 +440,26 @@ notEqualError <- function(names, val, call = sys.call(-1), msg = "", ...) {
 
   c <- condition(
     c("simstudy::notEqual", "error"),
+    message, call, ...
+  )
+  stop(c)
+}
+
+#' Variables not equal to value error.
+#'
+#' @param names Names of the variables.
+#' @param val Value to be not equal to.
+#' @param call sys.call to pass on to the error.
+#' @param msg Additional information for the error message as
+#' glueCollapse'able string.
+#' @noRd
+equalError <- function(names, val, call = sys.call(-1), msg = "", ...) {
+  message <- glueCollapse(
+    "{ names *} equal to {val}!", msg
+  )
+  
+  c <- condition(
+    c("simstudy::equal", "error"),
     message, call, ...
   )
   stop(c)
