@@ -104,9 +104,9 @@ assertAtLeastLength <- function(..., length, call = sys.call(-1)) {
   }
 }
 
-#' Are all elements of vector probabilities?
+#' Are all elements greater than or equal to a value?
 #'
-#' @description Checks if passed vector includes only proper probabilities
+#' @description Checks if passed vector is >= a minimum value
 #' @param vec Vector under consideration
 #' @noRd
 assertAtLeast <- function(..., minVal, call = sys.call(-1)) {
@@ -456,7 +456,7 @@ ensureMatrix <- function(var) {
 #' @description Checks if Matrix is positiv definite,
 #' @param ... A matrix as named element e.g. var1 = var1.
 #' @noRd
-assertPositiveDefinite <- function(..., call = sys.call(-1)) {
+assertPositiveSemiDefinite <- function(..., call = sys.call(-1)) {
   stopifnot(...length() == 1)
   dots <- dots2argNames(...)
   matrix <- dots$args[[1]]
@@ -464,7 +464,7 @@ assertPositiveDefinite <- function(..., call = sys.call(-1)) {
   eigenValues <- round(unlist(eigen(matrix, only.values = TRUE)), 8)
 
   if (!all(eigenValues >= 0) || !isSym) {
-    notPositiveDefiniteError(dots$names, call = call)
+    notPositiveSemiDefiniteError(dots$names, call = call)
   }
 }
 
@@ -537,6 +537,8 @@ assertInRange <- function(...,
       )
     )
   }
+  
+  dots$args <- lapply(dots$args, range)
 
   notInRange <- !sapply(dots$args, inRange)
 

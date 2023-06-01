@@ -84,3 +84,15 @@ ggplot(data=dtStudent,aes(x=factor(idClass),y=test,group=idClass)) +
   theme(legend.key=element_rect(fill=NA)) +
   ggtheme()
 
+## -----------------------------------------------------------------------------
+d1 <- defData(varname = "clustSize", formula = 120, dist = "clusterSize")
+
+genData(8, d1, id = "site")
+genData(7, d1, id = "site")
+
+## -----------------------------------------------------------------------------
+d1 <- defData(varname = "clustSize", formula = 120, 
+  variance = .1, dist = "clusterSize")
+
+genData(8, d1, id = "site")
+

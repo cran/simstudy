@@ -236,6 +236,9 @@ gammaGetShapeRate <- function(mean, dispersion) {
 #' specified when distribution is "gamma".
 #' @return A vector of values that represents the variances of random effects
 #' at the cluster level that correspond to the ICC vector.
+#' @references Nakagawa, Shinichi, and Holger Schielzeth. "A general and simple 
+#' method for obtaining R2 from generalized linear mixed‐effects models." 
+#' Methods in ecology and evolution 4, no. 2 (2013): 133-142.
 #' @examples
 #' targetICC <- seq(0.05, 0.20, by = .01)
 #'
@@ -255,7 +258,7 @@ iccRE <- function(ICC, dist, varTotal = NULL, varWithin = NULL, lambda = NULL, d
   if (dist == "poisson") {
     if (is.null(lambda)) stop("Specify a value for lambda")
 
-    vars <- unlist(lapply(ICC, function(x) .findPoisVar(1 / lambda * x / (1 - x))))
+    vars <- unlist(lapply(ICC, function(x) .findPoisVar(x, lambda)))
   } else if (dist == "binary") {
     vars <- unlist(lapply(ICC, function(x) (x / (1 - x) * (pi^2) / 3)))
   } else if (dist == "normal") {
@@ -803,6 +806,8 @@ survGetParams <- function(points) {
 #' define the line. Defaults to 100.
 #' @param scale An optional scale parameter that defaults to 1. If the value is 
 #' 1, the scale of the distribution is determined entirely by the argument "f".
+#' @param limits A vector of length 2 that specifies x-axis limits for the plot. 
+#' The default is NULL, in which case no limits are imposed.
 #' @return A ggplot of the survival curve defined by the specified parameters.
 #' If the argument points is specified, the plot will include them
 #' @examples
@@ -810,9 +815,11 @@ survGetParams <- function(points) {
 #' r <- survGetParams(points)
 #' survParamPlot(r[1], r[2])
 #' survParamPlot(r[1], r[2], points = points)
+#' survParamPlot(r[1], r[2], points = points, limits = c(0, 100))
 #' @export
 #' @concept utility
-survParamPlot <- function(formula, shape, points = NULL, n = 100, scale = 1) {
+survParamPlot <- function(formula, shape, points = NULL, n = 100, scale = 1, 
+                          limits = NULL) {
   
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop(
@@ -841,22 +848,38 @@ survParamPlot <- function(formula, shape, points = NULL, n = 100, scale = 1) {
     p = round(1 - cumsum(rep(1/length(u), length(u))), 3)
   )
   
+  if (!is.null(limits)) {
+    dd <- dd[ ( ( T >= limits[1] ) & ( T <= limits[2] ) ) ]  
+  }
+  
   p <- ggplot2::ggplot(data = dd, ggplot2::aes(x = T, y = p)) +
     ggplot2::geom_line(linewidth = 0.8) +
     ggplot2::scale_y_continuous(limits = c(0,1), name = "probability of survival") +
-    ggplot2::scale_x_continuous(name = "time") +
     ggplot2::theme(panel.grid = ggplot2::element_blank(),
-          axis.text = ggplot2::element_text(size = 7.5),
-          axis.title = ggplot2::element_text(size = 8, face = "bold")
+                   axis.text = ggplot2::element_text(size = 7.5),
+                   axis.title = ggplot2::element_text(size = 8, face = "bold")
     )
   
+  if (!is.null(limits)) {
+    p <- p + ggplot2::scale_x_continuous(name = "time", limits = limits)
+  } else {
+    p <- p + ggplot2::scale_x_continuous(name = "time") 
+  }
+  
   if (!is.null(points)) {
-    dpoints <- as.data.frame(do.call(rbind, points))  
+    
+    dpoints <- data.table::as.data.table(do.call(rbind, points))  
+    
+    if (!is.null(limits)) {
+      dpoints <- dpoints[ ( ( V1 >= limits[1] ) & ( V1 <= limits[2] ) ) ]  
+    }
+    
     return(
       p +     
         ggplot2::geom_point(data = dpoints, ggplot2::aes(x = V1, y = V2), 
-                    pch = 21, fill = "#DCC949", size = 2.5) 
+                            pch = 21, fill = "#DCC949", size = 2.5) 
     )
+    
   } else return(p)
   
 }
