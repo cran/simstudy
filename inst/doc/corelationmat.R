@@ -1,4 +1,7 @@
-## ---- echo = FALSE, message = FALSE-------------------------------------------
+## ----chunkname, echo=-1-------------------------------------------------------
+data.table::setDTthreads(2)
+
+## ----echo = FALSE, message = FALSE--------------------------------------------
 library(simstudy)
 library(ggplot2)
 library(scales)
@@ -28,14 +31,14 @@ ggtheme <- function(panelback = "white") {
   
 }
 
-## ---- message=FALSE-----------------------------------------------------------
+## ----message=FALSE------------------------------------------------------------
 library(simstudy)
 library(data.table)
 set.seed(37265)
 
 genCorMat(4)
 
-## ---- message=FALSE-----------------------------------------------------------
+## ----message=FALSE------------------------------------------------------------
 R <- genCorMat(4, cors = c(0.6, 0.4, 0.2, 0.5, 0.3, 0.8))
 R
 
@@ -48,7 +51,7 @@ head(dd)
 ## -----------------------------------------------------------------------------
 round(cor(as.matrix(dd[, -1])), 1)
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 matform <- "
 R = \\left (
 \\begin{matrix} 
@@ -65,7 +68,7 @@ katex::katex_html(matform, include_css = TRUE)
 ## -----------------------------------------------------------------------------
 genCorMat(nvars = 4, rho = 0.6, corstr = "cs")
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 matform <- "
 R = \\left (
 \\begin{matrix} 
@@ -82,7 +85,7 @@ katex::katex_html(matform)
 ## -----------------------------------------------------------------------------
 genCorMat(nvars = 4, rho = 0.6, corstr = "ar1")
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 matform <- "\\footnotesize{
 
 R = \\left ( \\begin{array}{c|c|c|c}
@@ -212,7 +215,7 @@ dd <- addCorGen(dc, idvar = "site", param1 = "lambda", corMatrix = RC,
 
 dd
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  replicate <- function(R, dc) {
 #    reps <- lapply(1:5000, function(x)
 #    addCorGen(dc, idvar = "site", param1 = "lambda", corMatrix = R,
@@ -228,7 +231,7 @@ dd
 #  replicate(R = RC, dc = dc)
 #  
 
-## ---- eval=TRUE---------------------------------------------------------------
+## ----eval=TRUE----------------------------------------------------------------
 d1 <- defData(varname = "n", formula = 20, dist = "noZeroPoisson")
 d1 <- defData(d1, varname = "mu", formula = 10, variance = 8, dist = "normal")
 d1 <- defData(d1, varname = "s2", formula = 4, dist = "nonrandom")
@@ -252,7 +255,7 @@ dd <- addCorGen(dc, idvar = "site", param1 = "mu", param2 = "s2",
 
 dd
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 library(katex)
 matform <- "\\footnotesize{
 
@@ -311,7 +314,7 @@ R = \\left ( \\begin{array}{c|c|c}
 
 katex_html(matform)
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 matform <- "\\footnotesize{
 
 R = \\left ( \\begin{array}{c|c|c}
@@ -369,7 +372,7 @@ R = \\left ( \\begin{array}{c|c|c}
 
 katex_html(matform)
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 matform <- "\\footnotesize{
 
 R = \\left ( \\begin{array}{c|c|c}
@@ -427,7 +430,7 @@ R = \\left ( \\begin{array}{c|c|c}
 
 katex_html(matform)
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 matform <- "\\footnotesize{
 
 R = \\left ( \\begin{array}{c|c|c}
@@ -509,7 +512,7 @@ R_XD
 dd <- genCorGen(n = 5000, nvars = 6, corMatrix = R_XD,
   dist = "poisson", params1 = 7, wide = TRUE)
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 round(cor(as.matrix(dd[, -1])), 2)
 
 ## -----------------------------------------------------------------------------
@@ -521,7 +524,7 @@ R_CE
 dd <- genCorGen(n = 5000, nvars = 6, corMatrix = R_CE,
   dist = "poisson", params1 = 7, wide = TRUE)
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 round(cor(as.matrix(dd[, -1])), 2)
 
 ## -----------------------------------------------------------------------------
@@ -533,7 +536,7 @@ R_CD
 dd <- genCorGen(n = 5000, nvars = 6, corMatrix = R_CD,
   dist = "poisson", params1 = 7, wide = TRUE)
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 round(cor(as.matrix(dd[, -1])), 2)
 
 ## -----------------------------------------------------------------------------
@@ -563,7 +566,7 @@ R <- blockDecayMat(ninds = N , nperiods = 3, rho_w = 0.6, r = r, nclusters = 10)
 
 lapply(R, function(x) round(x,2))[c(1, 3, 7)]
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  reps <- lapply(1:5000,
 #    function(x) addCorGen(dd, idvar = "site", corMatrix = R,
 #      dist = "poisson", param1 = "lambda", cnames = "y")

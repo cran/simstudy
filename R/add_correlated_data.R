@@ -317,7 +317,6 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #' # Long example
 #'
 #' def <- defData(varname = "xbase", formula = 5, variance = .4, dist = "gamma", id = "cid")
-#' def <- defData(def, "nperiods", formula = 3, dist = "noZeroPoisson")
 #'
 #' def2 <- defDataAdd(
 #'   varname = "p", formula = "-3+.2*period + .3*xbase",
@@ -328,6 +327,11 @@ addCorFlex <- function(dt, defs, rho = 0, tau = NULL, corstr = "cs",
 #'
 #' dtLong <- addPeriods(dt, idvars = "cid", nPeriods = 3)
 #' dtLong <- addColumns(def2, dtLong)
+#' 
+#' addCorGen(
+#'   dtOld = dtLong, idvar = "cid", nvars = NULL, rho = .7, corstr = "cs",
+#'   dist = "binary", param1 = "p"
+#' )
 #'
 #' @concept correlated
 #' @export
@@ -468,7 +472,8 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
   }
   
   dtTemp[, seq_ := 1:.N, keyby = .id]
-  
+  nvars <- dtTemp[.id == 1, .N] # only permits case where number of records per id is the same
+
   ####
 
   if (method == "copula") {
@@ -478,15 +483,18 @@ addCorGen <- function(dtOld, nvars=NULL, idvar = "id", rho=NULL, corstr=NULL, co
       dtM <- rbindlist(
         lapply(ns, function(x) .genQuantU(x$N, 1, rho, corstr, corMatrix[[x$.id]])) 
       )
+      dtTemp[, .U := dtM$Unew]
     } else {
-      ns <- as.list(dtTemp[, .N, keyby = .id][,N])
-      dtM <- rbindlist(
-        lapply(ns, function(x) .genQuantU(x, 1, rho, corstr, corMatrix))
-      ) 
+      if (is.null(corMatrix)) {
+        corMatrix <- .buildCorMat(nvars, corMatrix = NULL, rho = rho, corstr = corstr)
+      }
+      ns <- nrow(dtTemp[, .N, keyby = .id])
+      Unew <- c(t(mvnfast::rmvn(n = ns, mu = rep(0, nvars), sigma = corMatrix)))
+    
+      dtTemp[, .U := stats::pnorm(Unew)]
     }
     
-    dtTemp[, .U := dtM$Unew]
-    dtTemp[, seq := dtM$seq]
+    # dtTemp[, seq := dtM$seq]
     
     if (dist == "poisson") {
       setnames(dtTemp, param1, ".param1")

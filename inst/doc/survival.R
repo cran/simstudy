@@ -1,4 +1,7 @@
-## ---- echo = FALSE, message = FALSE-------------------------------------------
+## ----chunkname, echo=-1-------------------------------------------------------
+data.table::setDTthreads(2)
+
+## ----echo = FALSE, message = FALSE--------------------------------------------
 library(simstudy)
 # library(ggplot2)
 library(scales)
@@ -8,7 +11,7 @@ library(survival)
 library(gee)
 library(data.table)
 
-## ---- echo = FALSE------------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 plotcolors <- c("#B84226", "#1B8445", "#1C5974")
 
 cbbPalette <- c("#B84226","#B88F26", "#A5B435", "#1B8446",
@@ -29,7 +32,7 @@ ggtheme <- function(panelback = "white") {
   
 }
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 
 # Baseline data definitions
 
@@ -46,7 +49,7 @@ sdef <- defSurv(sdef, varname = "censorTime", scale = 80, shape = 1)
 sdef
 
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 
 # Baseline data definitions
 
@@ -60,7 +63,7 @@ head(dtSurv)
 dtSurv[,round(mean(survTime),1), keyby = .(grp,x1)]
 
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 dtSurv <- genData(300, def)
 dtSurv <- genSurv(dtSurv, sdef, timeName = "obsTime", 
             censorName = "censorTime", eventName = "status", 
@@ -72,7 +75,7 @@ head(dtSurv)
 
 dtSurv[,round(1-mean(status),2), keyby = .(grp,x1)]
 
-## ---- tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE----
+## ----tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE----
 fit <- survfit(Surv(obsTime, status) ~ x1+grp, data=dtSurv)
 
 survminer::ggsurvplot(fit, data = dtSurv,
@@ -83,7 +86,7 @@ survminer::ggsurvplot(fit, data = dtSurv,
     #                        panel.grid = ggplot2::element_blank())
 )
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 
 # Baseline data definitions
 
@@ -101,7 +104,7 @@ dtSurv <- genSurv(dtSurv, sdef, timeName = "obsTime",
 
 coxfit <- survival::coxph(Surv(obsTime, status) ~ x1 + x2, data = dtSurv)
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 gtsummary::tbl_regression(coxfit)
 
 ## -----------------------------------------------------------------------------
@@ -122,7 +125,7 @@ dtSurv <- addCompRisk(dtSurv, events = c("event_1", "event_2", "censor"),
             timeName = "time", censorName = "censor")
 dtSurv
 
-## ---- tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE----
+## ----tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE----
 fit <- survfit(Surv(time, event, type="mstate") ~ 1, data=dtSurv)
 survminer::ggcompetingrisks(fit, ggtheme = ggtheme("grey94"))  + 
   ggplot2::scale_fill_manual(values = cbbPalette)
@@ -132,7 +135,7 @@ dtSurv <- genData(101, d1)
 dtSurv <- genSurv(dtSurv, dS, timeName = "time", censorName = "censor")
 dtSurv
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 def <- defData(varname = "x", formula = .4, dist="binary")
 
 defS <- defSurv(varname = "death", formula = "-14.6 - 0.7*x", shape = .35)
@@ -143,7 +146,7 @@ dd <- genSurv(dd, defS, digits = 2, timeName = "time", censorName = "censor")
 
 fit <- survfit( Surv(time, event) ~ x, data = dd )
 
-## ---- tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE----
+## ----tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE----
 survminer::ggsurvplot(fit, data = dd, 
                       ggtheme = ggtheme("grey94"),
                       palette = cbbPalette
@@ -152,13 +155,13 @@ survminer::ggsurvplot(fit, data = dd,
 ## -----------------------------------------------------------------------------
 coxfit <- coxph(formula = Surv(time, event) ~ x, data = dd)
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 gtsummary::tbl_regression(coxfit)
 
 ## -----------------------------------------------------------------------------
 cox.zph(coxfit)
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 def <- defData(varname = "x", formula = .4, dist="binary")
 
 defS <- defSurv(varname = "death", formula = "-14.6 - 1.3*x", shape = .35, transition = 0)
@@ -170,7 +173,7 @@ dd <- genSurv(dd, defS, digits = 2, timeName = "time", censorName = "censor")
 
 fit <- survfit( Surv(time, event) ~ x, data = dd )
 
-## ---- tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE----
+## ----tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE----
 survminer::ggsurvplot(fit, data = dd, 
                       ggtheme = ggtheme("grey94"),
                       palette = cbbPalette
@@ -179,7 +182,7 @@ survminer::ggsurvplot(fit, data = dd,
 ## -----------------------------------------------------------------------------
 coxfit <- survival::coxph(formula = Surv(time, event) ~ x, data = dd)
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 gtsummary::tbl_regression(coxfit)
 
 ## -----------------------------------------------------------------------------
@@ -191,7 +194,7 @@ dd2 <- survSplit(Surv(time, event) ~ ., data= dd, cut=c(150),
 
 coxfit2 <- survival::coxph(Surv(tstart, time, event) ~ x:strata(tgroup), data=dd2)
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 gtsummary::tbl_regression(coxfit2)
 
 ## -----------------------------------------------------------------------------
@@ -202,7 +205,7 @@ points <- list(c(100, 0.80), c(200, 0.10))
 r <- survGetParams(points)
 r
 
-## ---- tidy = TRUE, fig.width = 6.5, fig.height = 3.5, warning=FALSE-----------
+## ----tidy = TRUE, fig.width = 6.5, fig.height = 3.5, warning=FALSE------------
 survParamPlot(f = r[1], shape = r[2], points)
 
 ## -----------------------------------------------------------------------------
@@ -213,7 +216,7 @@ defS <- defSurv(defS, varname = "censor", formula = 0, scale = exp(18.5), shape 
 dd <- genData(500)
 dd <- genSurv(dd, defS, timeName = "time", censorName = "censor")
 
-## ---- tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE----
+## ----tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 3.5, warning=FALSE----
 fit <- survfit( Surv(time, event) ~ 1, data = dd )
 
 survminer::ggsurvplot(fit, data = dd, 

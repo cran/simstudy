@@ -356,16 +356,16 @@ intervention. In addition, test scores vary by schools, and by
 classrooms, so the simulation provides <em>random effects</em> at each
 of these levels.</p>
 <p>We start by defining the school level data:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>gen.school <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;s0&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;normal&quot;</span>, <span class="at">formula =</span> <span class="dv">0</span>, <span class="at">variance =</span> <span class="dv">3</span>,</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">id =</span> <span class="st">&quot;idSchool&quot;</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>gen.school <span class="ot">&lt;-</span> <span class="fu">defData</span>(gen.school, <span class="at">varname =</span> <span class="st">&quot;nClasses&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;noZeroPoisson&quot;</span>, <span class="at">formula =</span> <span class="dv">3</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">282721</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>dtSchool <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">8</span>, gen.school)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>dtSchool <span class="ot">&lt;-</span> <span class="fu">trtAssign</span>(dtSchool, <span class="at">n =</span> <span class="dv">2</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>dtSchool</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>gen.school <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;s0&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;normal&quot;</span>, <span class="at">formula =</span> <span class="dv">0</span>, <span class="at">variance =</span> <span class="dv">3</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>    <span class="at">id =</span> <span class="st">&quot;idSchool&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>gen.school <span class="ot">&lt;-</span> <span class="fu">defData</span>(gen.school, <span class="at">varname =</span> <span class="st">&quot;nClasses&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;noZeroPoisson&quot;</span>, <span class="at">formula =</span> <span class="dv">3</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">282721</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>dtSchool <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">8</span>, gen.school)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>dtSchool <span class="ot">&lt;-</span> <span class="fu">trtAssign</span>(dtSchool, <span class="at">n =</span> <span class="dv">2</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>dtSchool</span></code></pre></div>
 <pre><code>##    idSchool         s0 nClasses trtGrp
 ## 1:        1  0.9732297        3      1
 ## 2:        2  3.5741932        4      1
@@ -378,14 +378,14 @@ of these levels.</p>
 <p>The classroom level data are generated with a call to
 <code>genCluster</code>, and then school level data is added by a call
 to <code>addColumns</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>gen.class <span class="ot">&lt;-</span> <span class="fu">defDataAdd</span>(<span class="at">varname =</span> <span class="st">&quot;c0&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;normal&quot;</span>, <span class="at">formula =</span> <span class="dv">0</span>, <span class="at">variance =</span> <span class="dv">2</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gen.class <span class="ot">&lt;-</span> <span class="fu">defDataAdd</span>(gen.class, <span class="at">varname =</span> <span class="st">&quot;nStudents&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;noZeroPoisson&quot;</span>,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> <span class="dv">20</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>dtClass <span class="ot">&lt;-</span> <span class="fu">genCluster</span>(dtSchool, <span class="st">&quot;idSchool&quot;</span>, <span class="at">numIndsVar =</span> <span class="st">&quot;nClasses&quot;</span>, <span class="at">level1ID =</span> <span class="st">&quot;idClass&quot;</span>)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>dtClass <span class="ot">&lt;-</span> <span class="fu">addColumns</span>(gen.class, dtClass)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dtClass, <span class="dv">10</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>gen.class <span class="ot">&lt;-</span> <span class="fu">defDataAdd</span>(<span class="at">varname =</span> <span class="st">&quot;c0&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;normal&quot;</span>, <span class="at">formula =</span> <span class="dv">0</span>, <span class="at">variance =</span> <span class="dv">2</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>gen.class <span class="ot">&lt;-</span> <span class="fu">defDataAdd</span>(gen.class, <span class="at">varname =</span> <span class="st">&quot;nStudents&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;noZeroPoisson&quot;</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>    <span class="at">formula =</span> <span class="dv">20</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>dtClass <span class="ot">&lt;-</span> <span class="fu">genCluster</span>(dtSchool, <span class="st">&quot;idSchool&quot;</span>, <span class="at">numIndsVar =</span> <span class="st">&quot;nClasses&quot;</span>, <span class="at">level1ID =</span> <span class="st">&quot;idClass&quot;</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>dtClass <span class="ot">&lt;-</span> <span class="fu">addColumns</span>(gen.class, dtClass)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="fu">head</span>(dtClass, <span class="dv">10</span>)</span></code></pre></div>
 <pre><code>##     idSchool        s0 nClasses trtGrp idClass          c0 nStudents
 ##  1:        1 0.9732297        3      1       1  1.62726560        16
 ##  2:        1 0.9732297        3      1       2 -0.69640102        16
@@ -398,16 +398,16 @@ to <code>addColumns</code>:</p>
 ##  9:        3 0.1121028        3      0       9  0.07024057        19
 ## 10:        3 0.1121028        3      0      10  1.09465368        21</code></pre>
 <p>Finally, the student level data are added using the same process:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>gen.student <span class="ot">&lt;-</span> <span class="fu">defDataAdd</span>(<span class="at">varname =</span> <span class="st">&quot;Male&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>,</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> <span class="fl">0.5</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>gen.student <span class="ot">&lt;-</span> <span class="fu">defDataAdd</span>(gen.student, <span class="at">varname =</span> <span class="st">&quot;age&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;uniform&quot;</span>,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> <span class="st">&quot;9.5; 10.5&quot;</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>gen.student <span class="ot">&lt;-</span> <span class="fu">defDataAdd</span>(gen.student, <span class="at">varname =</span> <span class="st">&quot;test&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;normal&quot;</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> <span class="st">&quot;50 - 5*Male + s0 + c0 + 8 * trtGrp&quot;</span>, <span class="at">variance =</span> <span class="dv">2</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>dtStudent <span class="ot">&lt;-</span> <span class="fu">genCluster</span>(dtClass, <span class="at">cLevelVar =</span> <span class="st">&quot;idClass&quot;</span>, <span class="at">numIndsVar =</span> <span class="st">&quot;nStudents&quot;</span>,</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">level1ID =</span> <span class="st">&quot;idChild&quot;</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>dtStudent <span class="ot">&lt;-</span> <span class="fu">addColumns</span>(gen.student, dtStudent)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>gen.student <span class="ot">&lt;-</span> <span class="fu">defDataAdd</span>(<span class="at">varname =</span> <span class="st">&quot;Male&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>,</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>    <span class="at">formula =</span> <span class="fl">0.5</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>gen.student <span class="ot">&lt;-</span> <span class="fu">defDataAdd</span>(gen.student, <span class="at">varname =</span> <span class="st">&quot;age&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;uniform&quot;</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="at">formula =</span> <span class="st">&quot;9.5; 10.5&quot;</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>gen.student <span class="ot">&lt;-</span> <span class="fu">defDataAdd</span>(gen.student, <span class="at">varname =</span> <span class="st">&quot;test&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;normal&quot;</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>    <span class="at">formula =</span> <span class="st">&quot;50 - 5*Male + s0 + c0 + 8 * trtGrp&quot;</span>, <span class="at">variance =</span> <span class="dv">2</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>dtStudent <span class="ot">&lt;-</span> <span class="fu">genCluster</span>(dtClass, <span class="at">cLevelVar =</span> <span class="st">&quot;idClass&quot;</span>, <span class="at">numIndsVar =</span> <span class="st">&quot;nStudents&quot;</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>    <span class="at">level1ID =</span> <span class="st">&quot;idChild&quot;</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>dtStudent <span class="ot">&lt;-</span> <span class="fu">addColumns</span>(gen.student, dtStudent)</span></code></pre></div>
 <p>This is what the clustered data look like. Each classroom is
 represented by a box, and each school is represented by a color. The
 intervention group is highlighted by dark outlines:</p>
@@ -429,9 +429,9 @@ dispersion parameter (in the variance field) Indicating a dispersion of
 0 (the default) implies exact balance, and larger values of dispersion
 imply more variability in the cluster sizes.</p>
 <p>Here are two examples with exact or close to exact balance:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;clustSize&quot;</span>, <span class="at">formula =</span> <span class="dv">120</span>, <span class="at">dist =</span> <span class="st">&quot;clusterSize&quot;</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">genData</span>(<span class="dv">8</span>, d1, <span class="at">id =</span> <span class="st">&quot;site&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;clustSize&quot;</span>, <span class="at">formula =</span> <span class="dv">120</span>, <span class="at">dist =</span> <span class="st">&quot;clusterSize&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">genData</span>(<span class="dv">8</span>, d1, <span class="at">id =</span> <span class="st">&quot;site&quot;</span>)</span></code></pre></div>
 <pre><code>##    site clustSize
 ## 1:    1        15
 ## 2:    2        15
@@ -441,7 +441,7 @@ imply more variability in the cluster sizes.</p>
 ## 6:    6        15
 ## 7:    7        15
 ## 8:    8        15</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">genData</span>(<span class="dv">7</span>, d1, <span class="at">id =</span> <span class="st">&quot;site&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">genData</span>(<span class="dv">7</span>, d1, <span class="at">id =</span> <span class="st">&quot;site&quot;</span>)</span></code></pre></div>
 <pre><code>##    site clustSize
 ## 1:    1        17
 ## 2:    2        17
@@ -451,10 +451,10 @@ imply more variability in the cluster sizes.</p>
 ## 6:    6        18
 ## 7:    7        17</code></pre>
 <p>This is a second example with variability across sites:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;clustSize&quot;</span>, <span class="at">formula =</span> <span class="dv">120</span>, </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">variance =</span> .<span class="dv">1</span>, <span class="at">dist =</span> <span class="st">&quot;clusterSize&quot;</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">genData</span>(<span class="dv">8</span>, d1, <span class="at">id =</span> <span class="st">&quot;site&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;clustSize&quot;</span>, <span class="at">formula =</span> <span class="dv">120</span>, </span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="at">variance =</span> .<span class="dv">1</span>, <span class="at">dist =</span> <span class="st">&quot;clusterSize&quot;</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="fu">genData</span>(<span class="dv">8</span>, d1, <span class="at">id =</span> <span class="st">&quot;site&quot;</span>)</span></code></pre></div>
 <pre><code>##    site clustSize
 ## 1:    1        22
 ## 2:    2        14

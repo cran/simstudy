@@ -414,21 +414,21 @@ shift of the threshold for each of the categories is identical.</p>
 <h2>Simulation</h2>
 <p>To generate ordered categorical data using <code>simstudy</code>,
 there is a function <code>genOrdCat</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>baseprobs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.31</span>, <span class="fl">0.29</span>, .<span class="dv">20</span>, <span class="fl">0.20</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>defA <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;exposed&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;1;1&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;trtAssign&quot;</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>defA <span class="ot">&lt;-</span> <span class="fu">defData</span>(defA, <span class="at">varname =</span> <span class="st">&quot;z&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;-0.7*exposed&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;nonrandom&quot;</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">130</span>)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>dT_1_cat <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">25000</span>, defA)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>dX <span class="ot">&lt;-</span> <span class="fu">genOrdCat</span>(dT_1_cat, <span class="at">adjVar =</span> <span class="st">&quot;z&quot;</span>, baseprobs, <span class="at">catVar =</span> <span class="st">&quot;r&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>baseprobs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.31</span>, <span class="fl">0.29</span>, .<span class="dv">20</span>, <span class="fl">0.20</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>defA <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;exposed&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;1;1&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;trtAssign&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>defA <span class="ot">&lt;-</span> <span class="fu">defData</span>(defA, <span class="at">varname =</span> <span class="st">&quot;z&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;-0.7*exposed&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;nonrandom&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">130</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>dT_1_cat <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">25000</span>, defA)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>dX <span class="ot">&lt;-</span> <span class="fu">genOrdCat</span>(dT_1_cat, <span class="at">adjVar =</span> <span class="st">&quot;z&quot;</span>, baseprobs, <span class="at">catVar =</span> <span class="st">&quot;r&quot;</span>)</span></code></pre></div>
 <p>Estimating the parameters of the model using function
 <code>clm</code>, we can recover the original parameters quite well.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ordinal)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>clmFit <span class="ot">&lt;-</span> <span class="fu">clm</span>(r <span class="sc">~</span> exposed, <span class="at">data =</span> dX)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(clmFit)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(ordinal)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>clmFit <span class="ot">&lt;-</span> <span class="fu">clm</span>(r <span class="sc">~</span> exposed, <span class="at">data =</span> dX)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">summary</span>(clmFit)</span></code></pre></div>
 <pre><code>## formula: r ~ exposed
 ## data:    dX
 ## 
@@ -453,16 +453,16 @@ the <span class="math inline">\(\alpha_i\)</span>’s in the model - and
 match the thresholds for the unexposed group.</p>
 <p>The log of the cumulative odds for groups 1 to 4 from the data
 without exposure are</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>(logOdds.unexp <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fu">odds</span>(<span class="fu">cumsum</span>(dX[exposed <span class="sc">==</span> <span class="dv">0</span>, <span class="fu">prop.table</span>(<span class="fu">table</span>(r))])))[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>(logOdds.unexp <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fu">odds</span>(<span class="fu">cumsum</span>(dX[exposed <span class="sc">==</span> <span class="dv">0</span>, <span class="fu">prop.table</span>(<span class="fu">table</span>(r))])))[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])</span></code></pre></div>
 <pre><code>##     1     2     3 
 ## -0.83  0.38  1.36</code></pre>
 <p>And under exposure:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>(logOdds.expos <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fu">odds</span>(<span class="fu">cumsum</span>(dX[exposed <span class="sc">==</span> <span class="dv">1</span>, <span class="fu">prop.table</span>(<span class="fu">table</span>(r))])))[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>(logOdds.expos <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fu">odds</span>(<span class="fu">cumsum</span>(dX[exposed <span class="sc">==</span> <span class="dv">1</span>, <span class="fu">prop.table</span>(<span class="fu">table</span>(r))])))[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])</span></code></pre></div>
 <pre><code>##      1      2      3 
 ## -0.084  1.135  2.147</code></pre>
 <p>The log of the cumulative odds ratios for each of the four groups
 is</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>logOdds.expos <span class="sc">-</span> logOdds.unexp</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>logOdds.expos <span class="sc">-</span> logOdds.unexp</span></code></pre></div>
 <pre><code>##    1    2    3 
 ## 0.75 0.76 0.79</code></pre>
 <p>A plot of the modeled cumulative probabilities (the lines) shows that
@@ -488,22 +488,22 @@ indicates the variable(s) for which the non-proportional assumption is
 violated, and <code>npAdj</code> indicates the various shifts of the
 intervals. (Note that the last cut point is at <code>Inf</code>, so
 there is no impact of a shift related to that threshold.)</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>baseprobs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.31</span>, <span class="fl">0.29</span>, .<span class="dv">20</span>, <span class="fl">0.20</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>npAdj <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.4</span>, <span class="fl">0.0</span>, <span class="sc">-</span><span class="fl">1.7</span>, <span class="dv">0</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>dX <span class="ot">&lt;-</span> <span class="fu">genOrdCat</span>(dT_1_cat, <span class="at">baseprobs =</span> baseprobs, <span class="at">adjVar =</span> <span class="st">&quot;z&quot;</span>,</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">catVar =</span> <span class="st">&quot;r&quot;</span>, <span class="at">npVar =</span> <span class="st">&quot;exposed&quot;</span>, <span class="at">npAdj =</span> npAdj)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>baseprobs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.31</span>, <span class="fl">0.29</span>, .<span class="dv">20</span>, <span class="fl">0.20</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>npAdj <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.4</span>, <span class="fl">0.0</span>, <span class="sc">-</span><span class="fl">1.7</span>, <span class="dv">0</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>dX <span class="ot">&lt;-</span> <span class="fu">genOrdCat</span>(dT_1_cat, <span class="at">baseprobs =</span> baseprobs, <span class="at">adjVar =</span> <span class="st">&quot;z&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>                <span class="at">catVar =</span> <span class="st">&quot;r&quot;</span>, <span class="at">npVar =</span> <span class="st">&quot;exposed&quot;</span>, <span class="at">npAdj =</span> npAdj)</span></code></pre></div>
 <p>The calculation of the log cumulative odds follows as before:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>(logOdds.unexp <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fu">odds</span>(<span class="fu">cumsum</span>(dX[exposed <span class="sc">==</span> <span class="dv">0</span>, <span class="fu">prop.table</span>(<span class="fu">table</span>(r))])))[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>(logOdds.unexp <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fu">odds</span>(<span class="fu">cumsum</span>(dX[exposed <span class="sc">==</span> <span class="dv">0</span>, <span class="fu">prop.table</span>(<span class="fu">table</span>(r))])))[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])</span></code></pre></div>
 <pre><code>##     1     2     3 
 ## -0.80  0.42  1.40</code></pre>
 <p>And under exposure:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>(logOdds.expos <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fu">odds</span>(<span class="fu">cumsum</span>(dX[exposed <span class="sc">==</span> <span class="dv">1</span>, <span class="fu">prop.table</span>(<span class="fu">table</span>(r))])))[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>(logOdds.expos <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fu">odds</span>(<span class="fu">cumsum</span>(dX[exposed <span class="sc">==</span> <span class="dv">1</span>, <span class="fu">prop.table</span>(<span class="fu">table</span>(r))])))[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])</span></code></pre></div>
 <pre><code>##    1    2    3 
 ## 0.29 1.10 3.72</code></pre>
 <p>But, now, the log of the cumulative odds ratios for each of the four
 groups varies across the different levels.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>logOdds.expos <span class="sc">-</span> logOdds.unexp</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>logOdds.expos <span class="sc">-</span> logOdds.unexp</span></code></pre></div>
 <pre><code>##    1    2    3 
 ## 1.09 0.69 2.32</code></pre>
 <p>This is confirmed by a plot of the model fit with a proportional odds
@@ -532,23 +532,23 @@ can be specified.</p>
 possible responses: “none”, “some”, “a lot”. The probabilities of
 response are specified in a <span class="math inline">\(5 \times
 3\)</span> matrix, and the rows sum to 1:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>baseprobs <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.1</span>, <span class="fl">0.7</span>,</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                      <span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>,</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                      <span class="fl">0.5</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>,</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                      <span class="fl">0.4</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>,</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                      <span class="fl">0.6</span>, <span class="fl">0.2</span>, <span class="fl">0.2</span>), </span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">nrow =</span> <span class="dv">5</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co"># generate the data</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">333</span>)                     </span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>dT_5_cat <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">10000</span>)</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>dX <span class="ot">&lt;-</span> <span class="fu">genOrdCat</span>(dT_5_cat, <span class="at">adjVar =</span> <span class="cn">NULL</span>, <span class="at">baseprobs =</span> baseprobs, </span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>                   <span class="at">prefix =</span> <span class="st">&quot;q&quot;</span>, <span class="at">rho =</span> <span class="fl">0.15</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="at">asFactor =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>baseprobs <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.1</span>, <span class="fl">0.7</span>,</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>                      <span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>                      <span class="fl">0.5</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>                      <span class="fl">0.4</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>                      <span class="fl">0.6</span>, <span class="fl">0.2</span>, <span class="fl">0.2</span>), </span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>                    <span class="at">nrow =</span> <span class="dv">5</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="co"># generate the data</span></span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">333</span>)                     </span>
+<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a>dT_5_cat <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">10000</span>)</span>
+<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a>dX <span class="ot">&lt;-</span> <span class="fu">genOrdCat</span>(dT_5_cat, <span class="at">adjVar =</span> <span class="cn">NULL</span>, <span class="at">baseprobs =</span> baseprobs, </span>
+<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a>                   <span class="at">prefix =</span> <span class="st">&quot;q&quot;</span>, <span class="at">rho =</span> <span class="fl">0.15</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="at">asFactor =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <p>The observed correlation of the items is slightly less than the
 specified correlations as expected:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(dX[, <span class="fu">cor</span>(<span class="fu">cbind</span>(q1, q2, q3, q4, q5))], <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">round</span>(dX[, <span class="fu">cor</span>(<span class="fu">cbind</span>(q1, q2, q3, q4, q5))], <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>##      q1   q2   q3   q4   q5
 ## q1 1.00 0.08 0.10 0.10 0.08
 ## q2 0.08 1.00 0.09 0.09 0.09
@@ -557,20 +557,20 @@ specified correlations as expected:</p>
 ## q5 0.08 0.09 0.11 0.10 1.00</code></pre>
 <p>However, the marginal probability distributions of each item match
 quite closely with the specified probabilities:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dM <span class="ot">&lt;-</span> <span class="fu">melt</span>(dX, <span class="at">id.vars =</span> <span class="st">&quot;id&quot;</span>)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>dProp <span class="ot">&lt;-</span> dM[ , <span class="fu">prop.table</span>(<span class="fu">table</span>(value)), by <span class="ot">=</span> variable]</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>dProp[, response <span class="sc">:</span><span class="er">=</span> <span class="fu">rep</span>(<span class="fu">seq</span>(<span class="dv">3</span>), <span class="dv">5</span>)]</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># observed probabilities</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dcast</span>(dProp, variable <span class="sc">~</span> response, <span class="at">value.var =</span> <span class="st">&quot;V1&quot;</span>, <span class="at">fill =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>dM <span class="ot">&lt;-</span> <span class="fu">melt</span>(dX, <span class="at">id.vars =</span> <span class="st">&quot;id&quot;</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>dProp <span class="ot">&lt;-</span> dM[ , <span class="fu">prop.table</span>(<span class="fu">table</span>(value)), by <span class="ot">=</span> variable]</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>dProp[, response <span class="sc">:=</span> <span class="fu">rep</span>(<span class="fu">seq</span>(<span class="dv">3</span>), <span class="dv">5</span>)]</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="co"># observed probabilities</span></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a><span class="fu">dcast</span>(dProp, variable <span class="sc">~</span> response, <span class="at">value.var =</span> <span class="st">&quot;V1&quot;</span>, <span class="at">fill =</span> <span class="dv">0</span>)</span></code></pre></div>
 <pre><code>##    variable    1    2    3
 ## 1:       q1 0.20 0.10 0.70
 ## 2:       q2 0.69 0.21 0.10
 ## 3:       q3 0.50 0.20 0.30
 ## 4:       q4 0.40 0.20 0.40
 ## 5:       q5 0.60 0.20 0.21</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># specified probabilities</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>baseprobs</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># specified probabilities</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>baseprobs</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3]
 ## [1,]  0.2  0.1  0.7
 ## [2,]  0.7  0.2  0.1
@@ -581,23 +581,23 @@ quite closely with the specified probabilities:</p>
 AR-1, so the correlation between questions closer to each other is
 higher than for questions farther apart. But the probability
 distributions are unaffected:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dX <span class="ot">&lt;-</span> <span class="fu">genOrdCat</span>(dT_5_cat, <span class="at">adjVar =</span> <span class="cn">NULL</span>, <span class="at">baseprobs =</span> baseprobs, </span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">prefix =</span> <span class="st">&quot;q&quot;</span>, <span class="at">rho =</span> <span class="fl">0.40</span>, <span class="at">corstr =</span> <span class="st">&quot;ar1&quot;</span>, <span class="at">asFactor =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># correlation</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(dX[, <span class="fu">cor</span>(<span class="fu">cbind</span>(q1, q2, q3, q4, q5))], <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>dX <span class="ot">&lt;-</span> <span class="fu">genOrdCat</span>(dT_5_cat, <span class="at">adjVar =</span> <span class="cn">NULL</span>, <span class="at">baseprobs =</span> baseprobs, </span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>                   <span class="at">prefix =</span> <span class="st">&quot;q&quot;</span>, <span class="at">rho =</span> <span class="fl">0.40</span>, <span class="at">corstr =</span> <span class="st">&quot;ar1&quot;</span>, <span class="at">asFactor =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="co"># correlation</span></span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a><span class="fu">round</span>(dX[, <span class="fu">cor</span>(<span class="fu">cbind</span>(q1, q2, q3, q4, q5))], <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>##      q1   q2   q3   q4   q5
 ## q1 1.00 0.22 0.10 0.05 0.02
 ## q2 0.22 1.00 0.29 0.10 0.03
 ## q3 0.10 0.29 1.00 0.31 0.11
 ## q4 0.05 0.10 0.31 1.00 0.29
 ## q5 0.02 0.03 0.11 0.29 1.00</code></pre>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>dM <span class="ot">&lt;-</span> <span class="fu">melt</span>(dX, <span class="at">id.vars =</span> <span class="st">&quot;id&quot;</span>)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>dProp <span class="ot">&lt;-</span> dM[ , <span class="fu">prop.table</span>(<span class="fu">table</span>(value)), by <span class="ot">=</span> variable]</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>dProp[, response <span class="sc">:</span><span class="er">=</span> <span class="fu">rep</span>(<span class="fu">seq</span>(<span class="dv">3</span>), <span class="dv">5</span>)]</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"># probabilities</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dcast</span>(dProp, variable <span class="sc">~</span> response, <span class="at">value.var =</span> <span class="st">&quot;V1&quot;</span>, <span class="at">fill =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>dM <span class="ot">&lt;-</span> <span class="fu">melt</span>(dX, <span class="at">id.vars =</span> <span class="st">&quot;id&quot;</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>dProp <span class="ot">&lt;-</span> dM[ , <span class="fu">prop.table</span>(<span class="fu">table</span>(value)), by <span class="ot">=</span> variable]</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>dProp[, response <span class="sc">:=</span> <span class="fu">rep</span>(<span class="fu">seq</span>(<span class="dv">3</span>), <span class="dv">5</span>)]</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a><span class="co"># probabilities</span></span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a><span class="fu">dcast</span>(dProp, variable <span class="sc">~</span> response, <span class="at">value.var =</span> <span class="st">&quot;V1&quot;</span>, <span class="at">fill =</span> <span class="dv">0</span>)</span></code></pre></div>
 <pre><code>##    variable    1    2     3
 ## 1:       q1 0.20 0.10 0.692
 ## 2:       q2 0.70 0.20 0.099

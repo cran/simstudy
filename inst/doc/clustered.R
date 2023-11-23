@@ -1,4 +1,7 @@
-## ---- echo = FALSE, message = FALSE-------------------------------------------
+## ----chunkname, echo=-1-------------------------------------------------------
+data.table::setDTthreads(2)
+
+## ----echo = FALSE, message = FALSE--------------------------------------------
 library(simstudy)
 library(ggplot2)
 library(scales)
@@ -29,7 +32,7 @@ ggtheme <- function(panelback = "white") {
 }
 
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 gen.school <- defData(varname="s0", dist = "normal", 
                       formula = 0, variance = 3, id = "idSchool"
 )
@@ -45,7 +48,7 @@ dtSchool <- trtAssign(dtSchool, n = 2)
 dtSchool
 
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 gen.class <- defDataAdd(varname = "c0", dist = "normal", formula = 0, 
                      variance = 2)
 gen.class <- defDataAdd(gen.class, varname = "nStudents", dist = "noZeroPoisson", formula = 20
@@ -56,7 +59,7 @@ dtClass <- addColumns(gen.class, dtClass)
 
 head(dtClass, 10)
 
-## ---- tidy = TRUE, tidy.opts= list(width.cutoff = 60)-------------------------
+## ----tidy = TRUE, tidy.opts= list(width.cutoff = 60)--------------------------
 gen.student <- defDataAdd(varname="Male", dist="binary", formula=0.5)
 gen.student <- defDataAdd(gen.student, varname="age", dist = "uniform", formula="9.5; 10.5")
 gen.student <- defDataAdd(gen.student, varname="test", dist = "normal",
@@ -65,7 +68,7 @@ dtStudent <- genCluster(dtClass,cLevelVar="idClass", numIndsVar = "nStudents",  
 
 dtStudent <- addColumns(gen.student, dtStudent)
 
-## ---- tidy = TRUE, echo = FALSE, fig.width = 7, fig.height = 3----------------
+## ----tidy = TRUE, echo = FALSE, fig.width = 7, fig.height = 3-----------------
 ggplot(data=dtStudent,aes(x=factor(idClass),y=test,group=idClass)) +
   geom_boxplot(aes(color=factor(trtGrp), fill = factor(idSchool)))+
   xlab("Classes")+

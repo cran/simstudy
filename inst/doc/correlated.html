@@ -353,19 +353,19 @@ deviations <code>sigma</code>, and either a correlation matrix
 <code>corMatrix</code> or a correlation coefficient <code>rho</code> and
 a correlation structure <code>corsrt</code>. Here are a few
 examples:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># specifying a specific correlation matrix C</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>C <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">0.7</span>, <span class="dv">1</span>, <span class="fl">0.8</span>, <span class="fl">0.2</span>, <span class="fl">0.8</span>, <span class="dv">1</span>), <span class="at">nrow =</span> <span class="dv">3</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>C</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># specifying a specific correlation matrix C</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>C <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">0.7</span>, <span class="dv">1</span>, <span class="fl">0.8</span>, <span class="fl">0.2</span>, <span class="fl">0.8</span>, <span class="dv">1</span>), <span class="at">nrow =</span> <span class="dv">3</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>C</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3]
 ## [1,]  1.0  0.7  0.2
 ## [2,]  0.7  1.0  0.8
 ## [3,]  0.2  0.8  1.0</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">282726</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># generate 3 correlated variables with different location and scale for each</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># field</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">genCorData</span>(<span class="dv">1000</span>, <span class="at">mu =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">12</span>, <span class="dv">3</span>), <span class="at">sigma =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="at">corMatrix =</span> C)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>dt</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">282726</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># generate 3 correlated variables with different location and scale for each</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co"># field</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">genCorData</span>(<span class="dv">1000</span>, <span class="at">mu =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">12</span>, <span class="dv">3</span>), <span class="at">sigma =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="at">corMatrix =</span> C)</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>dt</span></code></pre></div>
 <pre><code>##         id       V1       V2        V3
 ##    1:    1 4.125728 12.92567  3.328106
 ##    2:    2 4.712100 14.26502  8.876664
@@ -378,24 +378,24 @@ examples:</p>
 ##  998:  998 3.856643 13.17697  4.720628
 ##  999:  999 4.738479 12.64438  2.979415
 ## 1000: 1000 5.766867 13.51827  1.693172</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate correlation matrix</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>dt[, <span class="fu">round</span>(<span class="fu">cor</span>(<span class="fu">cbind</span>(V1, V2, V3)), <span class="dv">1</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># estimate correlation matrix</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>dt[, <span class="fu">round</span>(<span class="fu">cor</span>(<span class="fu">cbind</span>(V1, V2, V3)), <span class="dv">1</span>)]</span></code></pre></div>
 <pre><code>##     V1  V2  V3
 ## V1 1.0 0.7 0.2
 ## V2 0.7 1.0 0.8
 ## V3 0.2 0.8 1.0</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate standard deviation</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dt[, <span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">var</span>(<span class="fu">cbind</span>(V1, V2, V3)))), <span class="dv">1</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># estimate standard deviation</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>dt[, <span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">var</span>(<span class="fu">cbind</span>(V1, V2, V3)))), <span class="dv">1</span>)]</span></code></pre></div>
 <pre><code>##  V1  V2  V3 
 ## 0.9 1.9 3.0</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate 3 correlated variables with different location but same standard</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># deviation and compound symmetry (cs) correlation matrix with correlation</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># coefficient = 0.4.  Other correlation matrix structures are &#39;independent&#39;</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># (&#39;ind&#39;) and &#39;auto-regressive&#39; (&#39;ar1&#39;).</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">genCorData</span>(<span class="dv">1000</span>, <span class="at">mu =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">12</span>, <span class="dv">3</span>), <span class="at">sigma =</span> <span class="dv">3</span>, <span class="at">rho =</span> <span class="fl">0.4</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="at">cnames =</span> <span class="fu">c</span>(<span class="st">&quot;x0&quot;</span>,</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>))</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>dt</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># generate 3 correlated variables with different location but same standard</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co"># deviation and compound symmetry (cs) correlation matrix with correlation</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co"># coefficient = 0.4.  Other correlation matrix structures are &#39;independent&#39;</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co"># (&#39;ind&#39;) and &#39;auto-regressive&#39; (&#39;ar1&#39;).</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">genCorData</span>(<span class="dv">1000</span>, <span class="at">mu =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">12</span>, <span class="dv">3</span>), <span class="at">sigma =</span> <span class="dv">3</span>, <span class="at">rho =</span> <span class="fl">0.4</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="at">cnames =</span> <span class="fu">c</span>(<span class="st">&quot;x0&quot;</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>    <span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>))</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>dt</span></code></pre></div>
 <pre><code>##         id        x0        x1         x2
 ##    1:    1 7.1160161 14.294748  4.0251237
 ##    2:    2 3.5429823  8.299333  4.5620657
@@ -408,28 +408,28 @@ examples:</p>
 ##  998:  998 3.3079075 11.909745 -0.7375013
 ##  999:  999 3.7934154 10.515881  2.6021325
 ## 1000: 1000 5.6413141 13.513672  7.5321371</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate correlation matrix</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>dt[, <span class="fu">round</span>(<span class="fu">cor</span>(<span class="fu">cbind</span>(x0, x1, x2)), <span class="dv">1</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># estimate correlation matrix</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>dt[, <span class="fu">round</span>(<span class="fu">cor</span>(<span class="fu">cbind</span>(x0, x1, x2)), <span class="dv">1</span>)]</span></code></pre></div>
 <pre><code>##     x0  x1  x2
 ## x0 1.0 0.5 0.4
 ## x1 0.5 1.0 0.4
 ## x2 0.4 0.4 1.0</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate standard deviation</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>dt[, <span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">var</span>(<span class="fu">cbind</span>(x0, x1, x2)))), <span class="dv">1</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># estimate standard deviation</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>dt[, <span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">var</span>(<span class="fu">cbind</span>(x0, x1, x2)))), <span class="dv">1</span>)]</span></code></pre></div>
 <pre><code>##  x0  x1  x2 
 ## 2.9 3.0 3.0</code></pre>
 <p>The new data generated by <code>genCorData</code> can be merged with
 an existing data set. Alternatively, <code>addCorData</code> will do
 this directly:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define and generate the original data set</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;x&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;normal&quot;</span>, <span class="at">formula =</span> <span class="dv">0</span>, <span class="at">variance =</span> <span class="dv">1</span>, <span class="at">id =</span> <span class="st">&quot;cid&quot;</span>)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">1000</span>, def)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># add new correlate fields a0 and a1 to &#39;dt&#39;</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">addCorData</span>(dt, <span class="at">idname =</span> <span class="st">&quot;cid&quot;</span>, <span class="at">mu =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="at">sigma =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="fl">0.2</span>), <span class="at">rho =</span> <span class="sc">-</span><span class="fl">0.2</span>,</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="at">cnames =</span> <span class="fu">c</span>(<span class="st">&quot;a0&quot;</span>, <span class="st">&quot;a1&quot;</span>))</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>dt</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># define and generate the original data set</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;x&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;normal&quot;</span>, <span class="at">formula =</span> <span class="dv">0</span>, <span class="at">variance =</span> <span class="dv">1</span>, <span class="at">id =</span> <span class="st">&quot;cid&quot;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">1000</span>, def)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co"># add new correlate fields a0 and a1 to &#39;dt&#39;</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">addCorData</span>(dt, <span class="at">idname =</span> <span class="st">&quot;cid&quot;</span>, <span class="at">mu =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="at">sigma =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="fl">0.2</span>), <span class="at">rho =</span> <span class="sc">-</span><span class="fl">0.2</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>    <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="at">cnames =</span> <span class="fu">c</span>(<span class="st">&quot;a0&quot;</span>, <span class="st">&quot;a1&quot;</span>))</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>dt</span></code></pre></div>
 <pre><code>##        cid          x          a0          a1
 ##    1:    1 -0.4707940  0.97711194 -0.09127123
 ##    2:    2 -1.8723668  2.70498417 -0.27102780
@@ -442,13 +442,13 @@ this directly:</p>
 ##  998:  998  0.1015744 -0.09821567  0.06440723
 ##  999:  999 -0.5788317  0.16870967 -0.03890117
 ## 1000: 1000 -1.6175613  3.61182553 -0.46220263</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate correlation matrix</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>dt[, <span class="fu">round</span>(<span class="fu">cor</span>(<span class="fu">cbind</span>(a0, a1)), <span class="dv">1</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># estimate correlation matrix</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>dt[, <span class="fu">round</span>(<span class="fu">cor</span>(<span class="fu">cbind</span>(a0, a1)), <span class="dv">1</span>)]</span></code></pre></div>
 <pre><code>##      a0   a1
 ## a0  1.0 -0.2
 ## a1 -0.2  1.0</code></pre>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate standard deviation</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>dt[, <span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">var</span>(<span class="fu">cbind</span>(a0, a1)))), <span class="dv">1</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co"># estimate standard deviation</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>dt[, <span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">var</span>(<span class="fu">cbind</span>(a0, a1)))), <span class="dv">1</span>)]</span></code></pre></div>
 <pre><code>##  a0  a1 
 ## 2.0 0.2</code></pre>
 <div id="correlated-data-additional-distributions" class="section level2">
@@ -466,10 +466,10 @@ first example, we are generating data from a multivariate Poisson
 distribution. We start by specifying the mean of the Poisson
 distribution for each new variable, and then we specify the correlation
 structure, just as we did with the normal distribution.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>l <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">12</span>) <span class="co"># lambda for each new variable</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">genCorGen</span>(<span class="dv">1000</span>, <span class="at">nvars =</span> <span class="dv">3</span>, <span class="at">params1 =</span> l, <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">rho =</span> .<span class="dv">3</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="at">wide =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>dx</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>l <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">12</span>) <span class="co"># lambda for each new variable</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">genCorGen</span>(<span class="dv">1000</span>, <span class="at">nvars =</span> <span class="dv">3</span>, <span class="at">params1 =</span> l, <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">rho =</span> .<span class="dv">3</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="at">wide =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>dx</span></code></pre></div>
 <pre><code>##         id V1 V2 V3
 ##    1:    1  5 16 13
 ##    2:    2  9  9  6
@@ -482,14 +482,14 @@ structure, just as we did with the normal distribution.</p>
 ##  998:  998  6  8 12
 ##  999:  999 10 12 11
 ## 1000: 1000  9  9 12</code></pre>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cor</span>(<span class="fu">as.matrix</span>(dx[, .(V1, V2, V3)])), <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cor</span>(<span class="fu">as.matrix</span>(dx[, .(V1, V2, V3)])), <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>##     V1   V2   V3
 ## V1 1.0 0.30 0.30
 ## V2 0.3 1.00 0.24
 ## V3 0.3 0.24 1.00</code></pre>
 <p>We can also generate correlated binary data by specifying the
 probabilities:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">genCorGen</span>(<span class="dv">1000</span>, <span class="at">nvars =</span> <span class="dv">3</span>, <span class="at">params1 =</span> <span class="fu">c</span>(.<span class="dv">3</span>, .<span class="dv">5</span>, .<span class="dv">7</span>), <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>, <span class="at">rho =</span> .<span class="dv">8</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="at">wide =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">genCorGen</span>(<span class="dv">1000</span>, <span class="at">nvars =</span> <span class="dv">3</span>, <span class="at">params1 =</span> <span class="fu">c</span>(.<span class="dv">3</span>, .<span class="dv">5</span>, .<span class="dv">7</span>), <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>, <span class="at">rho =</span> .<span class="dv">8</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="at">wide =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>##         id V1 V2 V3
 ##    1:    1  0  1  1
 ##    2:    2  0  1  1
@@ -505,8 +505,8 @@ probabilities:</p>
 <p>The gamma distribution requires two parameters - the mean and
 dispersion. (These are converted into shape and rate parameters more
 commonly used.)</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">genCorGen</span>(<span class="dv">1000</span>, <span class="at">nvars =</span> <span class="dv">3</span>, <span class="at">params1 =</span> l, <span class="at">params2 =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">dist =</span> <span class="st">&quot;gamma&quot;</span>, <span class="at">rho =</span> .<span class="dv">7</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="at">wide =</span> <span class="cn">TRUE</span>, <span class="at">cnames=</span><span class="st">&quot;a, b, c&quot;</span>)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>dx</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">genCorGen</span>(<span class="dv">1000</span>, <span class="at">nvars =</span> <span class="dv">3</span>, <span class="at">params1 =</span> l, <span class="at">params2 =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">dist =</span> <span class="st">&quot;gamma&quot;</span>, <span class="at">rho =</span> .<span class="dv">7</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="at">wide =</span> <span class="cn">TRUE</span>, <span class="at">cnames=</span><span class="st">&quot;a, b, c&quot;</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>dx</span></code></pre></div>
 <pre><code>##         id            a          b           c
 ##    1:    1 4.137889e+00  1.9736693  5.73317661
 ##    2:    2 6.230611e-04  0.1790216  0.01098133
@@ -519,7 +519,7 @@ commonly used.)</p>
 ##  998:  998 3.492819e+00  4.1504352  2.37403911
 ##  999:  999 9.336809e+00 21.2184483 25.17933311
 ## 1000: 1000 2.044966e+01 32.3326247 23.81715119</code></pre>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cor</span>(<span class="fu">as.matrix</span>(dx[, .(a, b, c)])), <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cor</span>(<span class="fu">as.matrix</span>(dx[, .(a, b, c)])), <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>##      a    b    c
 ## a 1.00 0.63 0.67
 ## b 0.63 1.00 0.67
@@ -530,8 +530,8 @@ where there is one row per unique id. Now, we will generate data using
 the <em>long</em> form, where the correlated data are on different rows,
 so that there are repeated measurements for each id. An id will have
 multiple records (i.e. one id will appear on multiple rows):</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">genCorGen</span>(<span class="dv">1000</span>, <span class="at">nvars =</span> <span class="dv">3</span>, <span class="at">params1 =</span> l, <span class="at">params2 =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">dist =</span> <span class="st">&quot;gamma&quot;</span>, <span class="at">rho =</span> .<span class="dv">7</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="at">wide =</span> <span class="cn">FALSE</span>, <span class="at">cnames=</span><span class="st">&quot;NewCol&quot;</span>)</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>dx</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a>dx <span class="ot">&lt;-</span> <span class="fu">genCorGen</span>(<span class="dv">1000</span>, <span class="at">nvars =</span> <span class="dv">3</span>, <span class="at">params1 =</span> l, <span class="at">params2 =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">dist =</span> <span class="st">&quot;gamma&quot;</span>, <span class="at">rho =</span> .<span class="dv">7</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="at">wide =</span> <span class="cn">FALSE</span>, <span class="at">cnames=</span><span class="st">&quot;NewCol&quot;</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a>dx</span></code></pre></div>
 <pre><code>##         id period     NewCol
 ##    1:    1      0 0.08868527
 ##    2:    1      1 0.17558015
@@ -553,14 +553,14 @@ below, we are going to generate three sets (poisson, binary, and gamma)
 of correlated data with means that are a function of the variable
 <code>xbase</code>, which varies by id.</p>
 <p>First we define the data and generate a data set:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;xbase&quot;</span>, <span class="at">formula =</span> <span class="dv">5</span>, <span class="at">variance =</span> .<span class="dv">2</span>, <span class="at">dist =</span> <span class="st">&quot;gamma&quot;</span>, <span class="at">id =</span> <span class="st">&quot;cid&quot;</span>)</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(def, <span class="at">varname =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;.5 + .1*xbase&quot;</span>, <span class="at">dist=</span><span class="st">&quot;nonrandom&quot;</span>, <span class="at">link =</span> <span class="st">&quot;log&quot;</span>)</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(def, <span class="at">varname =</span> <span class="st">&quot;p&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;-2 + .3*xbase&quot;</span>, <span class="at">dist=</span><span class="st">&quot;nonrandom&quot;</span>, <span class="at">link =</span> <span class="st">&quot;logit&quot;</span>)</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(def, <span class="at">varname =</span> <span class="st">&quot;gammaMu&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;.5 + .2*xbase&quot;</span>, <span class="at">dist=</span><span class="st">&quot;nonrandom&quot;</span>, <span class="at">link =</span> <span class="st">&quot;log&quot;</span>)</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(def, <span class="at">varname =</span> <span class="st">&quot;gammaDis&quot;</span>, <span class="at">formula =</span> <span class="dv">1</span>, <span class="at">dist=</span><span class="st">&quot;nonrandom&quot;</span>)</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">10000</span>, def)</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>dt</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;xbase&quot;</span>, <span class="at">formula =</span> <span class="dv">5</span>, <span class="at">variance =</span> .<span class="dv">2</span>, <span class="at">dist =</span> <span class="st">&quot;gamma&quot;</span>, <span class="at">id =</span> <span class="st">&quot;cid&quot;</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(def, <span class="at">varname =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;.5 + .1*xbase&quot;</span>, <span class="at">dist=</span><span class="st">&quot;nonrandom&quot;</span>, <span class="at">link =</span> <span class="st">&quot;log&quot;</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(def, <span class="at">varname =</span> <span class="st">&quot;p&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;-2 + .3*xbase&quot;</span>, <span class="at">dist=</span><span class="st">&quot;nonrandom&quot;</span>, <span class="at">link =</span> <span class="st">&quot;logit&quot;</span>)</span>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(def, <span class="at">varname =</span> <span class="st">&quot;gammaMu&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;.5 + .2*xbase&quot;</span>, <span class="at">dist=</span><span class="st">&quot;nonrandom&quot;</span>, <span class="at">link =</span> <span class="st">&quot;log&quot;</span>)</span>
+<span id="cb33-5"><a href="#cb33-5" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(def, <span class="at">varname =</span> <span class="st">&quot;gammaDis&quot;</span>, <span class="at">formula =</span> <span class="dv">1</span>, <span class="at">dist=</span><span class="st">&quot;nonrandom&quot;</span>)</span>
+<span id="cb33-6"><a href="#cb33-6" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">10000</span>, def)</span>
+<span id="cb33-8"><a href="#cb33-8" tabindex="-1"></a>dt</span></code></pre></div>
 <pre><code>##          cid    xbase   lambda         p  gammaMu gammaDis
 ##     1:     1 1.546326 1.924435 0.1771026 2.246257        1
 ##     2:     2 5.689908 2.912439 0.4272628 5.144775        1
@@ -574,121 +574,121 @@ of correlated data with means that are a function of the variable
 ##  9999:  9999 3.393940 2.314964 0.2725312 3.250432        1
 ## 10000: 10000 7.722561 3.568895 0.5785365 7.725390        1</code></pre>
 <p>The Poisson distribution has a single parameter, lambda:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>dtX1 <span class="ot">&lt;-</span> <span class="fu">addCorGen</span>(<span class="at">dtOld =</span> dt, <span class="at">idvar =</span> <span class="st">&quot;cid&quot;</span>, <span class="at">nvars =</span> <span class="dv">3</span>, <span class="at">rho =</span> .<span class="dv">1</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>,</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">param1 =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">cnames =</span> <span class="st">&quot;a, b, c&quot;</span>)</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>dtX1</span></code></pre></div>
-<pre><code>##          cid    xbase   lambda         p  gammaMu gammaDis a b c
-##     1:     1 1.546326 1.924435 0.1771026 2.246257        1 2 2 2
-##     2:     2 5.689908 2.912439 0.4272628 5.144775        1 1 4 5
-##     3:     3 5.059867 2.734604 0.3817705 4.535672        1 4 2 1
-##     4:     4 4.599528 2.611573 0.3497493 4.136730        1 2 2 1
-##     5:     5 2.402442 2.096447 0.2176749 2.665758        1 1 3 2
-##    ---                                                          
-##  9996:  9996 3.610769 2.365707 0.2856166 3.394491        1 2 0 1
-##  9997:  9997 4.984305 2.714019 0.3764348 4.467643        1 4 2 4
-##  9998:  9998 5.122724 2.751847 0.3862310 4.593052        1 3 2 4
-##  9999:  9999 3.393940 2.314964 0.2725312 3.250432        1 1 3 0
-## 10000: 10000 7.722561 3.568895 0.5785365 7.725390        1 1 5 6</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a>dtX1 <span class="ot">&lt;-</span> <span class="fu">addCorGen</span>(<span class="at">dtOld =</span> dt, <span class="at">idvar =</span> <span class="st">&quot;cid&quot;</span>, <span class="at">nvars =</span> <span class="dv">3</span>, <span class="at">rho =</span> .<span class="dv">1</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>,</span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a>                    <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">param1 =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">cnames =</span> <span class="st">&quot;a, b, c&quot;</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a>dtX1</span></code></pre></div>
+<pre><code>##          cid    xbase   lambda         p  gammaMu gammaDis  a b c
+##     1:     1 1.546326 1.924435 0.1771026 2.246257        1  2 2 2
+##     2:     2 5.689908 2.912439 0.4272628 5.144775        1  1 0 2
+##     3:     3 5.059867 2.734604 0.3817705 4.535672        1  4 0 2
+##     4:     4 4.599528 2.611573 0.3497493 4.136730        1  3 1 3
+##     5:     5 2.402442 2.096447 0.2176749 2.665758        1  5 4 1
+##    ---                                                           
+##  9996:  9996 3.610769 2.365707 0.2856166 3.394491        1  1 2 2
+##  9997:  9997 4.984305 2.714019 0.3764348 4.467643        1  3 2 4
+##  9998:  9998 5.122724 2.751847 0.3862310 4.593052        1  7 2 1
+##  9999:  9999 3.393940 2.314964 0.2725312 3.250432        1  6 0 4
+## 10000: 10000 7.722561 3.568895 0.5785365 7.725390        1 12 1 3</code></pre>
 <p>The Bernoulli (binary) distribution has a single parameter, p:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>dtX2 <span class="ot">&lt;-</span> <span class="fu">addCorGen</span>(<span class="at">dtOld =</span> dt, <span class="at">idvar =</span> <span class="st">&quot;cid&quot;</span>, <span class="at">nvars =</span> <span class="dv">4</span>, <span class="at">rho =</span> .<span class="dv">4</span>, <span class="at">corstr =</span> <span class="st">&quot;ar1&quot;</span>,</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>, <span class="at">param1 =</span> <span class="st">&quot;p&quot;</span>)</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>dtX2</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a>dtX2 <span class="ot">&lt;-</span> <span class="fu">addCorGen</span>(<span class="at">dtOld =</span> dt, <span class="at">idvar =</span> <span class="st">&quot;cid&quot;</span>, <span class="at">nvars =</span> <span class="dv">4</span>, <span class="at">rho =</span> .<span class="dv">4</span>, <span class="at">corstr =</span> <span class="st">&quot;ar1&quot;</span>,</span>
+<span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a>                    <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>, <span class="at">param1 =</span> <span class="st">&quot;p&quot;</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" tabindex="-1"></a>dtX2</span></code></pre></div>
 <pre><code>##          cid    xbase   lambda         p  gammaMu gammaDis V1 V2 V3 V4
-##     1:     1 1.546326 1.924435 0.1771026 2.246257        1  0  0  0  0
-##     2:     2 5.689908 2.912439 0.4272628 5.144775        1  1  1  0  0
-##     3:     3 5.059867 2.734604 0.3817705 4.535672        1  0  0  0  0
-##     4:     4 4.599528 2.611573 0.3497493 4.136730        1  1  0  0  0
-##     5:     5 2.402442 2.096447 0.2176749 2.665758        1  0  0  1  0
+##     1:     1 1.546326 1.924435 0.1771026 2.246257        1  0  0  1  0
+##     2:     2 5.689908 2.912439 0.4272628 5.144775        1  0  0  0  1
+##     3:     3 5.059867 2.734604 0.3817705 4.535672        1  1  0  1  1
+##     4:     4 4.599528 2.611573 0.3497493 4.136730        1  0  0  0  1
+##     5:     5 2.402442 2.096447 0.2176749 2.665758        1  0  1  0  0
 ##    ---                                                                
-##  9996:  9996 3.610769 2.365707 0.2856166 3.394491        1  0  0  0  1
-##  9997:  9997 4.984305 2.714019 0.3764348 4.467643        1  0  1  0  1
+##  9996:  9996 3.610769 2.365707 0.2856166 3.394491        1  0  0  0  0
+##  9997:  9997 4.984305 2.714019 0.3764348 4.467643        1  0  1  1  0
 ##  9998:  9998 5.122724 2.751847 0.3862310 4.593052        1  0  0  0  1
 ##  9999:  9999 3.393940 2.314964 0.2725312 3.250432        1  0  0  0  0
 ## 10000: 10000 7.722561 3.568895 0.5785365 7.725390        1  0  0  1  0</code></pre>
 <p>The Gamma distribution has two parameters - in <code>simstudy</code>
 the mean and dispersion are specified:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>dtX3 <span class="ot">&lt;-</span> <span class="fu">addCorGen</span>(<span class="at">dtOld =</span> dt, <span class="at">idvar =</span> <span class="st">&quot;cid&quot;</span>, <span class="at">nvars =</span> <span class="dv">4</span>, <span class="at">rho =</span> .<span class="dv">4</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>,</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dist =</span> <span class="st">&quot;gamma&quot;</span>, <span class="at">param1 =</span> <span class="st">&quot;gammaMu&quot;</span>, <span class="at">param2 =</span> <span class="st">&quot;gammaDis&quot;</span>)</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>dtX3</span></code></pre></div>
-<pre><code>##          cid    xbase   lambda         p  gammaMu gammaDis         V1
-##     1:     1 1.546326 1.924435 0.1771026 2.246257        1 2.58709530
-##     2:     2 5.689908 2.912439 0.4272628 5.144775        1 0.07934567
-##     3:     3 5.059867 2.734604 0.3817705 4.535672        1 2.04176932
-##     4:     4 4.599528 2.611573 0.3497493 4.136730        1 8.25436952
-##     5:     5 2.402442 2.096447 0.2176749 2.665758        1 6.28127618
-##    ---                                                               
-##  9996:  9996 3.610769 2.365707 0.2856166 3.394491        1 6.64095852
-##  9997:  9997 4.984305 2.714019 0.3764348 4.467643        1 0.97710914
-##  9998:  9998 5.122724 2.751847 0.3862310 4.593052        1 6.51628773
-##  9999:  9999 3.393940 2.314964 0.2725312 3.250432        1 0.75152645
-## 10000: 10000 7.722561 3.568895 0.5785365 7.725390        1 1.39958999
-##                V2         V3         V4
-##     1:  2.1207941 7.37182655 1.49892176
-##     2: 15.2490909 0.01732443 0.04768341
-##     3:  0.1542492 4.43078463 2.76400220
-##     4:  2.3934427 1.88930272 2.23746274
-##     5:  2.5867935 6.63968812 2.03710012
-##    ---                                 
-##  9996:  1.8097451 2.95765819 4.63708493
-##  9997:  2.3576130 4.16571168 3.10540611
-##  9998:  6.8157548 3.81045976 3.76213866
-##  9999:  2.8992568 1.93141748 1.05365544
-## 10000:  4.8134691 2.38985964 1.75207835</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a>dtX3 <span class="ot">&lt;-</span> <span class="fu">addCorGen</span>(<span class="at">dtOld =</span> dt, <span class="at">idvar =</span> <span class="st">&quot;cid&quot;</span>, <span class="at">nvars =</span> <span class="dv">4</span>, <span class="at">rho =</span> .<span class="dv">4</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>,</span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a>                  <span class="at">dist =</span> <span class="st">&quot;gamma&quot;</span>, <span class="at">param1 =</span> <span class="st">&quot;gammaMu&quot;</span>, <span class="at">param2 =</span> <span class="st">&quot;gammaDis&quot;</span>)</span>
+<span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a>dtX3</span></code></pre></div>
+<pre><code>##          cid    xbase   lambda         p  gammaMu gammaDis          V1
+##     1:     1 1.546326 1.924435 0.1771026 2.246257        1 4.231680194
+##     2:     2 5.689908 2.912439 0.4272628 5.144775        1 6.787710358
+##     3:     3 5.059867 2.734604 0.3817705 4.535672        1 3.707544002
+##     4:     4 4.599528 2.611573 0.3497493 4.136730        1 0.348766326
+##     5:     5 2.402442 2.096447 0.2176749 2.665758        1 2.493923583
+##    ---                                                                
+##  9996:  9996 3.610769 2.365707 0.2856166 3.394491        1 0.002486867
+##  9997:  9997 4.984305 2.714019 0.3764348 4.467643        1 3.210241942
+##  9998:  9998 5.122724 2.751847 0.3862310 4.593052        1 9.556894110
+##  9999:  9999 3.393940 2.314964 0.2725312 3.250432        1 1.349413306
+## 10000: 10000 7.722561 3.568895 0.5785365 7.725390        1 2.404109193
+##               V2         V3         V4
+##     1: 1.2176380  0.4222348  2.1937488
+##     2: 4.6349836  6.5642077  3.1765033
+##     3: 1.5053746  1.1395938  1.0282041
+##     4: 7.7065647 15.1843651  1.5413112
+##     5: 0.6724540  2.0454487  1.5117235
+##    ---                                
+##  9996: 0.4825269  0.6716621  0.6721581
+##  9997: 0.2103485  4.9869686  3.8444291
+##  9998: 3.5482244 10.5174231  9.9577729
+##  9999: 2.3406277  1.7019004  0.8970987
+## 10000: 2.7987448  3.6667012 12.1680528</code></pre>
 <p>If we have data in <em>long</em> form (e.g. longitudinal data), the
 function will recognize the structure:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;xbase&quot;</span>, <span class="at">formula =</span> <span class="dv">5</span>, <span class="at">variance =</span> .<span class="dv">4</span>, <span class="at">dist =</span> <span class="st">&quot;gamma&quot;</span>, <span class="at">id =</span> <span class="st">&quot;cid&quot;</span>)</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(def, <span class="st">&quot;nperiods&quot;</span>, <span class="at">formula =</span> <span class="dv">3</span>, <span class="at">dist =</span> <span class="st">&quot;noZeroPoisson&quot;</span>)</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>def2 <span class="ot">&lt;-</span> <span class="fu">defDataAdd</span>(<span class="at">varname =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;.5+.5*period + .1*xbase&quot;</span>, <span class="at">dist=</span><span class="st">&quot;nonrandom&quot;</span>, <span class="at">link =</span> <span class="st">&quot;log&quot;</span>)</span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">1000</span>, def)</span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>dtLong <span class="ot">&lt;-</span> <span class="fu">addPeriods</span>(dt, <span class="at">idvars =</span> <span class="st">&quot;cid&quot;</span>, <span class="at">nPeriods =</span> <span class="dv">3</span>)</span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>dtLong <span class="ot">&lt;-</span> <span class="fu">addColumns</span>(def2, dtLong)</span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>dtLong</span></code></pre></div>
-<pre><code>##        cid period     xbase nperiods timeID    lambda
-##    1:    1      0 11.345477        1      1  5.127138
-##    2:    1      1 11.345477        1      2  8.453222
-##    3:    1      2 11.345477        1      3 13.937007
-##    4:    2      0  2.859828        5      4  2.194563
-##    5:    2      1  2.859828        5      5  3.618222
-##   ---                                                
-## 2996:  999      1  5.790138        3   2996  4.850170
-## 2997:  999      2  5.790138        3   2997  7.996579
-## 2998: 1000      0 10.958208        3   2998  4.932376
-## 2999: 1000      1 10.958208        3   2999  8.132113
-## 3000: 1000      2 10.958208        3   3000 13.407588</code></pre>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="do">### Generate the data </span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>dtX3 <span class="ot">&lt;-</span> <span class="fu">addCorGen</span>(<span class="at">dtOld =</span> dtLong, <span class="at">idvar =</span> <span class="st">&quot;cid&quot;</span>, <span class="at">nvars =</span> <span class="dv">3</span>, <span class="at">rho =</span> .<span class="dv">6</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>,</span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">param1 =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">cnames =</span> <span class="st">&quot;NewPois&quot;</span>)</span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>dtX3</span></code></pre></div>
-<pre><code>##        cid period     xbase nperiods timeID    lambda NewPois
-##    1:    1      0 11.345477        1      1  5.127138       5
-##    2:    1      1 11.345477        1      2  8.453222       6
-##    3:    1      2 11.345477        1      3 13.937007      18
-##    4:    2      0  2.859828        5      4  2.194563       3
-##    5:    2      1  2.859828        5      5  3.618222       5
-##   ---                                                        
-## 2996:  999      1  5.790138        3   2996  4.850170       4
-## 2997:  999      2  5.790138        3   2997  7.996579       6
-## 2998: 1000      0 10.958208        3   2998  4.932376       2
-## 2999: 1000      1 10.958208        3   2999  8.132113       4
-## 3000: 1000      2 10.958208        3   3000 13.407588       6</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;xbase&quot;</span>, <span class="at">formula =</span> <span class="dv">5</span>, <span class="at">variance =</span> .<span class="dv">4</span>, <span class="at">dist =</span> <span class="st">&quot;gamma&quot;</span>, <span class="at">id =</span> <span class="st">&quot;cid&quot;</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a>def <span class="ot">&lt;-</span> <span class="fu">defData</span>(def, <span class="st">&quot;nperiods&quot;</span>, <span class="at">formula =</span> <span class="dv">3</span>, <span class="at">dist =</span> <span class="st">&quot;noZeroPoisson&quot;</span>)</span>
+<span id="cb41-3"><a href="#cb41-3" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" tabindex="-1"></a>def2 <span class="ot">&lt;-</span> <span class="fu">defDataAdd</span>(<span class="at">varname =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;.5+.5*period + .1*xbase&quot;</span>, <span class="at">dist=</span><span class="st">&quot;nonrandom&quot;</span>, <span class="at">link =</span> <span class="st">&quot;log&quot;</span>)</span>
+<span id="cb41-5"><a href="#cb41-5" tabindex="-1"></a></span>
+<span id="cb41-6"><a href="#cb41-6" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">1000</span>, def)</span>
+<span id="cb41-7"><a href="#cb41-7" tabindex="-1"></a></span>
+<span id="cb41-8"><a href="#cb41-8" tabindex="-1"></a>dtLong <span class="ot">&lt;-</span> <span class="fu">addPeriods</span>(dt, <span class="at">idvars =</span> <span class="st">&quot;cid&quot;</span>, <span class="at">nPeriods =</span> <span class="dv">3</span>)</span>
+<span id="cb41-9"><a href="#cb41-9" tabindex="-1"></a>dtLong <span class="ot">&lt;-</span> <span class="fu">addColumns</span>(def2, dtLong)</span>
+<span id="cb41-10"><a href="#cb41-10" tabindex="-1"></a></span>
+<span id="cb41-11"><a href="#cb41-11" tabindex="-1"></a>dtLong</span></code></pre></div>
+<pre><code>##        cid period    xbase nperiods timeID    lambda
+##    1:    1      0 7.053471        2      1  3.337917
+##    2:    1      1 7.053471        2      2  5.503295
+##    3:    1      2 7.053471        2      3  9.073400
+##    4:    2      0 2.185136        3      4  2.051382
+##    5:    2      1 2.185136        3      5  3.382157
+##   ---                                               
+## 2996:  999      1 9.702454        1   2996  7.172436
+## 2997:  999      2 9.702454        1   2997 11.825348
+## 2998: 1000      0 3.044209        4   2998  2.235402
+## 2999: 1000      1 3.044209        4   2999  3.685554
+## 3000: 1000      2 3.044209        4   3000  6.076452</code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="do">### Generate the data </span></span>
+<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a>dtX3 <span class="ot">&lt;-</span> <span class="fu">addCorGen</span>(<span class="at">dtOld =</span> dtLong, <span class="at">idvar =</span> <span class="st">&quot;cid&quot;</span>, <span class="at">nvars =</span> <span class="dv">3</span>, <span class="at">rho =</span> .<span class="dv">6</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>,</span>
+<span id="cb43-4"><a href="#cb43-4" tabindex="-1"></a>                  <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">param1 =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">cnames =</span> <span class="st">&quot;NewPois&quot;</span>)</span>
+<span id="cb43-5"><a href="#cb43-5" tabindex="-1"></a>dtX3</span></code></pre></div>
+<pre><code>##        cid period    xbase nperiods timeID    lambda NewPois
+##    1:    1      0 7.053471        2      1  3.337917       5
+##    2:    1      1 7.053471        2      2  5.503295       6
+##    3:    1      2 7.053471        2      3  9.073400      11
+##    4:    2      0 2.185136        3      4  2.051382       2
+##    5:    2      1 2.185136        3      5  3.382157       1
+##   ---                                                       
+## 2996:  999      1 9.702454        1   2996  7.172436      10
+## 2997:  999      2 9.702454        1   2997 11.825348      11
+## 2998: 1000      0 3.044209        4   2998  2.235402       4
+## 2999: 1000      1 3.044209        4   2999  3.685554       7
+## 3000: 1000      2 3.044209        4   3000  6.076452       9</code></pre>
 <p>We can fit a generalized estimating equation (GEE) model and examine
 the coefficients and the working correlation matrix. They match closely
 to the data generating parameters:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>geefit <span class="ot">&lt;-</span> <span class="fu">gee</span>(NewPois <span class="sc">~</span> period <span class="sc">+</span> xbase, <span class="at">data =</span> dtX3, <span class="at">id =</span> cid, <span class="at">family =</span> poisson, <span class="at">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a>geefit <span class="ot">&lt;-</span> <span class="fu">gee</span>(NewPois <span class="sc">~</span> period <span class="sc">+</span> xbase, <span class="at">data =</span> dtX3, <span class="at">id =</span> cid, <span class="at">family =</span> poisson, <span class="at">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>)</span></code></pre></div>
 <pre><code>## Beginning Cgee S-function, @(#) geeformula.q 4.13 98/01/27</code></pre>
 <pre><code>## running glm to get initial regression estimate</code></pre>
 <pre><code>## (Intercept)      period       xbase 
-##   0.4806614   0.4948942   0.1063911</code></pre>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">summary</span>(geefit)<span class="sc">$</span>working.correlation, <span class="dv">2</span>)</span></code></pre></div>
+##   0.4915131   0.4929285   0.1030995</code></pre>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">summary</span>(geefit)<span class="sc">$</span>working.correlation, <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3]
-## [1,] 1.00 0.61 0.61
-## [2,] 0.61 1.00 0.61
-## [3,] 0.61 0.61 1.00</code></pre>
+## [1,] 1.00 0.56 0.56
+## [2,] 0.56 1.00 0.56
+## [3,] 0.56 0.56 1.00</code></pre>
 </div>
 
 

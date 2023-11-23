@@ -1,4 +1,7 @@
-## ---- echo = FALSE, message = FALSE-------------------------------------------
+## ----chunkname, echo=-1-------------------------------------------------------
+data.table::setDTthreads(2)
+
+## ----echo = FALSE, message = FALSE--------------------------------------------
 
 library(simstudy)
 library(data.table)
@@ -30,7 +33,7 @@ ggtheme <- function(panelback = "white") {
   
 }
 
-## ----  echo=FALSE-------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 def <- defData(varname="age", dist="normal", formula=10, variance = 2)
 def <- defData(def, varname="female", dist="binary", 
     formula="-2 + age * 0.1", link = "logit")
@@ -107,7 +110,7 @@ for (i in seq_along(age_effects)) {
 
 list_of_data
 
-## ----  echo=FALSE-------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 d <- list()
 d[[1]] <- data.table("beta", "mean", "both", "-", "dispersion", "X", "-", "X") 
 d[[2]] <- data.table("binary", "probability", "both", "-", "-", "X", "-", "X") 
@@ -169,7 +172,7 @@ dc <- defCondition(dc, condition = "x > 2", formula = "-5 + 4*x",
 dd <- genData(1000, d)
 dd <- addCondition(dc, dd, newvar = "y")
 
-## ---- fig.width = 5, fig.height = 3, echo=FALSE, message=FALSE----------------
+## ----fig.width = 5, fig.height = 3, echo=FALSE, message=FALSE-----------------
 ggplot(data = dd, aes(y = y, x = x)) +
   geom_point(color = " grey60", size = .5) +
   geom_smooth(se = FALSE, size = .5) +

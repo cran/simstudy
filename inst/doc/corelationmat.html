@@ -356,11 +356,11 @@ completely <em>randomly</em> generated (valid) correlation matrix or a
 correlation matrix with a set of specified coefficients.</p>
 <p>Here is an example of the first, a randomly generated correlation
 matrix:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(simstudy)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">37265</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">genCorMat</span>(<span class="dv">4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(simstudy)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">37265</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">genCorMat</span>(<span class="dv">4</span>)</span></code></pre></div>
 <pre><code>##             [,1]        [,2]        [,3]       [,4]
 ## [1,]  1.00000000 -0.22742403  0.01285282 -0.3201579
 ## [2,] -0.22742403  1.00000000 -0.04973973 -0.1218070
@@ -370,8 +370,8 @@ matrix:</p>
 well get an error message if it is not positive semidefinite!). These
 coefficients define the lower triangle (and upper) triangle of the
 matrix, reading down the columns:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">genCorMat</span>(<span class="dv">4</span>, <span class="at">cors =</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">0.4</span>, <span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.3</span>, <span class="fl">0.8</span>))</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>R</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">genCorMat</span>(<span class="dv">4</span>, <span class="at">cors =</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">0.4</span>, <span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.3</span>, <span class="fl">0.8</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>R</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
 ## [1,]  1.0  0.6  0.4  0.2
 ## [2,]  0.6  1.0  0.5  0.3
@@ -379,10 +379,10 @@ matrix, reading down the columns:</p>
 ## [4,]  0.2  0.3  0.8  1.0</code></pre>
 <p>This matrix can be used to generate data using functions
 <code>genCorData</code> or <code>genCorGen</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genCorGen</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">nvars =</span> <span class="dv">4</span>, <span class="at">corMatrix =</span> R, <span class="at">params1 =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">9</span>), </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">wide =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dd)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genCorGen</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">nvars =</span> <span class="dv">4</span>, <span class="at">corMatrix =</span> R, <span class="at">params1 =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">9</span>), </span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">wide =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">head</span>(dd)</span></code></pre></div>
 <pre><code>##    id V1 V2 V3 V4
 ## 1:  1  3  3  5  6
 ## 2:  2  3  9 12 10
@@ -392,7 +392,7 @@ matrix, reading down the columns:</p>
 ## 6:  6  4  5  6  7</code></pre>
 <p>And the correlation from this data set is quite close to the
 specified matrix <strong>R</strong>.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cor</span>(<span class="fu">as.matrix</span>(dd[, <span class="sc">-</span><span class="dv">1</span>])), <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cor</span>(<span class="fu">as.matrix</span>(dd[, <span class="sc">-</span><span class="dv">1</span>])), <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>##     V1  V2  V3  V4
 ## V1 1.0 0.6 0.4 0.2
 ## V2 0.6 1.0 0.5 0.3
@@ -429,7 +429,7 @@ c0,7.3,5.7,11,17,11c0,0,11,0,11,0c9.3,0,14.3,-0.3,15,-1c5.3,-5.3,10.3,-11,15,-17
 c242.7,-294.7,395.3,-681.7,458,-1161c21.3,-164.7,33.3,-350.7,36,-558
 l0,-1344c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,
 -470,-1265c-4.7,-6,-9.7,-11.7,-15,-17c-0.7,-0.7,-6.7,-1,-18,-1z"></path></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.15em;"><span></span></span></span></span></span></span></span></span></span></span></span>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">genCorMat</span>(<span class="at">nvars =</span> <span class="dv">4</span>, <span class="at">rho =</span> <span class="fl">0.6</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">genCorMat</span>(<span class="at">nvars =</span> <span class="dv">4</span>, <span class="at">rho =</span> <span class="fl">0.6</span>, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>)</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
 ## [1,]  1.0  0.6  0.6  0.6
 ## [2,]  0.6  1.0  0.6  0.6
@@ -462,7 +462,7 @@ c0,7.3,5.7,11,17,11c0,0,11,0,11,0c9.3,0,14.3,-0.3,15,-1c5.3,-5.3,10.3,-11,15,-17
 c242.7,-294.7,395.3,-681.7,458,-1161c21.3,-164.7,33.3,-350.7,36,-558
 l0,-1344c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,
 -470,-1265c-4.7,-6,-9.7,-11.7,-15,-17c-0.7,-0.7,-6.7,-1,-18,-1z"></path></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.15em;"><span></span></span></span></span></span></span></span></span></span></span></span>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">genCorMat</span>(<span class="at">nvars =</span> <span class="dv">4</span>, <span class="at">rho =</span> <span class="fl">0.6</span>, <span class="at">corstr =</span> <span class="st">&quot;ar1&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">genCorMat</span>(<span class="at">nvars =</span> <span class="dv">4</span>, <span class="at">rho =</span> <span class="fl">0.6</span>, <span class="at">corstr =</span> <span class="st">&quot;ar1&quot;</span>)</span></code></pre></div>
 <pre><code>##       [,1] [,2] [,3]  [,4]
 ## [1,] 1.000 0.60 0.36 0.216
 ## [2,] 0.600 1.00 0.60 0.360
@@ -619,10 +619,10 @@ of individuals in each cluster in the data set, and the lengths of <span class="
 clusters (though either or both can be scalars, in which case the values
 are shared across the clusters). The output is a list of correlation
 matrices, one for each cluster.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>RC <span class="ot">&lt;-</span> <span class="fu">genCorMat</span>(<span class="at">nvars =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">3</span>), <span class="at">rho =</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">0.7</span>, <span class="fl">0.5</span>, <span class="fl">0.4</span>), </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="at">nclusters =</span> <span class="dv">4</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>RC</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>RC <span class="ot">&lt;-</span> <span class="fu">genCorMat</span>(<span class="at">nvars =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">3</span>), <span class="at">rho =</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">0.7</span>, <span class="fl">0.5</span>, <span class="fl">0.4</span>), </span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>  <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="at">nclusters =</span> <span class="dv">4</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>RC</span></code></pre></div>
 <pre><code>## $`1`
 ##      [,1] [,2]
 ## [1,]  1.0  0.6
@@ -649,17 +649,17 @@ matrices, one for each cluster.</p>
 <p>To create the correlated data, first we can generate a data set of
 individuals that are clustered in groups. The outcome will be Poisson
 distributed, so we are specifying mean <span class="math inline">\(\lambda\)</span> for each cluster:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;n&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;c(2, 3, 4, 3)&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;nonrandom&quot;</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1, <span class="at">varname =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;c(6, 7, 9, 8)&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;nonrandom&quot;</span>)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">4</span>, d1, <span class="at">id =</span> <span class="st">&quot;site&quot;</span>)</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>dc <span class="ot">&lt;-</span> <span class="fu">genCluster</span>(<span class="at">dtClust =</span> ds, <span class="at">cLevelVar =</span> <span class="st">&quot;site&quot;</span>, <span class="at">numIndsVar =</span> <span class="st">&quot;n&quot;</span>, <span class="st">&quot;id&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;n&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;c(2, 3, 4, 3)&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;nonrandom&quot;</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1, <span class="at">varname =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;c(6, 7, 9, 8)&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;nonrandom&quot;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">4</span>, d1, <span class="at">id =</span> <span class="st">&quot;site&quot;</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>dc <span class="ot">&lt;-</span> <span class="fu">genCluster</span>(<span class="at">dtClust =</span> ds, <span class="at">cLevelVar =</span> <span class="st">&quot;site&quot;</span>, <span class="at">numIndsVar =</span> <span class="st">&quot;n&quot;</span>, <span class="st">&quot;id&quot;</span>)</span></code></pre></div>
 <p>Now, we can generate data using the correlation matrix
 <strong>RC</strong>:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">addCorGen</span>(dc, <span class="at">idvar =</span> <span class="st">&quot;site&quot;</span>, <span class="at">param1 =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">corMatrix =</span> RC,</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">cnames =</span> <span class="st">&quot;y&quot;</span>, <span class="at">method =</span> <span class="st">&quot;copula&quot;</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>dd</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">addCorGen</span>(dc, <span class="at">idvar =</span> <span class="st">&quot;site&quot;</span>, <span class="at">param1 =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">corMatrix =</span> RC,</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>          <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">cnames =</span> <span class="st">&quot;y&quot;</span>, <span class="at">method =</span> <span class="st">&quot;copula&quot;</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>dd</span></code></pre></div>
 <pre><code>##     site n lambda id  y
 ##  1:    1 2      6  1 11
 ##  2:    1 2      6  2  7
@@ -676,19 +676,19 @@ distributed, so we are specifying mean <span class="math inline">\(\lambda\)</sp
 <p>If we want to confirm that everything is working as expected, we can
 recover the overall correlation matrix by generating a large number of
 data sets (in this case 5000):</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>replicate <span class="ot">&lt;-</span> <span class="cf">function</span>(R, dc) {</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  reps <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5000</span>, <span class="cf">function</span>(x)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addCorGen</span>(dc, <span class="at">idvar =</span> <span class="st">&quot;site&quot;</span>, <span class="at">param1 =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">corMatrix =</span> R,</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">cnames =</span> <span class="st">&quot;y&quot;</span>, <span class="at">method =</span> <span class="st">&quot;copula&quot;</span>)</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  drep <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">rbindlist</span>(reps, <span class="at">idcol =</span> <span class="st">&quot;rep&quot;</span>)</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  drep[, seq <span class="sc">:</span><span class="er">=</span> <span class="dv">1</span><span class="sc">:</span>.N, keyby <span class="ot">=</span> rep]</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  dmat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">dcast</span>(drep, rep <span class="sc">~</span> seq, <span class="at">value.var =</span> <span class="st">&quot;y&quot;</span>)[, <span class="sc">-</span><span class="dv">1</span>])</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="fu">cor</span>(dmat), <span class="dv">1</span>) </span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="fu">replicate</span>(<span class="at">R =</span> RC, <span class="at">dc =</span> dc)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>replicate <span class="ot">&lt;-</span> <span class="cf">function</span>(R, dc) {</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>  reps <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5000</span>, <span class="cf">function</span>(x)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>  <span class="fu">addCorGen</span>(dc, <span class="at">idvar =</span> <span class="st">&quot;site&quot;</span>, <span class="at">param1 =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">corMatrix =</span> R,</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>    <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">cnames =</span> <span class="st">&quot;y&quot;</span>, <span class="at">method =</span> <span class="st">&quot;copula&quot;</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>  )</span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a>  drep <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">rbindlist</span>(reps, <span class="at">idcol =</span> <span class="st">&quot;rep&quot;</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a>  drep[, seq <span class="sc">:=</span> <span class="dv">1</span><span class="sc">:</span>.N, keyby <span class="ot">=</span> rep]</span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a>  dmat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">dcast</span>(drep, rep <span class="sc">~</span> seq, <span class="at">value.var =</span> <span class="st">&quot;y&quot;</span>)[, <span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a>  <span class="fu">round</span>(<span class="fu">cor</span>(dmat), <span class="dv">1</span>) </span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a>}</span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a><span class="fu">replicate</span>(<span class="at">R =</span> RC, <span class="at">dc =</span> dc)</span></code></pre></div>
 <p>It seems to have worked quite well - the empirical matrix matches the
 hypothetical matrix above. In the next post, I’ll describe how block
 matrices for different clusters over different time periods can also be
@@ -700,21 +700,21 @@ clusters, where the parameters (cluster means and correlation
 coefficients) themselves are randomly generated. By providing this
 flexibility, we induce extra variability in the data generation
 process.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;n&quot;</span>, <span class="at">formula =</span> <span class="dv">20</span>, <span class="at">dist =</span> <span class="st">&quot;noZeroPoisson&quot;</span>)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1, <span class="at">varname =</span> <span class="st">&quot;mu&quot;</span>, <span class="at">formula =</span> <span class="dv">10</span>, <span class="at">variance =</span> <span class="dv">8</span>, <span class="at">dist =</span> <span class="st">&quot;normal&quot;</span>)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1, <span class="at">varname =</span> <span class="st">&quot;s2&quot;</span>, <span class="at">formula =</span> <span class="dv">4</span>, <span class="at">dist =</span> <span class="st">&quot;nonrandom&quot;</span>)</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">100</span>, d1, <span class="at">id =</span> <span class="st">&quot;site&quot;</span>)</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>dc <span class="ot">&lt;-</span> <span class="fu">genCluster</span>(<span class="at">dtClust =</span> ds, <span class="at">cLevelVar =</span> <span class="st">&quot;site&quot;</span>, <span class="at">numIndsVar =</span> <span class="st">&quot;n&quot;</span>, <span class="st">&quot;id&quot;</span>)</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> dc[, .N, keyby <span class="ot">=</span> site][, N]</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>nsites <span class="ot">&lt;-</span> <span class="fu">length</span>(n)</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(nsites, <span class="dv">25</span>, <span class="dv">15</span>)</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>RM <span class="ot">&lt;-</span> <span class="fu">genCorMat</span>(<span class="at">nvars =</span> n, <span class="at">rho =</span> rho, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="at">nclusters =</span> nsites)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;n&quot;</span>, <span class="at">formula =</span> <span class="dv">20</span>, <span class="at">dist =</span> <span class="st">&quot;noZeroPoisson&quot;</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1, <span class="at">varname =</span> <span class="st">&quot;mu&quot;</span>, <span class="at">formula =</span> <span class="dv">10</span>, <span class="at">variance =</span> <span class="dv">8</span>, <span class="at">dist =</span> <span class="st">&quot;normal&quot;</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1, <span class="at">varname =</span> <span class="st">&quot;s2&quot;</span>, <span class="at">formula =</span> <span class="dv">4</span>, <span class="at">dist =</span> <span class="st">&quot;nonrandom&quot;</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">100</span>, d1, <span class="at">id =</span> <span class="st">&quot;site&quot;</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>dc <span class="ot">&lt;-</span> <span class="fu">genCluster</span>(<span class="at">dtClust =</span> ds, <span class="at">cLevelVar =</span> <span class="st">&quot;site&quot;</span>, <span class="at">numIndsVar =</span> <span class="st">&quot;n&quot;</span>, <span class="st">&quot;id&quot;</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a>n <span class="ot">&lt;-</span> dc[, .N, keyby <span class="ot">=</span> site][, N]</span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a>nsites <span class="ot">&lt;-</span> <span class="fu">length</span>(n)</span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(nsites, <span class="dv">25</span>, <span class="dv">15</span>)</span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a>RM <span class="ot">&lt;-</span> <span class="fu">genCorMat</span>(<span class="at">nvars =</span> n, <span class="at">rho =</span> rho, <span class="at">corstr =</span> <span class="st">&quot;cs&quot;</span>, <span class="at">nclusters =</span> nsites)</span></code></pre></div>
 <p>Here are the first three rows and columns of the correlation matrices
 for three clusters, as well as the dimensions for each matrix.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(RM[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">38</span>, <span class="dv">97</span>)], <span class="cf">function</span>(x) x[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">lapply</span>(RM[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">38</span>, <span class="dv">97</span>)], <span class="cf">function</span>(x) x[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])</span></code></pre></div>
 <pre><code>## $`1`
 ##           [,1]      [,2]      [,3]
 ## [1,] 1.0000000 0.6155452 0.6155452
@@ -732,7 +732,7 @@ for three clusters, as well as the dimensions for each matrix.</p>
 ## [1,] 1.0000000 0.6292113 0.6292113
 ## [2,] 0.6292113 1.0000000 0.6292113
 ## [3,] 0.6292113 0.6292113 1.0000000</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(RM[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">38</span>, <span class="dv">97</span>)], <span class="cf">function</span>(x) <span class="fu">dim</span>(x))</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">lapply</span>(RM[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">38</span>, <span class="dv">97</span>)], <span class="cf">function</span>(x) <span class="fu">dim</span>(x))</span></code></pre></div>
 <pre><code>## $`1`
 ## [1] 20 20
 ## 
@@ -742,10 +742,10 @@ for three clusters, as well as the dimensions for each matrix.</p>
 ## $`97`
 ## [1] 24 24</code></pre>
 <p>And here is how we generate the data</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">addCorGen</span>(dc, <span class="at">idvar =</span> <span class="st">&quot;site&quot;</span>, <span class="at">param1 =</span> <span class="st">&quot;mu&quot;</span>, <span class="at">param2 =</span> <span class="st">&quot;s2&quot;</span>,</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">corMatrix =</span> RM, <span class="at">dist =</span> <span class="st">&quot;normal&quot;</span>, <span class="at">cnames =</span> <span class="st">&quot;y&quot;</span>, <span class="at">method =</span> <span class="st">&quot;copula&quot;</span>)</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>dd</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">addCorGen</span>(dc, <span class="at">idvar =</span> <span class="st">&quot;site&quot;</span>, <span class="at">param1 =</span> <span class="st">&quot;mu&quot;</span>, <span class="at">param2 =</span> <span class="st">&quot;s2&quot;</span>,</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>                <span class="at">corMatrix =</span> RM, <span class="at">dist =</span> <span class="st">&quot;normal&quot;</span>, <span class="at">cnames =</span> <span class="st">&quot;y&quot;</span>, <span class="at">method =</span> <span class="st">&quot;copula&quot;</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>dd</span></code></pre></div>
 <pre><code>##       site  n        mu s2   id         y
 ##    1:    1 20  6.141913  4    1  5.104369
 ##    2:    1 20  6.141913  4    2  7.747311
@@ -1138,13 +1138,13 @@ indviduals per period, just to keep it simple.</p>
 <h4>Cross-sectional data with exchangeable correlation</h4>
 <p>In the first example, we specify <span class="math inline">\(\rho_w =
 0.5\)</span> and <span class="math inline">\(\rho_b = 0.3\)</span>:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(simstudy)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>R_XE <span class="ot">&lt;-</span> <span class="fu">blockExchangeMat</span>(<span class="at">ninds =</span> <span class="dv">2</span> , <span class="at">nperiods =</span> <span class="dv">3</span>, <span class="at">rho_w =</span> <span class="fl">0.5</span>,</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rho_b =</span> <span class="fl">0.3</span>, <span class="at">pattern =</span> <span class="st">&quot;xsection&quot;</span>)</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>R_XE</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">library</span>(simstudy)</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a>R_XE <span class="ot">&lt;-</span> <span class="fu">blockExchangeMat</span>(<span class="at">ninds =</span> <span class="dv">2</span> , <span class="at">nperiods =</span> <span class="dv">3</span>, <span class="at">rho_w =</span> <span class="fl">0.5</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>  <span class="at">rho_b =</span> <span class="fl">0.3</span>, <span class="at">pattern =</span> <span class="st">&quot;xsection&quot;</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a>R_XE</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6]
 ## [1,]  1.0  0.5  0.3  0.3  0.3  0.3
 ## [2,]  0.5  1.0  0.3  0.3  0.3  0.3
@@ -1157,10 +1157,10 @@ the correlation matrix <span class="math inline">\(R_XE\)</span>. I am
 effectively generating 5000 data sets with 6 observations each, all
 based on a Poisson distribution with mean = 7. I then report the
 empirical correlation matrix.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genCorGen</span>(<span class="at">n =</span> <span class="dv">5000</span>, <span class="at">nvars =</span> <span class="dv">6</span>, <span class="at">corMatrix =</span> R_XE,</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">params1 =</span> <span class="dv">7</span>, <span class="at">wide =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cor</span>(<span class="fu">as.matrix</span>(dd[, <span class="sc">-</span><span class="dv">1</span>])), <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genCorGen</span>(<span class="at">n =</span> <span class="dv">5000</span>, <span class="at">nvars =</span> <span class="dv">6</span>, <span class="at">corMatrix =</span> R_XE,</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">params1 =</span> <span class="dv">7</span>, <span class="at">wide =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cor</span>(<span class="fu">as.matrix</span>(dd[, <span class="sc">-</span><span class="dv">1</span>])), <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>##      V1   V2   V3   V4   V5   V6
 ## V1 1.00 0.48 0.29 0.29 0.29 0.30
 ## V2 0.48 1.00 0.25 0.28 0.29 0.28
@@ -1173,10 +1173,10 @@ empirical correlation matrix.</p>
 <h4>Cross-sectional data with correlation decay</h4>
 <p>Here, there is a decay parameter <span class="math inline">\(r =
 0.8\)</span> and no parameter <span class="math inline">\(\rho_b\)</span>.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>R_XD <span class="ot">&lt;-</span> <span class="fu">blockDecayMat</span>(<span class="at">ninds =</span> <span class="dv">2</span> , <span class="at">nperiods =</span> <span class="dv">3</span>, <span class="at">rho_w =</span> <span class="fl">0.5</span>,</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">r =</span> <span class="fl">0.8</span>, <span class="at">pattern =</span> <span class="st">&quot;xsection&quot;</span>)</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>R_XD</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>R_XD <span class="ot">&lt;-</span> <span class="fu">blockDecayMat</span>(<span class="at">ninds =</span> <span class="dv">2</span> , <span class="at">nperiods =</span> <span class="dv">3</span>, <span class="at">rho_w =</span> <span class="fl">0.5</span>,</span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>  <span class="at">r =</span> <span class="fl">0.8</span>, <span class="at">pattern =</span> <span class="st">&quot;xsection&quot;</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a>R_XD</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6]
 ## [1,] 1.00 0.50  0.4  0.4 0.32 0.32
 ## [2,] 0.50 1.00  0.4  0.4 0.32 0.32
@@ -1184,8 +1184,8 @@ empirical correlation matrix.</p>
 ## [4,] 0.40 0.40  0.5  1.0 0.40 0.40
 ## [5,] 0.32 0.32  0.4  0.4 1.00 0.50
 ## [6,] 0.32 0.32  0.4  0.4 0.50 1.00</code></pre>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genCorGen</span>(<span class="at">n =</span> <span class="dv">5000</span>, <span class="at">nvars =</span> <span class="dv">6</span>, <span class="at">corMatrix =</span> R_XD,</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">params1 =</span> <span class="dv">7</span>, <span class="at">wide =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genCorGen</span>(<span class="at">n =</span> <span class="dv">5000</span>, <span class="at">nvars =</span> <span class="dv">6</span>, <span class="at">corMatrix =</span> R_XD,</span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">params1 =</span> <span class="dv">7</span>, <span class="at">wide =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>##      V1   V2   V3   V4   V5   V6
 ## V1 1.00 0.51 0.38 0.41 0.31 0.31
 ## V2 0.51 1.00 0.38 0.39 0.30 0.30
@@ -1197,10 +1197,10 @@ empirical correlation matrix.</p>
 <div id="cohort-data-with-exchangeable-correlation" class="section level4">
 <h4>Cohort data with exchangeable correlation</h4>
 <p>Since we have a cohort, we introduce <span class="math inline">\(\rho_a\)</span> = 0.4, and specify <span class="math inline">\(pattern = \text{&quot;cohort&quot;}\)</span>:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>R_CE <span class="ot">&lt;-</span> <span class="fu">blockExchangeMat</span>(<span class="at">ninds =</span> <span class="dv">2</span> , <span class="at">nperiods =</span> <span class="dv">3</span>, <span class="at">rho_w =</span> <span class="fl">0.5</span>, </span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">rho_b =</span> <span class="fl">0.3</span>, <span class="at">rho_a =</span> <span class="fl">0.4</span>, <span class="at">pattern =</span> <span class="st">&quot;cohort&quot;</span>)</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>R_CE</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a>R_CE <span class="ot">&lt;-</span> <span class="fu">blockExchangeMat</span>(<span class="at">ninds =</span> <span class="dv">2</span> , <span class="at">nperiods =</span> <span class="dv">3</span>, <span class="at">rho_w =</span> <span class="fl">0.5</span>, </span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a>  <span class="at">rho_b =</span> <span class="fl">0.3</span>, <span class="at">rho_a =</span> <span class="fl">0.4</span>, <span class="at">pattern =</span> <span class="st">&quot;cohort&quot;</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" tabindex="-1"></a>R_CE</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6]
 ## [1,]  1.0  0.5  0.4  0.3  0.4  0.3
 ## [2,]  0.5  1.0  0.3  0.4  0.3  0.4
@@ -1208,8 +1208,8 @@ empirical correlation matrix.</p>
 ## [4,]  0.3  0.4  0.5  1.0  0.3  0.4
 ## [5,]  0.4  0.3  0.4  0.3  1.0  0.5
 ## [6,]  0.3  0.4  0.3  0.4  0.5  1.0</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genCorGen</span>(<span class="at">n =</span> <span class="dv">5000</span>, <span class="at">nvars =</span> <span class="dv">6</span>, <span class="at">corMatrix =</span> R_CE,</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">params1 =</span> <span class="dv">7</span>, <span class="at">wide =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genCorGen</span>(<span class="at">n =</span> <span class="dv">5000</span>, <span class="at">nvars =</span> <span class="dv">6</span>, <span class="at">corMatrix =</span> R_CE,</span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">params1 =</span> <span class="dv">7</span>, <span class="at">wide =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>##      V1   V2   V3   V4   V5   V6
 ## V1 1.00 0.49 0.39 0.27 0.39 0.29
 ## V2 0.49 1.00 0.29 0.40 0.30 0.41
@@ -1224,10 +1224,10 @@ empirical correlation matrix.</p>
 a cohort is the same as a decay in the case of a cross sectional design;
 the only difference that we set <span class="math inline">\(pattern =
 \text{&quot;cohort&quot;}\)</span>:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>R_CD <span class="ot">&lt;-</span> <span class="fu">blockDecayMat</span>(<span class="at">ninds =</span> <span class="dv">2</span> , <span class="at">nperiods =</span> <span class="dv">3</span>, <span class="at">rho_w =</span> <span class="fl">0.5</span>, </span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">r =</span> <span class="fl">0.8</span>, <span class="at">pattern =</span> <span class="st">&quot;cohort&quot;</span>)</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>R_CD</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a>R_CD <span class="ot">&lt;-</span> <span class="fu">blockDecayMat</span>(<span class="at">ninds =</span> <span class="dv">2</span> , <span class="at">nperiods =</span> <span class="dv">3</span>, <span class="at">rho_w =</span> <span class="fl">0.5</span>, </span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a>  <span class="at">r =</span> <span class="fl">0.8</span>, <span class="at">pattern =</span> <span class="st">&quot;cohort&quot;</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" tabindex="-1"></a>R_CD</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6]
 ## [1,] 1.00 0.50  0.8  0.4 0.64 0.32
 ## [2,] 0.50 1.00  0.4  0.8 0.32 0.64
@@ -1235,8 +1235,8 @@ the only difference that we set <span class="math inline">\(pattern =
 ## [4,] 0.40 0.80  0.5  1.0 0.40 0.80
 ## [5,] 0.64 0.32  0.8  0.4 1.00 0.50
 ## [6,] 0.32 0.64  0.4  0.8 0.50 1.00</code></pre>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genCorGen</span>(<span class="at">n =</span> <span class="dv">5000</span>, <span class="at">nvars =</span> <span class="dv">6</span>, <span class="at">corMatrix =</span> R_CD,</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">params1 =</span> <span class="dv">7</span>, <span class="at">wide =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genCorGen</span>(<span class="at">n =</span> <span class="dv">5000</span>, <span class="at">nvars =</span> <span class="dv">6</span>, <span class="at">corMatrix =</span> R_CD,</span>
+<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">params1 =</span> <span class="dv">7</span>, <span class="at">wide =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>##      V1   V2   V3   V4   V5   V6
 ## V1 1.00 0.47 0.79 0.38 0.63 0.30
 ## V2 0.47 1.00 0.38 0.78 0.30 0.62
@@ -1259,96 +1259,94 @@ randomly generated. The decay rate <span class="math inline">\(r\)</span> varies
 <em>beta</em> distribution with shape parameters 6 and 2). The parameter
 <span class="math inline">\(\rho_w\)</span> is constant across all
 clusters and is 0.6</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>defC <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;sample(5:10, 1)&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;nonrandom&quot;</span>)</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>defP <span class="ot">&lt;-</span> <span class="fu">defDataAdd</span>(<span class="at">varname =</span> <span class="st">&quot;n&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;2;4&quot;</span>, <span class="at">dist=</span><span class="st">&quot;uniformInt&quot;</span>)</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>dc <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">dtDefs =</span> defC, <span class="at">id =</span> <span class="st">&quot;site&quot;</span>)</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>dc <span class="ot">&lt;-</span> <span class="fu">addPeriods</span>(<span class="at">dtName =</span> dc, <span class="at">nPeriods =</span> <span class="dv">3</span>, </span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">idvars =</span> <span class="st">&quot;site&quot;</span>, <span class="at">perName =</span> <span class="st">&quot;period&quot;</span>)</span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>dc <span class="ot">&lt;-</span> <span class="fu">addColumns</span>(defP, dc)</span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genCluster</span>(<span class="at">dtClust =</span> dc, <span class="at">cLevelVar =</span> <span class="st">&quot;timeID&quot;</span>, </span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">numIndsVar =</span> <span class="st">&quot;n&quot;</span>, <span class="at">level1ID =</span> <span class="st">&quot;id&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a>defC <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;sample(5:10, 1)&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;nonrandom&quot;</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" tabindex="-1"></a>defP <span class="ot">&lt;-</span> <span class="fu">defDataAdd</span>(<span class="at">varname =</span> <span class="st">&quot;n&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;2;4&quot;</span>, <span class="at">dist=</span><span class="st">&quot;uniformInt&quot;</span>)</span>
+<span id="cb42-3"><a href="#cb42-3" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" tabindex="-1"></a>dc <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">dtDefs =</span> defC, <span class="at">id =</span> <span class="st">&quot;site&quot;</span>)</span>
+<span id="cb42-5"><a href="#cb42-5" tabindex="-1"></a>dc <span class="ot">&lt;-</span> <span class="fu">addPeriods</span>(<span class="at">dtName =</span> dc, <span class="at">nPeriods =</span> <span class="dv">3</span>, </span>
+<span id="cb42-6"><a href="#cb42-6" tabindex="-1"></a>                 <span class="at">idvars =</span> <span class="st">&quot;site&quot;</span>, <span class="at">perName =</span> <span class="st">&quot;period&quot;</span>)</span>
+<span id="cb42-7"><a href="#cb42-7" tabindex="-1"></a>dc <span class="ot">&lt;-</span> <span class="fu">addColumns</span>(defP, dc)</span>
+<span id="cb42-8"><a href="#cb42-8" tabindex="-1"></a></span>
+<span id="cb42-9"><a href="#cb42-9" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genCluster</span>(<span class="at">dtClust =</span> dc, <span class="at">cLevelVar =</span> <span class="st">&quot;timeID&quot;</span>, </span>
+<span id="cb42-10"><a href="#cb42-10" tabindex="-1"></a>  <span class="at">numIndsVar =</span> <span class="st">&quot;n&quot;</span>, <span class="at">level1ID =</span> <span class="st">&quot;id&quot;</span>)</span></code></pre></div>
 <p>In this example, the 10 clusters will have varying numbers of
 observations per period. Here are the counts for three sites:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>dc[site <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">7</span>), .(site, period, n)]</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a>dc[site <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">7</span>), .(site, period, n)]</span></code></pre></div>
 <pre><code>##    site period n
 ## 1:    1      0 4
 ## 2:    1      1 2
-## 3:    1      2 2
+## 3:    1      2 3
 ## 4:    3      0 3
-## 5:    3      1 2
+## 5:    3      1 3
 ## 6:    3      2 3
-## 7:    7      0 4
-## 8:    7      1 4
-## 9:    7      2 4</code></pre>
+## 7:    7      0 3
+## 8:    7      1 2
+## 9:    7      2 3</code></pre>
 <p>The sites will also have unique decay rates:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">rbeta</span>(<span class="dv">10</span>, <span class="dv">6</span>, <span class="dv">2</span>), <span class="dv">2</span>)</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>r[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">7</span>)]</span></code></pre></div>
-<pre><code>## [1] 0.76 0.94 0.87</code></pre>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">rbeta</span>(<span class="dv">10</span>, <span class="dv">6</span>, <span class="dv">2</span>), <span class="dv">2</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" tabindex="-1"></a>r[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">7</span>)]</span></code></pre></div>
+<pre><code>## [1] 0.66 0.85 0.81</code></pre>
 <p>Here are the correlation matrices for these three sites:</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> dd[, .N, keyby <span class="ot">=</span> .(site, period)][, N]</span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">blockDecayMat</span>(<span class="at">ninds =</span> N , <span class="at">nperiods =</span> <span class="dv">3</span>, <span class="at">rho_w =</span> <span class="fl">0.6</span>, <span class="at">r =</span> r, <span class="at">nclusters =</span> <span class="dv">10</span>)</span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(R, <span class="cf">function</span>(x) <span class="fu">round</span>(x,<span class="dv">2</span>))[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">7</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a>N <span class="ot">&lt;-</span> dd[, .N, keyby <span class="ot">=</span> .(site, period)][, N]</span>
+<span id="cb47-2"><a href="#cb47-2" tabindex="-1"></a></span>
+<span id="cb47-3"><a href="#cb47-3" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">blockDecayMat</span>(<span class="at">ninds =</span> N , <span class="at">nperiods =</span> <span class="dv">3</span>, <span class="at">rho_w =</span> <span class="fl">0.6</span>, <span class="at">r =</span> r, <span class="at">nclusters =</span> <span class="dv">10</span>)</span>
+<span id="cb47-4"><a href="#cb47-4" tabindex="-1"></a></span>
+<span id="cb47-5"><a href="#cb47-5" tabindex="-1"></a><span class="fu">lapply</span>(R, <span class="cf">function</span>(x) <span class="fu">round</span>(x,<span class="dv">2</span>))[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">7</span>)]</span></code></pre></div>
 <pre><code>## [[1]]
-##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]
-## [1,] 1.00 0.60 0.60 0.60 0.46 0.46 0.35 0.35
-## [2,] 0.60 1.00 0.60 0.60 0.46 0.46 0.35 0.35
-## [3,] 0.60 0.60 1.00 0.60 0.46 0.46 0.35 0.35
-## [4,] 0.60 0.60 0.60 1.00 0.46 0.46 0.35 0.35
-## [5,] 0.46 0.46 0.46 0.46 1.00 0.60 0.46 0.46
-## [6,] 0.46 0.46 0.46 0.46 0.60 1.00 0.46 0.46
-## [7,] 0.35 0.35 0.35 0.35 0.46 0.46 1.00 0.60
-## [8,] 0.35 0.35 0.35 0.35 0.46 0.46 0.60 1.00
+##       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9]
+##  [1,] 1.00 0.60 0.60 0.60  0.4  0.4 0.26 0.26 0.26
+##  [2,] 0.60 1.00 0.60 0.60  0.4  0.4 0.26 0.26 0.26
+##  [3,] 0.60 0.60 1.00 0.60  0.4  0.4 0.26 0.26 0.26
+##  [4,] 0.60 0.60 0.60 1.00  0.4  0.4 0.26 0.26 0.26
+##  [5,] 0.40 0.40 0.40 0.40  1.0  0.6 0.40 0.40 0.40
+##  [6,] 0.40 0.40 0.40 0.40  0.6  1.0 0.40 0.40 0.40
+##  [7,] 0.26 0.26 0.26 0.26  0.4  0.4 1.00 0.60 0.60
+##  [8,] 0.26 0.26 0.26 0.26  0.4  0.4 0.60 1.00 0.60
+##  [9,] 0.26 0.26 0.26 0.26  0.4  0.4 0.60 0.60 1.00
 ## 
 ## [[2]]
-##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]
-## [1,] 1.00 0.60 0.60 0.56 0.56 0.53 0.53 0.53
-## [2,] 0.60 1.00 0.60 0.56 0.56 0.53 0.53 0.53
-## [3,] 0.60 0.60 1.00 0.56 0.56 0.53 0.53 0.53
-## [4,] 0.56 0.56 0.56 1.00 0.60 0.56 0.56 0.56
-## [5,] 0.56 0.56 0.56 0.60 1.00 0.56 0.56 0.56
-## [6,] 0.53 0.53 0.53 0.56 0.56 1.00 0.60 0.60
-## [7,] 0.53 0.53 0.53 0.56 0.56 0.60 1.00 0.60
-## [8,] 0.53 0.53 0.53 0.56 0.56 0.60 0.60 1.00
+##       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9]
+##  [1,] 1.00 0.60 0.60 0.51 0.51 0.51 0.43 0.43 0.43
+##  [2,] 0.60 1.00 0.60 0.51 0.51 0.51 0.43 0.43 0.43
+##  [3,] 0.60 0.60 1.00 0.51 0.51 0.51 0.43 0.43 0.43
+##  [4,] 0.51 0.51 0.51 1.00 0.60 0.60 0.51 0.51 0.51
+##  [5,] 0.51 0.51 0.51 0.60 1.00 0.60 0.51 0.51 0.51
+##  [6,] 0.51 0.51 0.51 0.60 0.60 1.00 0.51 0.51 0.51
+##  [7,] 0.43 0.43 0.43 0.51 0.51 0.51 1.00 0.60 0.60
+##  [8,] 0.43 0.43 0.43 0.51 0.51 0.51 0.60 1.00 0.60
+##  [9,] 0.43 0.43 0.43 0.51 0.51 0.51 0.60 0.60 1.00
 ## 
 ## [[3]]
-##       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]
-##  [1,] 1.00 0.60 0.60 0.60 0.52 0.52 0.52 0.52 0.45  0.45  0.45  0.45
-##  [2,] 0.60 1.00 0.60 0.60 0.52 0.52 0.52 0.52 0.45  0.45  0.45  0.45
-##  [3,] 0.60 0.60 1.00 0.60 0.52 0.52 0.52 0.52 0.45  0.45  0.45  0.45
-##  [4,] 0.60 0.60 0.60 1.00 0.52 0.52 0.52 0.52 0.45  0.45  0.45  0.45
-##  [5,] 0.52 0.52 0.52 0.52 1.00 0.60 0.60 0.60 0.52  0.52  0.52  0.52
-##  [6,] 0.52 0.52 0.52 0.52 0.60 1.00 0.60 0.60 0.52  0.52  0.52  0.52
-##  [7,] 0.52 0.52 0.52 0.52 0.60 0.60 1.00 0.60 0.52  0.52  0.52  0.52
-##  [8,] 0.52 0.52 0.52 0.52 0.60 0.60 0.60 1.00 0.52  0.52  0.52  0.52
-##  [9,] 0.45 0.45 0.45 0.45 0.52 0.52 0.52 0.52 1.00  0.60  0.60  0.60
-## [10,] 0.45 0.45 0.45 0.45 0.52 0.52 0.52 0.52 0.60  1.00  0.60  0.60
-## [11,] 0.45 0.45 0.45 0.45 0.52 0.52 0.52 0.52 0.60  0.60  1.00  0.60
-## [12,] 0.45 0.45 0.45 0.45 0.52 0.52 0.52 0.52 0.60  0.60  0.60  1.00</code></pre>
+##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]
+## [1,] 1.00 0.60 0.60 0.49 0.49 0.39 0.39 0.39
+## [2,] 0.60 1.00 0.60 0.49 0.49 0.39 0.39 0.39
+## [3,] 0.60 0.60 1.00 0.49 0.49 0.39 0.39 0.39
+## [4,] 0.49 0.49 0.49 1.00 0.60 0.49 0.49 0.49
+## [5,] 0.49 0.49 0.49 0.60 1.00 0.49 0.49 0.49
+## [6,] 0.39 0.39 0.39 0.49 0.49 1.00 0.60 0.60
+## [7,] 0.39 0.39 0.39 0.49 0.49 0.60 1.00 0.60
+## [8,] 0.39 0.39 0.39 0.49 0.49 0.60 0.60 1.00</code></pre>
 <p>And here is code to generate the empirical correlation matrices for
 the three sites, based on 5000 replications of the data:</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>reps <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5000</span>, </span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) <span class="fu">addCorGen</span>(dd, <span class="at">idvar =</span> <span class="st">&quot;site&quot;</span>, <span class="at">corMatrix =</span> R,</span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">param1 =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">cnames =</span> <span class="st">&quot;y&quot;</span>)</span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>drep <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">rbindlist</span>(reps, <span class="at">idcol =</span> <span class="st">&quot;rep&quot;</span>)</span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>empir_corr <span class="ot">&lt;-</span> <span class="cf">function</span>(cluster) {</span>
-<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>  dcrep <span class="ot">&lt;-</span> drep[site <span class="sc">==</span> cluster, ]</span>
-<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>  dcrep[, seq <span class="sc">:</span><span class="er">=</span> <span class="dv">1</span><span class="sc">:</span>.N, keyby <span class="ot">=</span> rep]</span>
-<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>  dmat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">dcast</span>(dcrep, rep <span class="sc">~</span> seq, <span class="at">value.var =</span> <span class="st">&quot;y&quot;</span>)[, <span class="sc">-</span><span class="dv">1</span>])</span>
-<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">round</span>(<span class="fu">cor</span>(dmat), <span class="dv">2</span>))</span>
-<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a><span class="fu">empir_corr</span>(<span class="at">cluster =</span> <span class="dv">1</span>)</span>
-<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a><span class="fu">empir_corr</span>(<span class="at">cluster =</span> <span class="dv">3</span>)</span>
-<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a><span class="fu">empir_corr</span>(<span class="at">cluster =</span> <span class="dv">7</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a>reps <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5000</span>, </span>
+<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a>  <span class="cf">function</span>(x) <span class="fu">addCorGen</span>(dd, <span class="at">idvar =</span> <span class="st">&quot;site&quot;</span>, <span class="at">corMatrix =</span> R,</span>
+<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a>    <span class="at">dist =</span> <span class="st">&quot;poisson&quot;</span>, <span class="at">param1 =</span> <span class="st">&quot;lambda&quot;</span>, <span class="at">cnames =</span> <span class="st">&quot;y&quot;</span>)</span>
+<span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a>)</span>
+<span id="cb49-5"><a href="#cb49-5" tabindex="-1"></a></span>
+<span id="cb49-6"><a href="#cb49-6" tabindex="-1"></a>drep <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">rbindlist</span>(reps, <span class="at">idcol =</span> <span class="st">&quot;rep&quot;</span>)</span>
+<span id="cb49-7"><a href="#cb49-7" tabindex="-1"></a></span>
+<span id="cb49-8"><a href="#cb49-8" tabindex="-1"></a>empir_corr <span class="ot">&lt;-</span> <span class="cf">function</span>(cluster) {</span>
+<span id="cb49-9"><a href="#cb49-9" tabindex="-1"></a>  dcrep <span class="ot">&lt;-</span> drep[site <span class="sc">==</span> cluster, ]</span>
+<span id="cb49-10"><a href="#cb49-10" tabindex="-1"></a>  dcrep[, seq <span class="sc">:=</span> <span class="dv">1</span><span class="sc">:</span>.N, keyby <span class="ot">=</span> rep]</span>
+<span id="cb49-11"><a href="#cb49-11" tabindex="-1"></a>  dmat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">dcast</span>(dcrep, rep <span class="sc">~</span> seq, <span class="at">value.var =</span> <span class="st">&quot;y&quot;</span>)[, <span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb49-12"><a href="#cb49-12" tabindex="-1"></a>  </span>
+<span id="cb49-13"><a href="#cb49-13" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">round</span>(<span class="fu">cor</span>(dmat), <span class="dv">2</span>))</span>
+<span id="cb49-14"><a href="#cb49-14" tabindex="-1"></a>}</span>
+<span id="cb49-15"><a href="#cb49-15" tabindex="-1"></a></span>
+<span id="cb49-16"><a href="#cb49-16" tabindex="-1"></a></span>
+<span id="cb49-17"><a href="#cb49-17" tabindex="-1"></a><span class="fu">empir_corr</span>(<span class="at">cluster =</span> <span class="dv">1</span>)</span>
+<span id="cb49-18"><a href="#cb49-18" tabindex="-1"></a><span class="fu">empir_corr</span>(<span class="at">cluster =</span> <span class="dv">3</span>)</span>
+<span id="cb49-19"><a href="#cb49-19" tabindex="-1"></a><span class="fu">empir_corr</span>(<span class="at">cluster =</span> <span class="dv">7</span>)</span></code></pre></div>
 <p>
 <p><small><font color="darkkhaki"> Reference:</p>
 <p>Li, Fan, James P. Hughes, Karla Hemming, Monica Taljaard, Edward R.

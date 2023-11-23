@@ -1,4 +1,7 @@
-## ---- echo = FALSE, message = FALSE-------------------------------------------
+## ----chunkname, echo=-1-------------------------------------------------------
+data.table::setDTthreads(2)
+
+## ----echo = FALSE, message = FALSE--------------------------------------------
 library(simstudy)
 library(ggplot2)
 library(scales)
@@ -55,7 +58,7 @@ ggtheme <- function(panelback = "white") {
   
 }
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 def1 <- defData(varname = "m", dist = "binary", formula = .5)
 def1 <- defData(def1, "u", dist = "binary", formula = .5)
 def1 <- defData(def1, "x1", dist="normal", formula = "20*m + 20*u", variance = 2)
@@ -64,7 +67,7 @@ def1 <- defData(def1, "x3", dist="normal", formula = "20*m + 20*u", variance = 2
 
 dtAct <- genData(1000, def1)
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 defM <- defMiss(varname = "x1", formula = .15, logit.link = FALSE)
 defM <- defMiss(defM, varname = "x2", formula = ".05 + m * 0.25", logit.link = FALSE)
 defM <- defMiss(defM, varname = "x3", formula = ".05 + u * 0.25", logit.link = FALSE)
@@ -75,7 +78,7 @@ set.seed(283726)
 missMat <- genMiss(dtAct, defM, idvars = "id")
 dtObs <- genObs(dtAct, missMat, idvars = "id")
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 missMat
 dtObs
 
@@ -103,7 +106,7 @@ showDif(meanAct, meanObs)
 meanActm <- dtAct[,.(x1 = rmean(x1), x2 = rmean(x2), x3 = rmean(x3)), keyby = m]
 meanObsm <- dtObs[,.(x1 = rmean(x1), x2 = rmean(x2), x3 = rmean(x3)), keyby = m]
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 # compare observed and actual when m = 0
 
 showDif(meanActm[m==0, .(x1, x2, x3)], meanObsm[m==0, .(x1, x2, x3)])
@@ -112,7 +115,7 @@ showDif(meanActm[m==0, .(x1, x2, x3)], meanObsm[m==0, .(x1, x2, x3)])
 
 showDif(meanActm[m==1, .(x1, x2, x3)], meanObsm[m==1, .(x1, x2, x3)])
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 
 # use baseline definitions from the previous example
 
@@ -126,7 +129,7 @@ defLong <- defDataAdd(varname = "y", dist = "normal", formula = "10 + period*2 +
 dtTime <- addPeriods(dtAct, nPeriods = 4)
 dtTime <- addColumns(defLong, dtTime)
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 
 # missingness for y is not monotonic
 

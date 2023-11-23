@@ -1,4 +1,7 @@
-## ---- echo = FALSE, message = FALSE-------------------------------------------
+## ----chunkname, echo=-1-------------------------------------------------------
+data.table::setDTthreads(2)
+
+## ----echo = FALSE, message = FALSE--------------------------------------------
 library(simstudy)
 library(ggplot2)
 library(scales)
@@ -159,7 +162,7 @@ summary(clmFit)
 ## -----------------------------------------------------------------------------
 logOdds.expos - logOdds.unexp
 
-## ---- echo=FALSE, fig.width=6, fig.height=3.5---------------------------------
+## ----echo=FALSE, fig.width=6, fig.height=3.5----------------------------------
 getCumProbs <- function(coefs) {
   
   cumprob0 <- data.table(
@@ -264,7 +267,7 @@ dX <- genOrdCat(dT_1_cat, baseprobs = baseprobs, adjVar = "z",
 ## -----------------------------------------------------------------------------
 logOdds.expos - logOdds.unexp
 
-## ---- echo=FALSE, fig.width=6, fig.height=3.5, warning=FALSE------------------
+## ----echo=FALSE, fig.width=6, fig.height=3.5, warning=FALSE-------------------
 fitPlot(dX)
 
 ## -----------------------------------------------------------------------------

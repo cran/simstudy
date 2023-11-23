@@ -1,4 +1,7 @@
-## ---- echo = FALSE, message = FALSE-------------------------------------------
+## ----chunkname, echo=-1-------------------------------------------------------
+data.table::setDTthreads(2)
+
+## ----echo = FALSE, message = FALSE--------------------------------------------
 library(simstudy)
 library(ggplot2)
 library(scales)
@@ -28,7 +31,7 @@ ggtheme <- function(panelback = "white") {
   
 }
 
-## ---- tidy=TRUE---------------------------------------------------------------
+## ----tidy=TRUE----------------------------------------------------------------
 # specifying a specific correlation matrix C
 C <- matrix(c(1,.7,.2, .7, 1, .8, .2, .8, 1),nrow = 3)
 C
@@ -45,7 +48,7 @@ dt[,round(cor(cbind(V1, V2, V3)),1)]
 # estimate standard deviation
 dt[,round(sqrt(diag(var(cbind(V1, V2, V3)))),1)]
 
-## ---- tidy=TRUE---------------------------------------------------------------
+## ----tidy=TRUE----------------------------------------------------------------
 # generate 3 correlated variables with different location but same standard deviation
 # and compound symmetry (cs) correlation matrix with correlation coefficient = 0.4.
 # Other correlation matrix structures are "independent" ("ind") and "auto-regressive" ("ar1").
@@ -60,7 +63,7 @@ dt[,round(cor(cbind(x0, x1, x2)),1)]
 # estimate standard deviation
 dt[,round(sqrt(diag(var(cbind(x0, x1, x2)))),1)]
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 
 # define and generate the original data set
 def <- defData(varname = "x", dist = "normal", formula = 0, variance = 1, id = "cid")

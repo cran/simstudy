@@ -1,4 +1,7 @@
-## ---- echo = FALSE, message=FALSE---------------------------------------------
+## ----chunkname, echo=-1-------------------------------------------------------
+data.table::setDTthreads(2)
+
+## ----echo = FALSE, message=FALSE----------------------------------------------
 
 library(simstudy)
 library(ggplot2)
@@ -66,18 +69,18 @@ def <- defData(def, varname = "baseDBP", dist = "normal",
 
 dtstudy <- genData(330, def)
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 study1 <- trtAssign(dtstudy , n=3, balanced = TRUE, strata = c("male","over65"), grpName = "rxGrp")
 
 study1
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 study2 <- trtAssign(dtstudy , n=3, balanced = TRUE, grpName = "rxGrp")
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 study3 <- trtAssign(dtstudy , n=3, balanced = FALSE, grpName = "rxGrp")
 
-## ---- tidy = TRUE, echo = FALSE, fig.width = 4, fig.height = 6----------------
+## ----tidy = TRUE, echo = FALSE, fig.width = 4, fig.height = 6-----------------
 p1 <- splotfunc(study1, "Balanced within strata")
 p1a <- aplotfunc(study1, "")
 
@@ -105,11 +108,11 @@ dtstudy
 ## -----------------------------------------------------------------------------
 dtstudy[, .(n = .N, avg = round(mean(y), 1)), keyby = .(male, over65, rx)]
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 formula1 <- c("-2 + 2*male - .5*over65", "-1 + 2*male + .5*over65")
 dtExp <- trtObserve(dtstudy, formulas = formula1, logit.link = TRUE, grpName = "exposure")
 
-## ---- tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 2.5------------
+## ----tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 2.5-------------
 dtplot1 <- dtExp[,.N,keyby=.(male,exposure)]
 p1 <- ggplot(data = dtplot1, aes(x=factor(male), y=N)) +
   geom_bar(aes(fill=factor(exposure)), alpha = .8, stat="identity", position = "dodge") +
@@ -137,12 +140,12 @@ p2 <- ggplot(data = dtplot2, aes(x=factor(over65), y=N)) +
 grid.arrange(p1,p2,nrow=1)
 
 
-## ---- tidy = TRUE-------------------------------------------------------------
+## ----tidy = TRUE--------------------------------------------------------------
 formula2 <- c(.35, .45)
 
 dtExp2 <- trtObserve(dtstudy, formulas = formula2, logit.link = FALSE, grpName = "exposure")
 
-## ---- tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 2.5------------
+## ----tidy = TRUE, echo = FALSE, fig.width = 6.5, fig.height = 2.5-------------
 dtplot1a <- dtExp2[,.N,keyby=.(male,exposure)]
 p1a <- ggplot(data = dtplot1a, aes(x=factor(male), y=N)) +
   geom_bar(aes(fill=factor(exposure)), alpha = .8, stat="identity", position = "dodge") +

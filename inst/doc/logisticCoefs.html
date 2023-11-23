@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Targeted logistic model coefficients</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Targeted logistic model coefficients</h1>
+
+
+
+<p>In <code>simstudy</code>, there are at least two ways to define a
+binary data generating process. The first is to operate on the scale of
+the proportion or probability using the <em>identity</em> link. This
+allows users to define a data generating process that reflects
+assumptions about risk ratios and risk differences when comparing two
+groups defined by an exposure or treatment. However, this process can
+become challenging when introducing other covariates, because it can be
+difficult to constrain the probabilities so that they fall between 0 and
+1.</p>
+<p>The second approach works on the log-odds scale using a
+<em>logit</em> link, and is much more amenable to accommodating
+covariates. Unfortunately, this comes at the price of being able to
+easily generate specific risk ratios and risk differences, because all
+parameters are log-odds ratios. The overall (marginal) prevalence of an
+outcome in a population will vary depending on the distribution of
+covariates in that population, and the strengths (both absolute and
+relative) of the association of those covariates with the outcome. That
+is, the coefficients of a logistic model (including the intercept)
+determine the prevalence. The same is true regarding the risk ratio and
+risk difference (if there is one particular exposure or treatment of
+interest) and the AUC.</p>
+<p>Here we start with the simplest case where we have a target marginal
+proportion or prevalence, and then illustrate data generation with three
+other target statistics: <strong>risk ratios</strong>, <strong>risk
+differences</strong>, and <strong>AUCs</strong>.</p>
+<div id="prevalence" class="section level3">
+<h3>Prevalence</h3>
+<p>In this first example, we start with one set of assumptions for four
+covariates <span class="math inline">\(x_1, x2 \sim N(0, 1)\)</span>,
+<span class="math inline">\(b_1 \sim Bin(0.3)\)</span>, and <span class="math inline">\(b_2 \sim Bin(0.7)\)</span>, and generate the
+outcome <em>y</em> with the following data generating process:</p>
+<p><span class="math display">\[ \text{logit}(y) = 0.15x_1 + 0.25x_2 +
+0.10b_1 + 0.30b_2\]</span> <br></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(simstudy)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>coefs1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.15</span>, <span class="fl">0.25</span>, <span class="fl">0.10</span>, <span class="fl">0.30</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;x1&quot;</span>, <span class="at">formula =</span> <span class="dv">0</span>, <span class="at">variance =</span> <span class="dv">1</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1, <span class="at">varname =</span> <span class="st">&quot;x2&quot;</span>, <span class="at">formula =</span> <span class="dv">0</span>, <span class="at">variance =</span> <span class="dv">1</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1, <span class="at">varname =</span> <span class="st">&quot;b1&quot;</span>, <span class="at">formula =</span> <span class="fl">0.3</span>, <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1, <span class="at">varname =</span> <span class="st">&quot;b2&quot;</span>, <span class="at">formula =</span> <span class="fl">0.7</span>, <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>d1a <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1, <span class="at">varname =</span> <span class="st">&quot;y&quot;</span>, </span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>  <span class="at">formula =</span> <span class="st">&quot;t(..coefs1) %*% c(x1, x2, b1, b2)&quot;</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>, <span class="at">link =</span> <span class="st">&quot;logit&quot;</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">48392</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">500000</span>, d1a)</span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>dd</span></code></pre></div>
+<pre><code>##             id    x1     x2 b1 b2 y
+##      1:      1  0.29  0.390  0  1 1
+##      2:      2  0.76 -0.925  0  0 0
+##      3:      3 -1.47  0.939  0  0 1
+##      4:      4  1.92  0.560  0  1 1
+##      5:      5  1.40 -0.238  0  1 0
+##     ---                            
+## 499996: 499996 -0.32  0.367  0  0 0
+## 499997: 499997 -1.08  2.152  0  0 0
+## 499998: 499998 -1.10  0.380  1  0 0
+## 499999: 499999  0.56 -1.042  0  1 0
+## 500000: 500000  0.52  0.076  0  1 1</code></pre>
+<p>The overall proportion of <span class="math inline">\(y=1\)</span> in
+this case is</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>dd[, <span class="fu">mean</span>(y)]</span></code></pre></div>
+<pre><code>## [1] 0.56</code></pre>
+<p>If we have a desired marginal proportion of 0.40, then we can add an
+intercept of -0.66 to the data generating process:</p>
+<p><span class="math display">\[ \text{logit}(y) = -0.66 + 0.15x_1 +
+0.25x_2 + 0.10b_1 + 0.30b_2\]</span></p>
+<p>The simulation now gives us the desired target:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>d1a <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1, <span class="at">varname =</span> <span class="st">&quot;y&quot;</span>, </span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">formula =</span> <span class="st">&quot;t(c(-0.66, ..coefs1)) %*% c(1, x1, x2, b1, b2)&quot;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>, <span class="at">link =</span> <span class="st">&quot;logit&quot;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">genData</span>(<span class="dv">500000</span>, d1a)[, <span class="fu">mean</span>(y)]</span></code></pre></div>
+<pre><code>## [1] 0.4</code></pre>
+<p>If we change the distribution of the covariates, so that <span class="math inline">\(x_1 \sim N(1, 1)\)</span>, <span class="math inline">\(x_2 \sim N(2, 1)\)</span>, <span class="math inline">\(b_1 \sim Bin(0.5)\)</span>, and <span class="math inline">\(b_2 \sim Bin(0.8)\)</span>, and the strength of
+the association of these covariates with the outcome so that</p>
+<p><span class="math display">\[ \text{logit}(y) = 0.20x_1 + 0.35x_2 +
+0.20b_1 + 0.45b_2,\]</span></p>
+<p>the marginal proportion/prevalence (assuming no intercept term) also
+changes, going from 0.56 to 0.84:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>coefs2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.20</span>, <span class="fl">0.35</span>, <span class="fl">0.20</span>, <span class="fl">0.45</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>d2 <span class="ot">&lt;-</span> <span class="fu">defData</span>(<span class="at">varname =</span> <span class="st">&quot;x1&quot;</span>, <span class="at">formula =</span> <span class="dv">1</span>, <span class="at">variance =</span> <span class="dv">1</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>d2 <span class="ot">&lt;-</span> <span class="fu">defData</span>(d2, <span class="at">varname =</span> <span class="st">&quot;x2&quot;</span>, <span class="at">formula =</span> <span class="dv">3</span>, <span class="at">variance =</span> <span class="dv">1</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>d2 <span class="ot">&lt;-</span> <span class="fu">defData</span>(d2, <span class="at">varname =</span> <span class="st">&quot;b1&quot;</span>, <span class="at">formula =</span> <span class="fl">0.5</span>, <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>d2 <span class="ot">&lt;-</span> <span class="fu">defData</span>(d2, <span class="at">varname =</span> <span class="st">&quot;b2&quot;</span>, <span class="at">formula =</span> <span class="fl">0.8</span>, <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>d2a <span class="ot">&lt;-</span> <span class="fu">defData</span>(d2, <span class="at">varname =</span> <span class="st">&quot;y&quot;</span>, </span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  <span class="at">formula =</span> <span class="st">&quot;t(..coefs2) %*% c(x1, x2, b1, b2)&quot;</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>, <span class="at">link =</span> <span class="st">&quot;logit&quot;</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="fu">genData</span>(<span class="dv">500000</span>, d2a)[, <span class="fu">mean</span>(y)]</span></code></pre></div>
+<pre><code>## [1] 0.84</code></pre>
+<p>But under this new distribution, adding an intercept of -2.13 yields
+the desired target.</p>
+<p><span class="math display">\[ \text{logit}(y) = -2.13 + 0.20x_1 +
+0.35x_2 + 0.20b_1 + 0.45b_2 \]</span></p>
+<p><br></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>d2a <span class="ot">&lt;-</span> <span class="fu">defData</span>(d2, <span class="at">varname =</span> <span class="st">&quot;y&quot;</span>, </span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="at">formula =</span> <span class="st">&quot;t(c(-2.13, ..coefs2)) %*% c(1, x1, x2, b1, b2)&quot;</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>, <span class="at">link =</span> <span class="st">&quot;logit&quot;</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="fu">genData</span>(<span class="dv">500000</span>, d1a)[, <span class="fu">mean</span>(y)]</span></code></pre></div>
+<pre><code>## [1] 0.4</code></pre>
+<div id="finding-the-intercept" class="section level4">
+<h4>Finding the intercept</h4>
+<p>Where did those two intercepts come from? The <a href="https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-023-01836-5" target="_blank">paper</a> by Peter Austin describes an iterative
+bisection procedure that takes a distribution of covariates and a set of
+coefficients to identify the intercept coefficient that yields the
+target marginal proportion or prevalence.</p>
+<p>The general idea of the algorithm is to try out series of different
+intercepts in an intelligent way that ends up at the right spot. (If you
+want the details for the algorithm, take a look at the <a href="https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-023-01836-5" target="_blank">paper</a>.) The starting search range is pre-defined
+(we’ve used -10 to 10 for the intercept), and we start with an value of
+0 for the initial intercept and simulate a large data set (the paper
+uses 1 million observations, but 100,000 seems to work just fine) and
+record the population prevalence. If we’ve overshot the target
+prevalence, we turn our attention to the range between -10 and 0, taking
+the average, which is -5. Otherwise, we focus on the range between 0 and
+10. We iterate this way, choosing the range we need to focus on and
+setting the intercept at the mid-point (hence the name
+<em>bisection</em>). The algorithm will converge pretty quickly on the
+value of the intercept that gives the target population prevalence for
+the underlying covariate distribution and coefficient assumptions.</p>
+<p>In the current implementation in <code>simstudy</code>, the intercept
+is provided by a simple call to <code>logisticCoefs</code>. Here are the
+calls for the two sets of definitions in definition tables <em>d1</em>
+and <em>d2</em>.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">logisticCoefs</span>(<span class="at">defCovar =</span> d1, <span class="at">coefs =</span> coefs1, <span class="at">popPrev =</span> <span class="fl">0.40</span>)</span></code></pre></div>
+<pre><code>##    B0    x1    x2    b1    b2 
+## -0.66  0.15  0.25  0.10  0.30</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">logisticCoefs</span>(<span class="at">defCovar =</span> d2, <span class="at">coefs =</span> coefs2, <span class="at">popPrev =</span> <span class="fl">0.40</span>)</span></code></pre></div>
+<pre><code>##    B0    x1    x2    b1    b2 
+## -2.13  0.20  0.35  0.20  0.45</code></pre>
+</div>
+</div>
+<div id="risk-ratios" class="section level3">
+<h3>Risk ratios</h3>
+<p>Just as the prevalence depends on the distribution of covariates and
+their association with the outcome, risk ratios comparing the outcome
+probabilities for two groups also depend on the additional covariates.
+The marginal risk ratio comparing treatment (<span class="math inline">\(A =1\)</span> to control (<span class="math inline">\(A=0\)</span>) (given the distribution of
+covariates) is</p>
+<p><span class="math display">\[RR = \frac{P(y=1 | A = 1)}{P(y=1 | A =
+0)}\]</span> In the data generation process we use a log-odds ratio of
+-0.40 (odds ratio of approximately 0.67) in both cases, but we get
+different risk ratios (0.82 vs. 0.93), depending on the covariates
+(defined in <em>d1</em> and <em>d2</em>).</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>d1a <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1, <span class="at">varname =</span> <span class="st">&quot;rx&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;1;1&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;trtAssign&quot;</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>d1a <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1a, <span class="at">varname =</span> <span class="st">&quot;y&quot;</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>  <span class="at">formula =</span> <span class="st">&quot;t(c(-0.40, ..coefs1)) %*% c(rx, x1, x2, b1, b2)&quot;</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>, <span class="at">link =</span> <span class="st">&quot;logit&quot;</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>)</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">500000</span>, d1a)</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>dd[rx<span class="sc">==</span><span class="dv">1</span>, <span class="fu">mean</span>(y)]<span class="sc">/</span>dd[rx<span class="sc">==</span><span class="dv">0</span>, <span class="fu">mean</span>(y)]</span></code></pre></div>
+<pre><code>## [1] 0.82</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>d2a <span class="ot">&lt;-</span> <span class="fu">defData</span>(d2, <span class="at">varname =</span> <span class="st">&quot;rx&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;1;1&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;trtAssign&quot;</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>d2a <span class="ot">&lt;-</span> <span class="fu">defData</span>(d2a, <span class="at">varname =</span> <span class="st">&quot;y&quot;</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>  <span class="at">formula =</span> <span class="st">&quot;t(c(-0.40, ..coefs2)) %*% c(rx, x1, x2, b1, b2)&quot;</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>, <span class="at">link =</span> <span class="st">&quot;logit&quot;</span></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>)</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">500000</span>, d2a)</span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>dd[rx<span class="sc">==</span><span class="dv">1</span>, <span class="fu">mean</span>(y)]<span class="sc">/</span>dd[rx<span class="sc">==</span><span class="dv">0</span>, <span class="fu">mean</span>(y)]</span></code></pre></div>
+<pre><code>## [1] 0.93</code></pre>
+<p>By specifying both a population prevalence and a target risk ratio in
+the call to <code>logisticCoefs</code>, we can get the necessary
+parameters. When specifying the target risk ratio, it is required to be
+between 0 and 1/popPrev. A risk ratio cannot be negative, and the
+probability of the outcome under treatment cannot exceed 1 (which will
+happen if the risk ratio is greater than 1/popPrev).</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>C1 <span class="ot">&lt;-</span> <span class="fu">logisticCoefs</span>(d1, coefs1, <span class="at">popPrev =</span> <span class="fl">0.40</span>, <span class="at">rr =</span> <span class="fl">0.85</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>C1</span></code></pre></div>
+<pre><code>##    B0     A    x1    x2    b1    b2 
+## -0.66 -0.26  0.15  0.25  0.10  0.30</code></pre>
+<p>If we use <span class="math inline">\(C_1\)</span> in the data
+generation process, we will get a data set with the desired target
+prevalence and risk ratio:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>d1a <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1, <span class="at">varname =</span> <span class="st">&quot;rx&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;1;1&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;trtAssign&quot;</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>d1a <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1a, <span class="at">varname =</span> <span class="st">&quot;y&quot;</span>,</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>  <span class="at">formula =</span> <span class="st">&quot;t(..C1) %*% c(1, rx, x1, x2, b1, b2)&quot;</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>, <span class="at">link =</span> <span class="st">&quot;logit&quot;</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>)</span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">500000</span>, d1a)</span></code></pre></div>
+<p>Here are the prevalence and risk ratio:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>dd[rx<span class="sc">==</span><span class="dv">0</span>, <span class="fu">mean</span>(y)]</span></code></pre></div>
+<pre><code>## [1] 0.4</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>dd[rx<span class="sc">==</span><span class="dv">1</span>, <span class="fu">mean</span>(y)]<span class="sc">/</span>dd[rx<span class="sc">==</span><span class="dv">0</span>, <span class="fu">mean</span>(y)]</span></code></pre></div>
+<pre><code>## [1] 0.86</code></pre>
+<p>You can do the same for the second set of assumptions.</p>
+</div>
+<div id="risk-differences" class="section level3">
+<h3>Risk differences</h3>
+<p>Risk differences have the same set of issues, and are handled in the
+same way. The risk difference is defined as</p>
+<p><span class="math display">\[ RD = P(y=1 | A = 1) - P(y=1 | A =
+0)\]</span></p>
+<p>To get the coefficients related to a population prevalence of 0.40
+and risk difference of -0.15 (so that the proportion in the exposure arm
+is 0.25), we use the <em>rd</em> argument:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>C1 <span class="ot">&lt;-</span> <span class="fu">logisticCoefs</span>(d1, coefs1, <span class="at">popPrev =</span> <span class="fl">0.40</span>, <span class="at">rd =</span> <span class="sc">-</span><span class="fl">0.15</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>C1</span></code></pre></div>
+<pre><code>##    B0     A    x1    x2    b1    b2 
+## -0.66 -0.71  0.15  0.25  0.10  0.30</code></pre>
+<p>Again, using <span class="math inline">\(C_1\)</span> in the data
+generation process, we will get a data set with the desired target
+prevalence and risk difference:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>d1a <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1, <span class="at">varname =</span> <span class="st">&quot;rx&quot;</span>, <span class="at">formula =</span> <span class="st">&quot;1;1&quot;</span>, <span class="at">dist =</span> <span class="st">&quot;trtAssign&quot;</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>d1a <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1a, <span class="at">varname =</span> <span class="st">&quot;y&quot;</span>,</span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a>  <span class="at">formula =</span> <span class="st">&quot;t(..C1) %*% c(1, rx, x1, x2, b1, b2)&quot;</span>,</span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>, <span class="at">link =</span> <span class="st">&quot;logit&quot;</span></span>
+<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a>)</span>
+<span id="cb28-6"><a href="#cb28-6" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">500000</span>, d1a)</span>
+<span id="cb28-8"><a href="#cb28-8" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" tabindex="-1"></a>dd[rx<span class="sc">==</span><span class="dv">0</span>, <span class="fu">mean</span>(y)]</span></code></pre></div>
+<pre><code>## [1] 0.4</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>dd[rx<span class="sc">==</span><span class="dv">1</span>, <span class="fu">mean</span>(y)] <span class="sc">-</span> dd[rx<span class="sc">==</span><span class="dv">0</span>, <span class="fu">mean</span>(y)]</span></code></pre></div>
+<pre><code>## [1] -0.15</code></pre>
+</div>
+<div id="auc" class="section level3">
+<h3>AUC</h3>
+<p>The AUC is another commonly used statistic to evaluate a logistic
+model. We can use <code>logisticCoefs</code> to find the parameters that
+will allow us to generate data from a model with a specific AUC. To get
+the coefficients related to a population prevalence of 0.40 and an AUC
+of 0.85, we use the <em>auc</em> argument (which must be between 0.5 and
+1):</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a>C1 <span class="ot">&lt;-</span> <span class="fu">logisticCoefs</span>(d1, coefs1, <span class="at">popPrev =</span> <span class="fl">0.40</span>, <span class="at">auc =</span> <span class="fl">0.85</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a>C1</span></code></pre></div>
+<pre><code>##    B0    x1    x2    b1    b2 
+## -1.99  0.85  1.41  0.56  1.69</code></pre>
+<p>Again, using <span class="math inline">\(C_1\)</span> in the data
+generation process, we will get a data set with the desired target
+prevalence and the AUC (calculated here using the <code>lrm</code>
+function in the <code>rms</code> package:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a>d1a <span class="ot">&lt;-</span> <span class="fu">defData</span>(d1, <span class="at">varname =</span> <span class="st">&quot;y&quot;</span>,</span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a>  <span class="at">formula =</span> <span class="st">&quot;t(..C1) %*% c(1, x1, x2, b1, b2)&quot;</span>,</span>
+<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a>  <span class="at">dist =</span> <span class="st">&quot;binary&quot;</span>, <span class="at">link =</span> <span class="st">&quot;logit&quot;</span></span>
+<span id="cb34-4"><a href="#cb34-4" tabindex="-1"></a>)</span>
+<span id="cb34-5"><a href="#cb34-5" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="#cb34-6" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">500000</span>, d1a)</span>
+<span id="cb34-7"><a href="#cb34-7" tabindex="-1"></a></span>
+<span id="cb34-8"><a href="#cb34-8" tabindex="-1"></a>dd[, <span class="fu">mean</span>(y)]</span></code></pre></div>
+<pre><code>## [1] 0.4</code></pre>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a>fit <span class="ot">&lt;-</span> rms<span class="sc">::</span><span class="fu">lrm</span>(y <span class="sc">~</span> x1 <span class="sc">+</span> x2 <span class="sc">+</span> b1 <span class="sc">+</span> b2, <span class="at">data =</span> dd)</span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a>fit<span class="sc">$</span>stats[<span class="st">&quot;C&quot;</span>]</span></code></pre></div>
+<pre><code>##    C 
+## 0.85</code></pre>
+<p>
+<p><small><font color="darkkhaki"> References:</p>
+<p>Austin, Peter C. “The iterative bisection procedure: a useful tool
+for determining parameter values in data-generating processes in Monte
+Carlo simulations.” BMC Medical Research Methodology 23, no. 1 (2023):
+1-10.</p>
+</font></small>
+</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

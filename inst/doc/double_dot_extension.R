@@ -1,4 +1,7 @@
-## ---- echo = FALSE, message = FALSE-------------------------------------------
+## ----chunkname, echo=-1-------------------------------------------------------
+data.table::setDTthreads(2)
+
+## ----echo = FALSE, message = FALSE--------------------------------------------
 options(digits = 3)
 
 library(simstudy)
@@ -81,7 +84,7 @@ fit <- summary(lm(y ~ x, data = dd))
 coef(fit)
 fit$sigma
 
-## ---- fig.width = 5-----------------------------------------------------------
+## ----fig.width = 5------------------------------------------------------------
 sigma2s <- c(1, 2, 6, 9)
 
 gen_data <- function(sigma2, d) {
@@ -138,20 +141,20 @@ d1 <- defData(d1, varname = "b", formula = ".5;.5", variance = "1;2", dist = "ca
 d1 <- defData(d1, varname = "outcome", formula = "..effect[a, b]", dist="nonrandom")
 
 ## -----------------------------------------------------------------------------
-dx <- genData(8, d1)
+dx <- genData(1000, d1)
 dx
 
 ## -----------------------------------------------------------------------------
 d1 <- updateDef(d1, "outcome", newvariance = 9, newdist = "normal")
 dx <- genData(1000, d1)
 
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 dsum <- dx[, .(outcome=mean(outcome)), keyby = .(a, b)]
 
 ggplot(data = dx, aes(x = factor(a), y = outcome)) +
   geom_jitter(aes(color = factor(b)), width = .2, alpha = .4, size = .2) +
   geom_point(data = dsum, size = 2, aes(color = factor(b))) + 
-  geom_line(data = dsum, size = 1, aes(color = factor(b), group = factor(b))) +
+  geom_line(data = dsum, linewidth = 1, aes(color = factor(b), group = factor(b))) +
   scale_color_manual(values = cbbPalette, name = "  b") +
   theme(panel.grid = element_blank()) +
   xlab ("a")

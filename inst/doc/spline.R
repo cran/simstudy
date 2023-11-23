@@ -1,4 +1,7 @@
-## ---- echo = FALSE, message = FALSE-------------------------------------------
+## ----chunkname, echo=-1-------------------------------------------------------
+data.table::setDTthreads(2)
+
+## ----echo = FALSE, message = FALSE--------------------------------------------
 library(simstudy)
 library(ggplot2)
 library(scales)
@@ -29,7 +32,7 @@ ggtheme <- function(panelback = "white") {
   
 }
 
-## ---- fig.width = 6, fig.height = 2.5-----------------------------------------
+## ----fig.width = 6, fig.height = 2.5------------------------------------------
 knots <- c(0.25, 0.50, 0.75)
 viewBasis(knots, degree = 2)
 
@@ -37,7 +40,7 @@ knots <- c(0.20, 0.40, 0.60, 0.80)
 viewBasis(knots, degree = 3)
 
 
-## ---- fig.width = 6, fig.height = 2.5-----------------------------------------
+## ----fig.width = 6, fig.height = 2.5------------------------------------------
 knots <- c(0.25, 0.5, 0.75)
 
 # number of elements in theta: length(knots) + degree + 1
@@ -61,7 +64,7 @@ ddef <- defData(varname = "age", formula = "20;60", dist = "uniform")
 theta1 = c(0.1, 0.8, 0.6, 0.4, 0.6, 0.9, 0.9)
 knots <- c(0.25, 0.5, 0.75)
 
-## ---- fig.width = 6, fig.height = 2.5-----------------------------------------
+## ----fig.width = 6, fig.height = 2.5------------------------------------------
 viewSplines(knots = knots, theta = theta1, degree = 3)
 
 ## -----------------------------------------------------------------------------
@@ -74,14 +77,14 @@ dt <- genSpline(dt = dt, newvar = "weight",
                 newrange = "90;160",
                 noise.var = 64)
 
-## ---- fig.width = 6, fig.height = 3, message = FALSE--------------------------
+## ----fig.width = 6, fig.height = 3, message = FALSE---------------------------
 ggplot(data = dt, aes(x=age, y=weight)) +
   geom_point(color = "grey65", size = 0.75) +
   geom_smooth(se=FALSE, color="red", size = 1, method = "auto") +
   geom_vline(xintercept = quantile(dt$age, knots)) +
   theme(panel.grid.minor = element_blank())
 
-## ---- fig.width = 6, fig.height = 3-------------------------------------------
+## ----fig.width = 6, fig.height = 3--------------------------------------------
 
 # normalize age for best basis functions
 dt[, nage := (age - min(age))/(max(age) - min(age))] 
