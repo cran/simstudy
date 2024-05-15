@@ -49,7 +49,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -466,33 +466,37 @@ in <strong><code>def</code></strong>, and then stored in the object
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">1000</span>, def)</span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>dd</span></code></pre></div>
-<pre><code>##         id   age female visits
-##    1:    1  9.78      0      0
-##    2:    2 10.81      0      0
-##    3:    3  8.86      0      1
-##    4:    4  9.83      1      1
-##    5:    5 10.58      0      0
-##   ---                         
-##  996:  996  8.87      1      2
-##  997:  997 10.27      0      0
-##  998:  998  6.84      0      1
-##  999:  999  9.28      0      2
-## 1000: 1000 10.80      1      2</code></pre>
+<pre><code>## Key: &lt;id&gt;
+##          id   age female visits
+##       &lt;int&gt; &lt;num&gt;  &lt;int&gt;  &lt;int&gt;
+##    1:     1  9.78      0      0
+##    2:     2 10.81      0      0
+##    3:     3  8.86      0      1
+##    4:     4  9.83      1      1
+##    5:     5 10.58      0      0
+##   ---                          
+##  996:   996  8.87      1      2
+##  997:   997 10.27      0      0
+##  998:   998  6.84      0      1
+##  999:   999  9.28      0      2
+## 1000:  1000 10.80      1      2</code></pre>
 <p>If no data definition is provided, a simple data set is created with
 just id’s.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">genData</span>(<span class="dv">1000</span>)</span></code></pre></div>
-<pre><code>##         id
-##    1:    1
-##    2:    2
-##    3:    3
-##    4:    4
-##    5:    5
-##   ---     
-##  996:  996
-##  997:  997
-##  998:  998
-##  999:  999
-## 1000: 1000</code></pre>
+<pre><code>## Key: &lt;id&gt;
+##          id
+##       &lt;int&gt;
+##    1:     1
+##    2:     2
+##    3:     3
+##    4:     4
+##    5:     5
+##   ---      
+##  996:   996
+##  997:   997
+##  998:   998
+##  999:   999
+## 1000:  1000</code></pre>
 </div>
 <div id="assigning-treatmentexposure" class="section level3">
 <h3>Assigning treatment/exposure</h3>
@@ -506,26 +510,30 @@ possible.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>study1 <span class="ot">&lt;-</span> <span class="fu">trtAssign</span>(dd, <span class="at">n =</span> <span class="dv">3</span>, <span class="at">balanced =</span> <span class="cn">TRUE</span>, <span class="at">strata =</span> <span class="fu">c</span>(<span class="st">&quot;female&quot;</span>),</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>    <span class="at">grpName =</span> <span class="st">&quot;rx&quot;</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>study1</span></code></pre></div>
-<pre><code>##         id   age female visits rx
-##    1:    1  9.78      0      0  3
-##    2:    2 10.81      0      0  1
-##    3:    3  8.86      0      1  3
-##    4:    4  9.83      1      1  3
-##    5:    5 10.58      0      0  3
-##   ---                            
-##  996:  996  8.87      1      2  2
-##  997:  997 10.27      0      0  3
-##  998:  998  6.84      0      1  1
-##  999:  999  9.28      0      2  1
-## 1000: 1000 10.80      1      2  3</code></pre>
+<pre><code>## Key: &lt;id&gt;
+##          id   age female visits    rx
+##       &lt;int&gt; &lt;num&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt;
+##    1:     1  9.78      0      0     3
+##    2:     2 10.81      0      0     1
+##    3:     3  8.86      0      1     3
+##    4:     4  9.83      1      1     3
+##    5:     5 10.58      0      0     3
+##   ---                                
+##  996:   996  8.87      1      2     2
+##  997:   997 10.27      0      0     3
+##  998:   998  6.84      0      1     1
+##  999:   999  9.28      0      2     1
+## 1000:  1000 10.80      1      2     3</code></pre>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>study1[, .N, keyby <span class="ot">=</span> .(female, rx)]</span></code></pre></div>
-<pre><code>##    female rx   N
-## 1:      0  1 249
-## 2:      0  2 248
-## 3:      0  3 248
-## 4:      1  1  85
-## 5:      1  2  85
-## 6:      1  3  85</code></pre>
+<pre><code>## Key: &lt;female, rx&gt;
+##    female    rx     N
+##     &lt;int&gt; &lt;int&gt; &lt;int&gt;
+## 1:      0     1   249
+## 2:      0     2   248
+## 3:      0     3   248
+## 4:      1     1    85
+## 5:      1     2    85
+## 6:      1     3    85</code></pre>
 </div>
 </div>
 <div id="more-details-on-data-definitions" class="section level2">
@@ -568,12 +576,14 @@ functions. Here is an example with a user-defined function
 <span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>    <span class="at">variance =</span> <span class="fl">0.1</span>, <span class="at">dist =</span> <span class="st">&quot;normal&quot;</span>)</span>
 <span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a></span>
 <span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="fu">genData</span>(<span class="dv">5</span>, def)</span></code></pre></div>
-<pre><code>##    id   age loginvage
-## 1:  1 10.31     -2.58
-## 2:  2  7.90     -1.94
-## 3:  3  9.83     -1.93
-## 4:  4  9.10     -2.42
-## 5:  5 10.18     -2.21</code></pre>
+<pre><code>## Key: &lt;id&gt;
+##       id   age loginvage
+##    &lt;int&gt; &lt;num&gt;     &lt;num&gt;
+## 1:     1 10.31     -2.58
+## 2:     2  7.90     -1.94
+## 3:     3  9.83     -1.93
+## 4:     4  9.10     -2.42
+## 5:     5 10.18     -2.21</code></pre>
 <p>Replication is an important aspect of data simulation - it is often
 very useful to generate data under different sets of assumptions.
 <code>simstudy</code> facilitates this in at least two different ways.
@@ -584,15 +594,18 @@ function <code>log10</code> instead of <code>log</code>:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>def10 <span class="ot">&lt;-</span> <span class="fu">updateDef</span>(def, <span class="at">changevar =</span> <span class="st">&quot;loginvage&quot;</span>, <span class="at">newformula =</span> <span class="st">&quot;log10(myinv(age))&quot;</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>def10</span></code></pre></div>
 <pre><code>##      varname           formula variance   dist     link
+##       &lt;char&gt;            &lt;char&gt;   &lt;char&gt; &lt;char&gt;   &lt;char&gt;
 ## 1:       age                10        2 normal identity
 ## 2: loginvage log10(myinv(age))      0.1 normal identity</code></pre>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">genData</span>(<span class="dv">5</span>, def10)</span></code></pre></div>
-<pre><code>##    id   age loginvage
-## 1:  1  9.82    -0.338
-## 2:  2 10.97    -0.633
-## 3:  3 11.79    -1.267
-## 4:  4  9.74    -0.882
-## 5:  5 10.11    -1.519</code></pre>
+<pre><code>## Key: &lt;id&gt;
+##       id   age loginvage
+##    &lt;int&gt; &lt;num&gt;     &lt;num&gt;
+## 1:     1  9.82    -0.338
+## 2:     2 10.97    -0.633
+## 3:     3 11.79    -1.267
+## 4:     4  9.74    -0.882
+## 5:     5 10.11    -1.519</code></pre>
 <p>A more powerful feature of <code>simstudy</code> that allows for
 dynamic definition tables is the external reference capability through
 the <em>double-dot</em> notation. Any variable reference in a formula
@@ -606,12 +619,15 @@ that is preceded by “..” refers to an externally defined variable:</p>
 <span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a></span>
 <span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>def</span></code></pre></div>
 <pre><code>##    varname            formula variance      dist     link
+##     &lt;char&gt;             &lt;char&gt;    &lt;num&gt;    &lt;char&gt;   &lt;char&gt;
 ## 1:     age                 10        2    normal identity
 ## 2: agemult age * ..age_effect        0 nonrandom identity</code></pre>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">genData</span>(<span class="dv">2</span>, def)</span></code></pre></div>
-<pre><code>##    id  age agemult
-## 1:  1 9.69    29.1
-## 2:  2 9.63    28.9</code></pre>
+<pre><code>## Key: &lt;id&gt;
+##       id   age agemult
+##    &lt;int&gt; &lt;num&gt;   &lt;num&gt;
+## 1:     1  9.69    29.1
+## 2:     2  9.63    28.9</code></pre>
 <p>But the real power of dynamic definition is seen in the context of
 iteration over multiple values:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>age_effects <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>)</span>
@@ -624,19 +640,25 @@ iteration over multiple values:</p>
 <span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a></span>
 <span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a>list_of_data</span></code></pre></div>
 <pre><code>## [[1]]
-##    id  age agemult
-## 1:  1 11.4       0
-## 2:  2 10.7       0
+## Key: &lt;id&gt;
+##       id   age agemult
+##    &lt;int&gt; &lt;num&gt;   &lt;num&gt;
+## 1:     1  11.4       0
+## 2:     2  10.7       0
 ## 
 ## [[2]]
-##    id  age agemult
-## 1:  1 11.3    56.6
-## 2:  2 11.2    56.1
+## Key: &lt;id&gt;
+##       id   age agemult
+##    &lt;int&gt; &lt;num&gt;   &lt;num&gt;
+## 1:     1  11.3    56.6
+## 2:     2  11.2    56.1
 ## 
 ## [[3]]
-##    id   age agemult
-## 1:  1  9.32    93.2
-## 2:  2 10.62   106.2</code></pre>
+## Key: &lt;id&gt;
+##       id   age agemult
+##    &lt;int&gt; &lt;num&gt;   &lt;num&gt;
+## 1:     1  9.32    93.2
+## 2:     2 10.62   106.2</code></pre>
 </div>
 <div id="distributions" class="section level3">
 <h3>Distributions</h3>
@@ -718,6 +740,16 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 </tr>
 <tr class="even">
+<td align="left">custom</td>
+<td align="left">function</td>
+<td align="left">string</td>
+<td align="left">-</td>
+<td align="left">arguments</td>
+<td align="center">X</td>
+<td align="center">-</td>
+<td align="center">-</td>
+</tr>
+<tr class="odd">
 <td align="left">exponential</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -727,7 +759,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">gamma</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -737,7 +769,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">mixture</td>
 <td align="left">formula</td>
 <td align="left">string</td>
@@ -747,7 +779,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">negBinomial</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -757,7 +789,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">nonrandom</td>
 <td align="left">formula</td>
 <td align="left">both</td>
@@ -767,7 +799,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">normal</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -777,7 +809,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">noZeroPoisson</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -787,7 +819,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">poisson</td>
 <td align="left">mean</td>
 <td align="left">both</td>
@@ -797,7 +829,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">trtAssign</td>
 <td align="left">ratio</td>
 <td align="left">string</td>
@@ -807,7 +839,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">X</td>
 <td align="center">-</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">uniform</td>
 <td align="left">range</td>
 <td align="left">string</td>
@@ -817,7 +849,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="center">-</td>
 <td align="center">-</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">uniformInt</td>
 <td align="left">range</td>
 <td align="left">string</td>
@@ -889,8 +921,29 @@ rounding errors.</p>
 allocation to each row is <em>N/k</em>, with some rows getting an
 increment of 1 to ensure that the sum is N. It is possible to relax the
 assumption of balanced cluster sizes by setting <em>dispersion &gt;
-0</em>. As the dispersion, the variability of cluster sizes across
-clusters increases.</p>
+0</em>. As the dispersion increases, the variability of cluster sizes
+across clusters increases.</p>
+</div>
+<div id="custom" class="section level4">
+<h4>custom</h4>
+<p>Custom distributions can be specified in <code>defData</code> and
+<code>defDataAdd</code> by setting the argument <em>dist</em> to
+“custom”. When defining a custom distribution, provide the name of the
+user-defined function as a string in the <em>formula</em> argument. The
+arguments of the custom function are listed in the <em>variance</em>
+argument, separated by commas and formatted as “<strong>arg_1 =
+val_form_1, arg_2 = val_form_2, <span class="math inline">\(\dots\)</span>, arg_K = val_form_K</strong>”. The
+<em>arg_k’s</em> represent the names of the arguments passed to the
+customized function, where <span class="math inline">\(k\)</span> ranges
+from <span class="math inline">\(1\)</span> to <span class="math inline">\(K\)</span>. Values or formulas can be used for
+each <em>val_form_k</em>. If formulas are used, ensure that the
+variables have been previously generated. Double dot notation is
+available in specifying <em>value_formula_k</em>. One important
+requirement of the custom function is that the parameter list used to
+define the function must include an argument”<strong>n = n</strong>”,
+but do not include <span class="math inline">\(n\)</span> in the
+definition as part of <code>defData</code> or
+<code>defDataAdd</code>.</p>
 </div>
 <div id="exponential" class="section level4">
 <h4>exponential</h4>
@@ -1035,6 +1088,7 @@ specified as they are in the <code>defData</code> function. Calls to
 <span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a></span>
 <span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a>def</span></code></pre></div>
 <pre><code>##    varname     formula variance        dist     link
+##     &lt;char&gt;      &lt;char&gt;    &lt;num&gt;      &lt;char&gt;   &lt;char&gt;
 ## 1:      g1 1/3;1/3;1/3        0 categorical identity
 ## 2:      g2 1/3;1/3;1/3        0 categorical identity
 ## 3:      g3 1/3;1/3;1/3        0 categorical identity
@@ -1079,20 +1133,24 @@ defined in the current definition able.</p>
 <span id="cb25-10"><a href="#cb25-10" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">genData</span>(<span class="dv">5</span>, d1)</span>
 <span id="cb25-11"><a href="#cb25-11" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">trtAssign</span>(dd, <span class="at">nTrt =</span> <span class="dv">2</span>, <span class="at">grpName =</span> <span class="st">&quot;rx&quot;</span>)</span>
 <span id="cb25-12"><a href="#cb25-12" tabindex="-1"></a>dd</span></code></pre></div>
-<pre><code>##    id      x1 x2 rx
-## 1:  1 -1.3230  1  0
-## 2:  2 -0.0494  0  1
-## 3:  3 -0.4064  1  0
-## 4:  4 -0.5562  1  0
-## 5:  5 -0.0941  0  1</code></pre>
+<pre><code>## Key: &lt;id&gt;
+##       id      x1    x2    rx
+##    &lt;int&gt;   &lt;num&gt; &lt;int&gt; &lt;int&gt;
+## 1:     1 -1.3230     1     0
+## 2:     2 -0.0494     0     1
+## 3:     3 -0.4064     1     0
+## 4:     4 -0.5562     1     0
+## 5:     5 -0.0941     0     1</code></pre>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">addColumns</span>(d2, dd)</span>
 <span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>dd</span></code></pre></div>
-<pre><code>##    id      x1 x2 rx    q1    q2 y
-## 1:  1 -1.3230  1  0 4.589  5.70 0
-## 2:  2 -0.0494  0  1 9.829 11.74 1
-## 3:  3 -0.4064  1  0 2.117  4.47 0
-## 4:  4 -0.5562  1  0 0.798  3.24 0
-## 5:  5 -0.0941  0  1 7.601  6.98 0</code></pre>
+<pre><code>## Key: &lt;id&gt;
+##       id      x1    x2    rx    q1    q2     y
+##    &lt;int&gt;   &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt;
+## 1:     1 -1.3230     1     0 4.589  5.70     0
+## 2:     2 -0.0494     0     1 9.829 11.74     1
+## 3:     3 -0.4064     1     0 2.117  4.47     0
+## 4:     4 -0.5562     1     0 0.798  3.24     0
+## 5:     5 -0.0941     0     1 7.601  6.98     0</code></pre>
 </div>
 <div id="defcondition-and-addcondition" class="section level3">
 <h3>defCondition and addCondition</h3>

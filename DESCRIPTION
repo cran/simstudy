@@ -1,8 +1,8 @@
 Type: Package
 Package: simstudy
 Title: Simulation of Study Data
-Version: 0.7.1
-Date: 2023-11-22
+Version: 0.8.0
+Date: 2024-05-14
 Authors@R: 
     c(person(given = "Keith",
              family = "Goldfeld",
@@ -35,11 +35,11 @@ Suggests: covr, dplyr, formatR, gee, ggplot2, grid, gridExtra,
 LinkingTo: Rcpp, pbv (>= 0.4-22), fastglm
 VignetteBuilder: knitr
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 NeedsCompilation: yes
-Packaged: 2023-11-23 00:44:30 UTC; keith
+Packaged: 2024-05-14 19:26:12 UTC; keith
 Author: Keith Goldfeld [aut, cre] (<https://orcid.org/0000-0002-0292-8780>),
   Jacob Wujciak-Jens [aut] (<https://orcid.org/0000-0002-7281-3989>)
 Maintainer: Keith Goldfeld <keith.goldfeld@nyulangone.org>
 Repository: CRAN
-Date/Publication: 2023-11-23 01:00:02 UTC
+Date/Publication: 2024-05-15 13:50:02 UTC

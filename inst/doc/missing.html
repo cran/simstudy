@@ -49,7 +49,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -388,31 +388,35 @@ dependent on <code>u</code>, an unmeasured predictor of
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>missMat <span class="ot">&lt;-</span> <span class="fu">genMiss</span>(dtAct, defM, <span class="at">idvars =</span> <span class="st">&quot;id&quot;</span>)</span>
 <span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>dtObs <span class="ot">&lt;-</span> <span class="fu">genObs</span>(dtAct, missMat, <span class="at">idvars =</span> <span class="st">&quot;id&quot;</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>missMat</span></code></pre></div>
-<pre><code>##         id x1 x2 x3 u m
-##    1:    1  0  0  0 1 0
-##    2:    2  0  0  0 1 0
-##    3:    3  1  0  0 1 0
-##    4:    4  1  0  0 1 0
-##    5:    5  1  1  0 1 0
-##   ---                  
-##  996:  996  0  0  0 1 0
-##  997:  997  1  0  1 1 0
-##  998:  998  0  0  1 1 0
-##  999:  999  0  0  0 1 0
-## 1000: 1000  0  0  0 1 0</code></pre>
+<pre><code>## Key: &lt;id&gt;
+##          id    x1    x2    x3     u     m
+##       &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt;
+##    1:     1     0     0     0     1     0
+##    2:     2     0     0     0     1     0
+##    3:     3     1     0     0     1     0
+##    4:     4     1     0     0     1     0
+##    5:     5     1     1     0     1     0
+##   ---                                    
+##  996:   996     0     0     0     1     0
+##  997:   997     1     0     1     1     0
+##  998:   998     0     0     1     1     0
+##  999:   999     0     0     0     1     0
+## 1000:  1000     0     0     0     1     0</code></pre>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>dtObs</span></code></pre></div>
-<pre><code>##         id m  u   x1     x2   x3
-##    1:    1 0 NA  2.4 -0.094  1.8
-##    2:    2 0 NA 21.0 19.064 21.8
-##    3:    3 0 NA   NA -2.126 -2.0
-##    4:    4 0 NA   NA  0.635  2.9
-##    5:    5 0 NA   NA     NA 17.1
-##   ---                           
-##  996:  996 0 NA 17.7 19.671 18.7
-##  997:  997 1 NA   NA 40.886   NA
-##  998:  998 0 NA 19.8 20.647   NA
-##  999:  999 1 NA 20.3 23.645 18.8
-## 1000: 1000 0 NA 21.0 20.302 20.0</code></pre>
+<pre><code>## Key: &lt;id&gt;
+##          id     m     u    x1     x2    x3
+##       &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt;  &lt;num&gt; &lt;num&gt;
+##    1:     1     0    NA   2.4 -0.094   1.8
+##    2:     2     0    NA  21.0 19.064  21.8
+##    3:     3     0    NA    NA -2.126  -2.0
+##    4:     4     0    NA    NA  0.635   2.9
+##    5:     5     0    NA    NA     NA  17.1
+##   ---                                     
+##  996:   996     0    NA  17.7 19.671  18.7
+##  997:   997     1    NA    NA 40.886    NA
+##  998:   998     0    NA  19.8 20.647    NA
+##  999:   999     1    NA  20.3 23.645  18.8
+## 1000:  1000     0    NA  21.0 20.302  20.0</code></pre>
 <p>The impacts of the various data mechanisms on estimation can be seen
 with a simple calculation of means using both the “true” data set
 without missing data as a comparison for the “observed” data set. Since
