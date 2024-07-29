@@ -706,7 +706,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="left">-</td>
 <td align="left">-</td>
 <td align="center">X</td>
-<td align="center">-</td>
+<td align="center">X</td>
 <td align="center">X</td>
 </tr>
 <tr class="odd">
@@ -716,7 +716,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="left">-</td>
 <td align="left"># of trials</td>
 <td align="center">X</td>
-<td align="center">-</td>
+<td align="center">X</td>
 <td align="center">X</td>
 </tr>
 <tr class="even">
@@ -727,7 +727,7 @@ types of distributions, which are listed in the following table:</p>
 <td align="left">a;b;c</td>
 <td align="center">X</td>
 <td align="center">-</td>
-<td align="center">-</td>
+<td align="center">X</td>
 </tr>
 <tr class="odd">
 <td align="left">clusterSize</td>
@@ -880,16 +880,19 @@ takes values <span class="math inline">\(0\)</span> or <span class="math inline"
 <em>Bernoulli</em> distribution, or is a <em>binomial</em> distribution
 with a single trial <span class="math inline">\(n=1\)</span>.) The
 <code>formula</code> represents the probability (with the ‘identity’
-link) or the log odds (with the ‘logit’ link) that the variable takes
-the value of 1. The mean of this distribution is <span class="math inline">\(p\)</span>, and variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(p(1-p)\)</span>.</p>
+link), the relative risk (with the ‘log’ link), or the log odds (with
+the ‘logit’ link) that the variable takes the value of 1. The mean of
+this distribution is <span class="math inline">\(p\)</span>, and
+variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(p(1-p)\)</span>.</p>
 </div>
 <div id="binomial" class="section level4">
 <h4>binomial</h4>
 <p>A <em>binomial</em> distribution is a discrete data distribution that
 represents the count of the number of successes given a number of
-trials. The formula specifies the probability of success <span class="math inline">\(p\)</span>, and the variance field is used to
-specify the number of trials <span class="math inline">\(n\)</span>.
-Given a value of <span class="math inline">\(p\)</span>, the mean <span class="math inline">\(\mu\)</span> of this distribution is <span class="math inline">\(n*p\)</span>, and the variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(np(1-p)\)</span>.</p>
+trials. The formula specifies the probability of success (with the
+‘identity’ link), the relative risk (with the ‘log’ link), or the log
+odds (with the ‘logit’ link) that the variable takes the value of 1. and
+the variance field is used to specify the number of trials <span class="math inline">\(n\)</span>. Given a value of <span class="math inline">\(p\)</span>, the mean <span class="math inline">\(\mu\)</span> of this distribution is <span class="math inline">\(n*p\)</span>, and the variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(np(1-p)\)</span>.</p>
 </div>
 <div id="categorical" class="section level4">
 <h4>categorical</h4>

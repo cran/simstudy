@@ -38,9 +38,10 @@ explained below. Required variables and expected pattern for each
 distribution can be found in this table:\tabular{lllll}{
    \strong{name} \tab \strong{formula} \tab \strong{format} \tab \strong{variance} \tab \strong{link} \cr
    beta \tab mean \tab String or Number \tab dispersion value \tab identity or logit \cr
-   binary \tab probability for 1 \tab String or Number \tab NA \tab identity or logit \cr
-   binomial \tab probability of success \tab String or Number \tab number of trials \tab identity or logit \cr
+   binary \tab probability for 1 \tab String or Number \tab NA \tab identity, log, or logit \cr
+   binomial \tab probability of success \tab String or Number \tab number of trials \tab identity, log, or logit \cr
    categorical \tab probabilities \tab \verb{p_1;p_2;..;p_n} \tab category labels: \verb{a;b;c} , \verb{50;130;20} \tab identity or logit \cr
+   custom \tab name of function \tab String \tab arguments \tab identity \cr
    exponential \tab mean (lambda) \tab String or Number \tab NA \tab identity or log \cr
    gamma \tab mean \tab String or Number \tab dispersion value \tab identity or log \cr
    mixture \tab formula \tab \code{x_1 }|\code{p_1 + x_2}|\verb{p_2 ... x_n}|\code{ p_n} \tab NA \tab NA \cr
