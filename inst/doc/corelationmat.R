@@ -216,20 +216,20 @@ dd <- addCorGen(dc, idvar = "site", param1 = "lambda", corMatrix = RC,
 dd
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  replicate <- function(R, dc) {
-#    reps <- lapply(1:5000, function(x)
-#    addCorGen(dc, idvar = "site", param1 = "lambda", corMatrix = R,
-#      dist = "poisson", cnames = "y", method = "copula")
-#    )
-#  
-#    drep <- data.table::rbindlist(reps, idcol = "rep")
-#    drep[, seq := 1:.N, keyby = rep]
-#    dmat <- as.matrix(dcast(drep, rep ~ seq, value.var = "y")[, -1])
-#    round(cor(dmat), 1)
-#  }
-#  
-#  replicate(R = RC, dc = dc)
-#  
+# replicate <- function(R, dc) {
+#   reps <- lapply(1:5000, function(x)
+#   addCorGen(dc, idvar = "site", param1 = "lambda", corMatrix = R,
+#     dist = "poisson", cnames = "y", method = "copula")
+#   )
+# 
+#   drep <- data.table::rbindlist(reps, idcol = "rep")
+#   drep[, seq := 1:.N, keyby = rep]
+#   dmat <- as.matrix(dcast(drep, rep ~ seq, value.var = "y")[, -1])
+#   round(cor(dmat), 1)
+# }
+# 
+# replicate(R = RC, dc = dc)
+# 
 
 ## ----eval=TRUE----------------------------------------------------------------
 d1 <- defData(varname = "n", formula = 20, dist = "noZeroPoisson")
@@ -567,23 +567,23 @@ R <- blockDecayMat(ninds = N , nperiods = 3, rho_w = 0.6, r = r, nclusters = 10)
 lapply(R, function(x) round(x,2))[c(1, 3, 7)]
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  reps <- lapply(1:5000,
-#    function(x) addCorGen(dd, idvar = "site", corMatrix = R,
-#      dist = "poisson", param1 = "lambda", cnames = "y")
-#  )
-#  
-#  drep <- data.table::rbindlist(reps, idcol = "rep")
-#  
-#  empir_corr <- function(cluster) {
-#    dcrep <- drep[site == cluster, ]
-#    dcrep[, seq := 1:.N, keyby = rep]
-#    dmat <- as.matrix(dcast(dcrep, rep ~ seq, value.var = "y")[, -1])
-#  
-#    return(round(cor(dmat), 2))
-#  }
-#  
-#  
-#  empir_corr(cluster = 1)
-#  empir_corr(cluster = 3)
-#  empir_corr(cluster = 7)
+# reps <- lapply(1:5000,
+#   function(x) addCorGen(dd, idvar = "site", corMatrix = R,
+#     dist = "poisson", param1 = "lambda", cnames = "y")
+# )
+# 
+# drep <- data.table::rbindlist(reps, idcol = "rep")
+# 
+# empir_corr <- function(cluster) {
+#   dcrep <- drep[site == cluster, ]
+#   dcrep[, seq := 1:.N, keyby = rep]
+#   dmat <- as.matrix(dcast(dcrep, rep ~ seq, value.var = "y")[, -1])
+# 
+#   return(round(cor(dmat), 2))
+# }
+# 
+# 
+# empir_corr(cluster = 1)
+# empir_corr(cluster = 3)
+# empir_corr(cluster = 7)
 
